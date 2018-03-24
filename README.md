@@ -25,5 +25,14 @@ $ npm install --global code-complexity
 
     $ code-complexity /path/to/git/directory
     $ code-complexity /path/to/git/directory --limit 3
-    $ code-complexity /path/to/git/directory --details
+    $ code-complexity /path/to/git/directory --limit 10 --details
+```
+
+## Output
+
+```sh
+$ code-complexity . --details
+
+src/code-complexity.js 53 (commits: 1, sloc: 53)
+src/cli.js 16 (commits: 1, sloc: 16)
 ```
