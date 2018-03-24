@@ -1,6 +1,6 @@
 {
   "name": "code-focus",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Multiply commits per file with each file sloc",
   "main": "bin/code-complexity",
   "scripts": {
