@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "Multiply commits per file with each file sloc",
   "main": "bin/code-complexity",
+  "bin": {
+    "code-complexity": "bin/code-complexity"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
