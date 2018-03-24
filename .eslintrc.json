@@ -1,0 +1,21 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 8
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": "off"
+  },
+  "extends": [
+    "prettier",
+    "eslint:recommended"
+  ],
+  "env": {
+    "mocha": true,
+    "es6": true,
+    "node": true
+  }
+}

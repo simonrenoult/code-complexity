@@ -1,0 +1,27 @@
+{
+  "name": "code-focus",
+  "version": "0.0.1",
+  "description": "Multiply commits per file with each file sloc",
+  "main": "bin/code-complexity",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Simon Renoult <simon.renoult@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-config-prettier": "^2.8.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "prettier": "^1.11.1"
+  },
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "commander": "^2.15.1",
+    "node-sloc": "^0.1.10",
+    "path-exists": "^3.0.0"
+  }
+}
