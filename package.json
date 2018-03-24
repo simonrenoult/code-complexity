@@ -1,5 +1,5 @@
 {
-  "name": "code-focus",
+  "name": "code-complexity",
   "version": "1.0.2",
   "description": "Multiply commits per file with each file sloc",
   "main": "bin/code-complexity",
