@@ -2,6 +2,16 @@
 
 > Measure projects complexity based on files sloc and commit number.
 
+<a href="https://travis-ci.org/simonrenoult/code-complexity">
+  <img alt="Travis" src="https://img.shields.io/travis/simonrenoult/code-complexity.svg?style=flat-square">
+</a>
+<a href="https://codecov.io/gh/simonrenoult/code-complexity">
+  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/simonrenoult/code-complexity.svg?style=flat-square">
+</a>
+<a href="https://travis-ci.org/simonrenoult/code-complexity">
+  <img alt="Travis" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
+</a>
+
 
 ## Install
 
