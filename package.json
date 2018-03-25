@@ -9,7 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "complexity",
+    "sloc",
+    "commit",
+    "cli"
+  ],
   "author": "Simon Renoult <simon.renoult@gmail.com>",
   "license": "MIT",
   "devDependencies": {
