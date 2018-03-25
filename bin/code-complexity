@@ -3,6 +3,7 @@
 const cli = require("../src/cli");
 const { displayResult } = require("../src/output");
 const { computeComplexity } = require("../src/code-complexity");
+const { getRawCommitCount } = require("../src/git-interface");
 
 if (!cli.args || !cli.args.length) {
   cli.help();
@@ -10,6 +11,9 @@ if (!cli.args || !cli.args.length) {
 }
 
 const directory = cli.args[0];
-computeComplexity(directory, cli).then(filesComplexity => {
+
+(async () => {
+  const rawCommitCount = await getRawCommitCount(directory);
+  const filesComplexity = await computeComplexity(rawCommitCount, directory);
   displayResult(filesComplexity, cli);
-});
+})();

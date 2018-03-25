@@ -1,24 +1,13 @@
-const { exec } = require("child_process");
-const fs = require("fs");
 const nodeSloc = require("node-sloc");
 const path = require("path");
 const pathExists = require("path-exists");
-const { promisify } = require("util");
 
 module.exports = {
   computeComplexity
 };
 
-async function computeComplexity(directory) {
-  if (!directory) {
-    throw new Error("Argument 'dir' must be provided.");
-  }
-
-  if (!fs.lstatSync(directory).isDirectory()) {
-    throw new Error("Argument 'dir' must be a directory.");
-  }
-
-  const commitCount = await countCommitsPerFile(directory);
+async function computeComplexity(rawCommitCount, directory) {
+  const commitCount = await parseRawCommitCount(rawCommitCount, directory);
 
   const filesToAnalyze = commitCount.map(file => file.absolutePath);
   const slocPerFile = await computeSlocPerFile(filesToAnalyze);
@@ -26,24 +15,28 @@ async function computeComplexity(directory) {
   return await computeComplexityPerFile(commitCount, slocPerFile);
 }
 
-async function countCommitsPerFile(directory) {
-  const { stdout, stderr } = await promisify(exec)(
-    `git -C ${directory} log --name-only --format='' | sort | uniq -c`
-  );
-
-  if (stderr) throw stderr;
-
-  return stdout
+async function parseRawCommitCount(rawCommitCountPerFile, directory) {
+  return rawCommitCountPerFile
     .split("\n")
     .filter(line => line.endsWith(".js"))
     .map(line => {
-      const matches = line.match(/(.+) (.+)/);
-      const commitCount = parseInt(matches[1], 10);
-      const pathToFile = matches[2];
+      const { commitCount, pathToFile } = parseRawLine(line);
       const absolutePath = path.resolve(directory, pathToFile);
       return { absolutePath, pathToFile, commitCount };
     })
     .filter(({ absolutePath }) => pathExists.sync(absolutePath));
+}
+
+function parseRawLine(line) {
+  const COMMIT_COUNT_PER_FILE_REGEX = /(.+) (.+)/;
+  const COMMIT_COUNT_INDEX = 1;
+  const PATH_INDEX = 2;
+
+  const matches = line.match(COMMIT_COUNT_PER_FILE_REGEX);
+  const commitCount = parseInt(matches[COMMIT_COUNT_INDEX], 10);
+  const pathToFile = matches[PATH_INDEX];
+
+  return { commitCount, pathToFile };
 }
 
 async function computeSlocPerFile(fileList) {
