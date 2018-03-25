@@ -1,6 +1,6 @@
 {
   "name": "code-complexity",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Measure projects complexity based on files sloc and commit number.",
   "main": "bin/code-complexity",
   "bin": {
