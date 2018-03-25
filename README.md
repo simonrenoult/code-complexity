@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure projects complexity based of files sloc and commit number.
+> Measure projects complexity based on files sloc and commit number.
 
 
 ## Install
