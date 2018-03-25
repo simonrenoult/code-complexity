@@ -31,6 +31,7 @@ describe(".computeComplexity(rawCommitCount, directory)", () => {
     // When
     const result = await computeComplexity(rawCommitCount, directory);
 
+    // Then
     expect(result).to.eql([
       {
         absolutePath: "/qux/bar/server.js",
