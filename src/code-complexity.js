@@ -1,6 +1,6 @@
-const nodeSloc = require("node-sloc");
 const path = require("path");
 const pathExists = require("path-exists");
+const { getSloc } = require("./sloc-interface");
 
 module.exports = {
   computeComplexity
@@ -8,7 +8,6 @@ module.exports = {
 
 async function computeComplexity(rawCommitCount, directory) {
   const commitCount = await parseRawCommitCount(rawCommitCount, directory);
-
   const filesToAnalyze = commitCount.map(file => file.absolutePath);
   const slocPerFile = await computeSlocPerFile(filesToAnalyze);
 
@@ -18,6 +17,7 @@ async function computeComplexity(rawCommitCount, directory) {
 async function parseRawCommitCount(rawCommitCountPerFile, directory) {
   return rawCommitCountPerFile
     .split("\n")
+    .map(line => line.trim())
     .filter(line => line.endsWith(".js"))
     .map(line => {
       const { commitCount, pathToFile } = parseRawLine(line);
@@ -42,7 +42,7 @@ function parseRawLine(line) {
 async function computeSlocPerFile(fileList) {
   return await Promise.all(
     fileList.map(async file => {
-      const { sloc } = await nodeSloc({ path: file });
+      const sloc = await getSloc(file);
       return { absolutePath: file, sloc };
     })
   );
