@@ -2,15 +2,10 @@
 
 > Measure projects complexity based on files sloc and commit number.
 
-<a href="https://travis-ci.org/simonrenoult/code-complexity">
-  <img alt="Travis" src="https://img.shields.io/travis/simonrenoult/code-complexity.svg?style=flat-square">
-</a>
-<a href="https://codecov.io/gh/simonrenoult/code-complexity">
-  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/simonrenoult/code-complexity.svg?style=flat-square">
-</a>
-<a href="https://travis-ci.org/simonrenoult/code-complexity">
-  <img alt="Travis" src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square">
-</a>
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coverage-image]][coverage-url]
+[![Style Status][style-image]][style-url]
+[![NPM Version][npm-image]][npm-url]
 
 
 ## Install
@@ -54,3 +49,13 @@ $ code-complexity . --details
 src/code-complexity.js 53 (commits: 1, sloc: 53)
 src/cli.js 16 (commits: 1, sloc: 16)
 ```
+
+
+[travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/simonrenoult/code-complexity
+[style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
+[style-url]: https://prettier.io/
+[coverage-image]: https://img.shields.io/codecov/c/github/simonrenoult/code-complexity.svg?style=flat-square
+[coverage-url]: https://coveralls.io/github/simonrenoult/code-complexity?branch=master
+[npm-image]: https://img.shields.io/npm/v/code-complexity.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/code-complexity
