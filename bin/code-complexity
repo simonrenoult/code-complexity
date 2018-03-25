@@ -1,36 +1,15 @@
 #!/usr/bin/env node
 
-const chalk = require("chalk");
 const cli = require("../src/cli");
-const codeComplexity = require("../src/code-complexity");
+const { displayResult } = require("../src/output");
+const { computeComplexity } = require("../src/code-complexity");
 
 if (!cli.args || !cli.args.length) {
   cli.help();
   process.exit(0);
 }
 
-codeComplexity(cli.args[0], cli).then(displayResult);
-
-function displayResult(filesComplexity) {
-  console.log();
-
-  filesComplexity
-    .sort((fileA, fileB) => fileB.overallComplexity - fileA.overallComplexity)
-    .slice(0, cli.limit || filesComplexity.length)
-    .forEach(
-      ({ pathToFile, overallComplexity, commitCount, sloc: { sloc } }) => {
-        let messageChunks = [
-          chalk.yellow(pathToFile),
-          chalk.magenta(overallComplexity)
-        ];
-
-        if (cli.details) {
-          messageChunks.push(
-            chalk.blue(`(commits: ${commitCount}, sloc: ${sloc})`)
-          );
-        }
-
-        console.log(messageChunks.join(" "));
-      }
-    );
-}
+const directory = cli.args[0];
+computeComplexity(directory, cli).then(filesComplexity => {
+  displayResult(filesComplexity, cli);
+});
