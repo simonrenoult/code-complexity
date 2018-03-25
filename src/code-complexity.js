@@ -28,14 +28,13 @@ async function computeComplexity(directory) {
 
 async function countCommitsPerFile(directory) {
   const { stdout, stderr } = await promisify(exec)(
-    `git -C ${directory} log --name-only --pretty=format: | sort | uniq -c | sort -nr`
+    `git -C ${directory} log --name-only --format='' | sort | uniq -c`
   );
 
   if (stderr) throw stderr;
 
   return stdout
     .split("\n")
-    .map(line => line.trim())
     .filter(line => line.endsWith(".js"))
     .map(line => {
       const matches = line.match(/(.+) (.+)/);
