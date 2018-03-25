@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "NODE_ENV=test nyc mocha spec/**/*.test.js",
+    "test": "NODE_ENV=test nyc mocha test/**/*.test.js",
     "coverage": "NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "keywords": [
