@@ -20,18 +20,19 @@ $ npm install --global code-complexity
 ```sh
   Usage: code-complexity <dir>
 
-  Measure projects complexity based of files sloc and commit number.
+  Measure projects complexity based on files sloc and commit number.
 
   Options:
 
-    -l, --limit [limit]  Limit the number of files to output
-    -d, --details        Show the number of commit and computed sloc
-    -c, --commit         Show the number of commits
-    -s, --sloc           Show the computed sloc
-    --sort [sort]        Sort results by commit, complexity, file or sloc
-    --min [min]          Exclude results below <min>
-    --max [max]          Exclude results above <max>
-    -h, --help           output usage information
+    -l, --limit [limit]    Limit the number of files to output
+    -d, --details          Show the number of commit and computed sloc
+    -c, --commit           Show the number of commits
+    -s, --sloc             Show the computed sloc
+    -n, --no-first-parent  Do not use the git-log flag '--first-parent' when counting commits
+    --sort [sort]          Sort results by commit, complexity, file or sloc
+    --min [min]            Exclude results below <min>
+    --max [max]            Exclude results above <max>
+    -h, --help             output usage information
 
   Examples:
 

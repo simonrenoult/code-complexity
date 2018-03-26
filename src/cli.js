@@ -13,6 +13,10 @@ commander
   .option("-c, --commit", "Show the number of commits")
   .option("-s, --sloc", "Show the computed sloc")
   .option(
+    "-n, --no-first-parent",
+    "Do not use the git-log flag '--first-parent' when counting commits"
+  )
+  .option(
     "--sort [sort]",
     "Sort results by commit, complexity, file or sloc",
     /^(commit|complexity|file|sloc)$/i
