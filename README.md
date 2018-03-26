@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure projects complexity based on files sloc and commit number.
+> Measure projects complexity based on files sloc and commit count.
 
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coverage-image]][coverage-url]
@@ -20,7 +20,7 @@ $ npm install --global code-complexity
 ```sh
   Usage: code-complexity <dir>
 
-  Measure projects complexity based on files sloc and commit number.
+  Measure projects complexity based on files sloc and commit count.
 
   Options:
 
