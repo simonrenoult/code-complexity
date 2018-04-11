@@ -6,6 +6,13 @@
   "bin": {
     "code-complexity": "bin/code-complexity"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simonrenoult/code-complexity"
+  },
+  "bugs": {
+    "url": "https://github.com/simonrenoult/code-complexity/issues"
+  },
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
