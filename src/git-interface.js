@@ -1,12 +1,13 @@
 const { exec } = require("child_process");
 const fs = require("fs");
 const { promisify } = require("util");
+const isDebug = process.env.DEBUG || false;
 
 module.exports = {
   getRawCommitCount
 };
 
-async function getRawCommitCount(directory, firstParent) {
+async function getRawCommitCount(directory, firstParent, since) {
   if (!directory) {
     throw new Error("Argument 'dir' must be provided.");
   }
@@ -16,9 +17,14 @@ async function getRawCommitCount(directory, firstParent) {
   }
 
   const firstParentFlag = firstParent ? "--first-parent" : "";
-  const { stdout, stderr } = await promisify(exec)(
-    `git -C ${directory} log ${firstParentFlag} --name-only --format='' | sort | uniq -c`
-  );
+  const sinceParameter = since ? `--since="${since}"` : "";
+  const command = `git -C ${directory} log ${sinceParameter} ${firstParentFlag} --name-only --format='' | sort | uniq -c`;
+
+  if (isDebug) {
+    console.log(command);
+  }
+
+  const { stdout, stderr } = await promisify(exec)(command);
 
   if (stderr) throw stderr;
 

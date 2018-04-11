@@ -13,7 +13,11 @@ if (!cli.args || !cli.args.length) {
 const directory = cli.args[0];
 
 (async () => {
-  const rawCommitCount = await getRawCommitCount(directory, cli.firstParent);
+  const rawCommitCount = await getRawCommitCount(
+    directory,
+    cli.firstParent,
+    cli.since
+  );
   const filesComplexity = await computeComplexity(rawCommitCount, directory);
   displayResult(filesComplexity, cli);
 })();

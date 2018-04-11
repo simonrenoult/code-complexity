@@ -12,6 +12,7 @@ commander
   .option("-d, --details", "Show the number of commit and computed sloc")
   .option("-c, --commit", "Show the number of commits")
   .option("-s, --sloc", "Show the computed sloc")
+  .option("-i, --since [since]", "Limit the age of the commit analyzed")
   .option(
     "-n, --no-first-parent",
     "Do not use the git-log flag '--first-parent' when counting commits"
