@@ -28,6 +28,7 @@ $ npm install --global code-complexity
     -d, --details          Show the number of commit and computed sloc
     -c, --commit           Show the number of commits
     -s, --sloc             Show the computed sloc
+    -i, --since [since]    Limit the age of the commit analyzed
     -n, --no-first-parent  Do not use the git-log flag '--first-parent' when counting commits
     --sort [sort]          Sort results by commit, complexity, file or sloc
     --min [min]            Exclude results below <min>
