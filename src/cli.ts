@@ -1,7 +1,10 @@
-const pkg = require("../package");
-const commander = require("commander");
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import * as commander from "commander";
 
-commander
+const pkg = getPackageJson();
+
+export default commander
   .usage("<dir>")
   .description(pkg.description)
   .option(
@@ -28,14 +31,16 @@ commander
     console.log();
     console.log("  Examples:");
     console.log();
-    console.log("    $ code-complexity /path/to/git/directory");
-    console.log("    $ code-complexity /path/to/git/directory --limit 3");
-    console.log("    $ code-complexity /path/to/git/directory --details");
-    console.log(
-      "    $ code-complexity /path/to/git/directory --min 10 --max 50"
-    );
+    console.log("    $ index.ts /path/to/git/directory");
+    console.log("    $ index.ts /path/to/git/directory --limit 3");
+    console.log("    $ index.ts /path/to/git/directory --details");
+    console.log("    $ index.ts /path/to/git/directory --min 10 --max 50");
     console.log();
   })
   .parse(process.argv);
 
-module.exports = commander;
+function getPackageJson(): { description: string } {
+  const path = resolve(__dirname, "../package.json");
+  const rawPkg = readFileSync(path, "utf8");
+  return JSON.parse(rawPkg);
+}
