@@ -50,6 +50,10 @@ src/code-complexity.js 53 (commits: 1, sloc: 53)
 src/cli.js 16 (commits: 1, sloc: 16)
 ```
 
+## Troubleshooting
+
++ `Error: stdout maxBuffer exceeded`: use the flag `--since` to limit the number of commits to analyze.
+
 [travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
 [style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
