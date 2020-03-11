@@ -7,15 +7,13 @@
 [![Style Status][style-image]][style-url]
 [![NPM Version][npm-image]][npm-url]
 
+## Usage
 
-## Install
-
-```console
-$ npm install --global code-complexity
+```sh
+$ npx code-complexity <path-to-git-directory>
 ```
 
-
-## Usage
+## Help
 
 ```sh
   Usage: code-complexity <dir>
@@ -46,12 +44,11 @@ $ npm install --global code-complexity
 ## Output
 
 ```sh
-$ code-complexity . --details
+$ npx code-complexity . --details
 
 src/code-complexity.js 53 (commits: 1, sloc: 53)
 src/cli.js 16 (commits: 1, sloc: 16)
 ```
-
 
 [travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
