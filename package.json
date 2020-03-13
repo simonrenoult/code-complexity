@@ -6,6 +6,9 @@
   "bin": {
     "code-complexity": "dist/index.js"
   },
+  "files": [
+    "dist/"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/simonrenoult/code-complexity"
@@ -14,11 +17,13 @@
     "url": "https://github.com/simonrenoult/code-complexity/issues"
   },
   "scripts": {
-    "lint": "eslint --ext .ts .",
-    "pretest": "npm run lint",
-    "test": "NODE_ENV=test nyc mocha test/**/*.test.js",
     "build": "tsc",
-    "coverage": "NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "coverage": "NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "lint": "eslint --ext .ts .",
+    "prepare": "npm run build",
+    "pretest": "npm run lint",
+    "postversion": "git push --tags",
+    "test": "NODE_ENV=test nyc mocha test/**/*.test.js"
   },
   "keywords": [
     "complexity",
