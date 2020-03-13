@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import cli from "./cli";
 import { fromComplexityPerFileToStringPerFile } from "./from-complexity-per-file-to-string-per-file";
 import {
