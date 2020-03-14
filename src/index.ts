@@ -22,16 +22,16 @@ async function main(): Promise<void> {
   const [directory] = cli.args;
   const options = { firstParent: cli.firstParent, since: cli.since };
 
-  const commitCount: CommitCountPerFile[] = await countCommitsPerFile(
+  const commitCountPerFiles: CommitCountPerFile[] = await countCommitsPerFile(
     directory,
     options
   );
 
-  const filesComplexity: ComplexityPerFile[] = await computeComplexityPerFile(
-    commitCount
+  const complexityPerFiles: ComplexityPerFile[] = await computeComplexityPerFile(
+    commitCountPerFiles
   );
 
-  fromComplexityPerFileToStringPerFile(filesComplexity, cli).forEach(line =>
+  fromComplexityPerFileToStringPerFile(complexityPerFiles, cli).forEach(line =>
     console.log(line)
   );
 }
