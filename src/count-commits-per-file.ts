@@ -15,7 +15,7 @@ export async function countCommitsPerFile(
   return stdout
     .split(PER_LINE)
     .map(trim)
-    .filter(jsOnly)
+    .filter(jsOrTsOnly)
     .map(line => {
       const { groups } = line.match(COMMITS_PER_FILE);
       return new CommitCountPerFile(
@@ -29,7 +29,7 @@ export async function countCommitsPerFile(
 
 const PER_LINE = "\n";
 const trim = (s): string => s.trim();
-const jsOnly = (s): string => s.endsWith(".js");
+const jsOrTsOnly = (s): string => s.endsWith(".js") || s.endsWith(".ts");
 const COMMITS_PER_FILE = /(?<commitCount>[0-9]+) (?<relativePathToFile>.+)/;
 const ignoreFilesThatNoLongerExist = (
   commitCountPerFile: CommitCountPerFile
