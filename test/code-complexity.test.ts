@@ -3,7 +3,7 @@ import { describe, before, it } from "mocha";
 import { resolve } from "path";
 import { expect } from "chai";
 
-const codeComplexity = resolve(__dirname, "../src/index.ts");
+const codeComplexity = resolve(__dirname, "../src/code-complexity.ts");
 const fixture = resolve(__dirname, "code-complexity-fixture");
 
 describe("code-complexity", () => {

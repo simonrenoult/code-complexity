@@ -15,7 +15,7 @@ const examples = [
 ];
 
 export default commander
-  .usage("<dir>")
+  .usage("<dir> [options]")
   .description(pkg.description)
   .option(
     "-l, --limit [limit]",
