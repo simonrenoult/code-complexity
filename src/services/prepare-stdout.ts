@@ -7,6 +7,7 @@ export function prepareStdout(
 ): string[] {
   return filesComplexity
     .sort(sortResult(cli.sort))
+    .filter(exclude(cli.excludes))
     .filter(limitResult(cli.limit, cli.min, cli.max))
     .map(prepareLine(cli));
 }
@@ -32,6 +33,15 @@ function sortResult(sort) {
     }
 
     return 0;
+  };
+}
+
+function exclude(exclusions = []) {
+  return (fileComplexity): boolean => {
+    const atLeastOneExclusionMatches = exclusions.some(exclusion => {
+      return fileComplexity.relativePathToFile.includes(exclusion);
+    });
+    return atLeastOneExclusionMatches === false;
   };
 }
 

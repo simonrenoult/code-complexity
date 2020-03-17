@@ -18,7 +18,11 @@ export default async function computeComplexity(): Promise<void> {
   }
 
   const [directory] = cli.args;
-  const options = { firstParent: cli.firstParent, since: cli.since };
+  const options = {
+    firstParent: cli.firstParent,
+    since: cli.since,
+    excludes: cli.excludes
+  };
 
   const commitCountPerFiles: CommitCountPerFile[] = await countCommitsPerFile(
     directory,

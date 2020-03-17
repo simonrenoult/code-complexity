@@ -9,7 +9,8 @@ const examples = [
   "$ code-complexity <dir> --details",
   "$ code-complexity <dir> --min 10 --max 50",
   "$ code-complexity <dir> --sort complexity",
-  "$ code-complexity <dir> --details --limit 10 --sort complexity"
+  "$ code-complexity <dir> --excludes lib,test",
+  "$ code-complexity <dir> --details --limit 10 --sort complexity --excludes test"
 ];
 
 export default commander
@@ -35,6 +36,11 @@ export default commander
   )
   .option("--min [min]", "Exclude results below <min>", parseInt)
   .option("--max [max]", "Exclude results above <max>", parseInt)
+  .option(
+    "--excludes <strings>",
+    "List of strings (comma separated) used in filenames to exclude",
+    commaSeparatedList
+  )
   .on("--help", () => {
     console.log();
     console.log("Examples:");
@@ -48,4 +54,8 @@ function getPackageJson(): { description: string } {
   const path = resolve(__dirname, "../package.json");
   const rawPkg = readFileSync(path, "utf8");
   return JSON.parse(rawPkg);
+}
+
+function commaSeparatedList(value: string): Array<string> {
+  return value.split(",");
 }
