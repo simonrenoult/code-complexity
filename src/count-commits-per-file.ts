@@ -27,7 +27,7 @@ export async function countCommitsPerFile(
   return stdout
     .split(PER_LINE)
     .map(trim)
-    .filter(jsOrTsOnly)
+    .filter(removeEmptyLines)
     .map(toCommitCountPerFile(directory))
     .filter(ignoreFilesThatNoLongerExist);
 }
@@ -56,18 +56,18 @@ function buildCommand(directory, { firstParent, since }): string {
   const firstParentFlag = firstParent ? "--first-parent" : "";
   const sinceParameter = since ? `--since="${since}"` : "";
   return [
-    `git -C ${directory} log ${sinceParameter} ${firstParentFlag} --name-only --format=''`,
+    `git -C ${directory} log ${sinceParameter} ${firstParentFlag} --name-only --format='' '*.[tj]s'`,
     "sort",
     "uniq --count"
   ].join(" | ");
 }
 
-function trim(s): string {
+function trim(s: string): string {
   return s.trim();
 }
 
-function jsOrTsOnly(s): string {
-  return s.endsWith(".js") || s.endsWith(".ts");
+function removeEmptyLines(s: string): boolean {
+  return s.length !== 0;
 }
 
 function toCommitCountPerFile(directory) {
