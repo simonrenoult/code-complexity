@@ -3,6 +3,14 @@ import { resolve } from "path";
 import * as commander from "commander";
 
 const pkg = getPackageJson();
+const examples = [
+  "$ code-complexity <dir>",
+  "$ code-complexity <dir> --limit 3",
+  "$ code-complexity <dir> --details",
+  "$ code-complexity <dir> --min 10 --max 50",
+  "$ code-complexity <dir> --sort complexity",
+  "$ code-complexity <dir> --details --limit 10 --sort complexity"
+];
 
 export default commander
   .usage("<dir>")
@@ -29,22 +37,9 @@ export default commander
   .option("--max [max]", "Exclude results above <max>", parseInt)
   .on("--help", () => {
     console.log();
-    console.log(
-      "  Examples (using the source code instead of npm published versions):"
-    );
+    console.log("Examples:");
     console.log();
-    console.log(
-      "    $ npm run build && node dist/index.js /path/to/git/directory"
-    );
-    console.log(
-      "    $ npm run build && node dist/index.js /path/to/git/directory --limit 3"
-    );
-    console.log(
-      "    $ npm run build && node dist/index.js /path/to/git/directory --details"
-    );
-    console.log(
-      "    $ npx code-complexity /path/to/git/directory --min 10 --max 50"
-    );
+    examples.forEach(example => console.log(`  ${example}`));
     console.log();
   })
   .parse(process.argv);
