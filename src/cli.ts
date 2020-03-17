@@ -10,6 +10,7 @@ const examples = [
   "$ code-complexity <dir> --min 10 --max 50",
   "$ code-complexity <dir> --sort complexity",
   "$ code-complexity <dir> --excludes lib,test",
+  "$ code-complexity <dir> --includes users",
   "$ code-complexity <dir> --details --limit 10 --sort complexity --excludes test"
 ];
 
@@ -38,8 +39,17 @@ export default commander
   .option("--max [max]", "Exclude results above <max>", parseInt)
   .option(
     "--excludes <strings>",
-    "List of strings (comma separated) used in filenames to exclude",
-    commaSeparatedList
+    "List of strings (comma separated) used in filenames to exclude " +
+      "(mutually exclusive with '--includes')",
+    commaSeparatedList,
+    []
+  )
+  .option(
+    "--includes <strings>",
+    "List of strings (comma separated) used in filenames to include " +
+      "(mutually exclusive with '--excludes')",
+    commaSeparatedList,
+    []
   )
   .on("--help", () => {
     console.log();

@@ -7,7 +7,7 @@ export function prepareStdout(
 ): string[] {
   return filesComplexity
     .sort(sortResult(cli.sort))
-    .filter(exclude(cli.excludes))
+    .filter(selectFiles(cli.includes, cli.excludes))
     .filter(limitResult(cli.limit, cli.min, cli.max))
     .map(prepareLine(cli));
 }
@@ -36,13 +36,25 @@ function sortResult(sort) {
   };
 }
 
-function exclude(exclusions = []) {
-  return (fileComplexity): boolean => {
-    const atLeastOneExclusionMatches = exclusions.some(exclusion => {
-      return fileComplexity.relativePathToFile.includes(exclusion);
-    });
-    return atLeastOneExclusionMatches === false;
+function selectFiles(
+  inclusions = [],
+  exclusions = []
+): (ComplexityPerFile) => boolean {
+  return (fileComplexity: ComplexityPerFile): boolean => {
+    if (inclusions.length) {
+      return inclusions.some(pathContains(fileComplexity));
+    }
+
+    if (exclusions.length) {
+      return !exclusions.some(pathContains(fileComplexity));
+    }
+
+    return true;
   };
+
+  function pathContains(fileComplexity: ComplexityPerFile) {
+    return (s): boolean => fileComplexity.relativePathToFile.includes(s);
+  }
 }
 
 function limitResult(limit, min, max) {
