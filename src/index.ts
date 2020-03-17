@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 
 import cli from "./cli";
-import { fromComplexityPerFileToStringPerFile } from "./from-complexity-per-file-to-string-per-file";
+import { prepareStdout } from "./services/prepare-stdout";
 import {
   ComplexityPerFile,
   computeComplexityPerFile
-} from "./compute-complexity-per-file";
+} from "./services/compute-complexity-per-file";
 import {
   CommitCountPerFile,
   countCommitsPerFile
-} from "./count-commits-per-file";
+} from "./services/count-commits-per-file";
 
 main();
 
-async function main(): Promise<void> {
+export default async function main(): Promise<void> {
   if (!cli.args || !cli.args.length) {
     cli.help();
     process.exit(0);
@@ -31,7 +31,5 @@ async function main(): Promise<void> {
     commitCountPerFiles
   );
 
-  fromComplexityPerFileToStringPerFile(complexityPerFiles, cli).forEach(line =>
-    console.log(line)
-  );
+  prepareStdout(complexityPerFiles, cli).forEach(line => console.log(line));
 }

@@ -1,7 +1,7 @@
 import { blue, magenta, yellow } from "chalk";
 import { ComplexityPerFile } from "./compute-complexity-per-file";
 
-export function fromComplexityPerFileToStringPerFile(
+export function prepareStdout(
   filesComplexity: ComplexityPerFile[],
   cli
 ): string[] {
