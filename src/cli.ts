@@ -29,12 +29,22 @@ export default commander
   .option("--max [max]", "Exclude results above <max>", parseInt)
   .on("--help", () => {
     console.log();
-    console.log("  Examples:");
+    console.log(
+      "  Examples (using the source code instead of npm published versions):"
+    );
     console.log();
-    console.log("    $ index.ts /path/to/git/directory");
-    console.log("    $ index.ts /path/to/git/directory --limit 3");
-    console.log("    $ index.ts /path/to/git/directory --details");
-    console.log("    $ index.ts /path/to/git/directory --min 10 --max 50");
+    console.log(
+      "    $ npm run build && node dist/index.js /path/to/git/directory"
+    );
+    console.log(
+      "    $ npm run build && node dist/index.js /path/to/git/directory --limit 3"
+    );
+    console.log(
+      "    $ npm run build && node dist/index.js /path/to/git/directory --details"
+    );
+    console.log(
+      "    $ npx code-complexity /path/to/git/directory --min 10 --max 50"
+    );
     console.log();
   })
   .parse(process.argv);
