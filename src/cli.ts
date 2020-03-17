@@ -40,14 +40,14 @@ export default commander
   .option(
     "--excludes <strings>",
     "List of strings (comma separated) used in filenames to exclude " +
-      "(mutually exclusive with '--includes')",
+      "(executed after '--includes')",
     commaSeparatedList,
     []
   )
   .option(
     "--includes <strings>",
     "List of strings (comma separated) used in filenames to include " +
-      "(mutually exclusive with '--excludes')",
+      "(executed before '--excludes')",
     commaSeparatedList,
     []
   )

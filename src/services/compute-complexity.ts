@@ -17,10 +17,6 @@ export default async function computeComplexity(): Promise<void> {
     process.exit(0);
   }
 
-  if (cli.includes.length !== 0 && cli.excludes.length !== 0) {
-    throw new Error("Options 'includes' and 'excludes' are mutually exclusive");
-  }
-
   const [directory] = cli.args;
   const options = { firstParent: cli.firstParent, since: cli.since };
   const commitCountPerFiles: CommitCountPerFile[] = await countCommitsPerFile(

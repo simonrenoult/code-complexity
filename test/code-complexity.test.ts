@@ -38,7 +38,7 @@ describe("code-complexity", () => {
       );
     });
 
-    context("With exclude", () => {
+    context("With excludes", () => {
       it("outputs the appropriate values", () => {
         // Given
         const command = [
@@ -97,6 +97,33 @@ describe("code-complexity", () => {
             "examples/multi-router/index.js 22 (commits: 2, sloc: 11)",
             "examples/multi-router/controllers/api_v1.js 9 (commits: 1, sloc: 9)",
             "examples/multi-router/controllers/api_v2.js 9 (commits: 1, sloc: 9)"
+          ].join("\n")
+        );
+      });
+    });
+
+    context("With includes and excludes", () => {
+      it("outputs the appropriate values", () => {
+        // Given
+        const command = [
+          `ts-node ${codeComplexity}`,
+          fixture,
+          `--details`,
+          `--limit 10`,
+          `--sort complexity`,
+          `--includes router`,
+          `--excludes test,examples`
+        ].join(" ");
+
+        // When
+        const output = execSync(command, { encoding: "utf8" });
+
+        // Then
+        expect(output.trim()).to.deep.equal(
+          [
+            "lib/router/index.js 40005 (commits: 105, sloc: 381)",
+            "lib/router/route.js 2856 (commits: 28, sloc: 102)",
+            "lib/router/layer.js 1602 (commits: 18, sloc: 89)"
           ].join("\n")
         );
       });

@@ -6,13 +6,14 @@ export function prepareStdout(
   cli
 ): string[] {
   return filesComplexity
-    .sort(sortResult(cli.sort))
-    .filter(selectFiles(cli.includes, cli.excludes))
-    .filter(limitResult(cli.limit, cli.min, cli.max))
+    .sort(sort(cli.sort))
+    .filter(include(cli.includes))
+    .filter(exclude(cli.excludes))
+    .filter(limit(cli.limit, cli.min, cli.max))
     .map(prepareLine(cli));
 }
 
-function sortResult(sort) {
+function sort(sort) {
   return (fileA: ComplexityPerFile, fileB: ComplexityPerFile): number => {
     if (sort === "complexity") {
       return fileB.complexity - fileA.complexity;
@@ -36,28 +37,31 @@ function sortResult(sort) {
   };
 }
 
-function selectFiles(
-  inclusions = [],
-  exclusions = []
-): (ComplexityPerFile) => boolean {
+function include(inclusions): (ComplexityPerFile) => boolean {
   return (fileComplexity: ComplexityPerFile): boolean => {
     if (inclusions.length) {
       return inclusions.some(pathContains(fileComplexity));
     }
 
+    return true;
+  };
+}
+
+function exclude(exclusions): (ComplexityPerFile) => boolean {
+  return (fileComplexity: ComplexityPerFile): boolean => {
     if (exclusions.length) {
       return !exclusions.some(pathContains(fileComplexity));
     }
 
     return true;
   };
-
-  function pathContains(fileComplexity: ComplexityPerFile) {
-    return (s): boolean => fileComplexity.relativePathToFile.includes(s);
-  }
 }
 
-function limitResult(limit, min, max) {
+function pathContains(fileComplexity: ComplexityPerFile) {
+  return (s): boolean => fileComplexity.relativePathToFile.includes(s);
+}
+
+function limit(limit, min, max) {
   return (complexityPerFile: ComplexityPerFile, i: number): boolean => {
     if (limit && i >= limit) {
       return false;
