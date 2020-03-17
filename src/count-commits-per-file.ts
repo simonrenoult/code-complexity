@@ -53,10 +53,18 @@ function assertIsGitRootDirectory(directory: string): void {
 }
 
 function buildCommand(directory, { firstParent, since }): string {
-  const firstParentFlag = firstParent ? "--first-parent" : "";
-  const sinceParameter = since ? `--since="${since}"` : "";
   return [
-    `git -C ${directory} log ${sinceParameter} ${firstParentFlag} --name-only --format='' '*.[tj]s'`,
+    [
+      "git",
+      `-C ${directory}`,
+      `log`,
+      `--follow`,
+      `--name-only`,
+      `--format=''`,
+      since ? `--since="${since}"` : "",
+      firstParent ? "--first-parent" : "",
+      "'*.[tj]s'"
+    ].join(" "),
     "sort",
     "uniq --count"
   ].join(" | ");
