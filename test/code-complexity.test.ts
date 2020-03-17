@@ -1,57 +1,40 @@
-// FIXME: use proxyquire with TypeScript...
-// import { describe, it } from 'mocha'
-// import { expect } from 'chai'
-// import proxyquire from 'proxyquire'
-// const { computeComplexityPerFile } = proxyquire("../src/index.ts", {
-//   "path-exists": {
-//     sync() {
-//       return true;
-//     }
-//   },
-//   "./sloc-interface": {
-//     getSloc() {
-//       return { sloc: 2 };
-//     }
-//   }
-// });
-//
-// describe(".computeComplexityPerFile(rawCommitCount, directory)", () => {
-//   it("returns the appropriate object", async () => {
-//     // Given
-//     const directory = "/qux/bar";
-//     const rawCommitCount = [
-//       "3 .eslintrc.js",
-//       "2 .gitignore",
-//       "1 LICENSE",
-//       "7 README.md",
-//       "9 package.json",
-//       "8 server.js",
-//       "28 src/foo.js"
-//     ].join("\n");
-//
-//     // When
-//     const result = await computeComplexityPerFile(rawCommitCount, directory);
-//
-//     // Then
-//     expect(result).to.eql([
-//       {
-//         absolutePathToFile: "/qux/bar/server.js",
-//         commitCount: 8,
-//         overallComplexity: 16,
-//         relativePathToFile: "server.js",
-//         sloc: {
-//           sloc: 2
-//         }
-//       },
-//       {
-//         absolutePathToFile: "/qux/bar/src/foo.js",
-//         commitCount: 28,
-//         overallComplexity: 56,
-//         relativePathToFile: "src/foo.js",
-//         sloc: {
-//           sloc: 2
-//         }
-//       }
-//     ]);
-//   });
-// });
+import { execSync } from "child_process";
+import { describe, before, it } from "mocha";
+import { resolve } from "path";
+import { expect } from "chai";
+
+const codeComplexity = resolve(__dirname, "../src/index.ts");
+const fixture = resolve(__dirname, "code-complexity-fixture");
+
+describe("code-complexity", () => {
+  let output;
+
+  before(() => {
+    const command = [
+      `ts-node ${codeComplexity}`,
+      fixture,
+      `--details`,
+      `--limit 10`,
+      `--sort complexity`
+    ].join(" ");
+
+    output = execSync(command, { encoding: "utf8" });
+  });
+
+  it("outputs the appropriate values", () => {
+    expect(output.trim()).to.deep.equal(
+      [
+        "lib/response.js 142416 (commits: 276, sloc: 516)",
+        "test/app.router.js 54714 (commits: 66, sloc: 829)",
+        "lib/router/index.js 40005 (commits: 105, sloc: 381)",
+        "lib/application.js 32818 (commits: 122, sloc: 269)",
+        "lib/request.js 21746 (commits: 131, sloc: 166)",
+        "test/res.send.js 17822 (commits: 38, sloc: 469)",
+        "test/res.sendFile.js 14674 (commits: 22, sloc: 667)",
+        "test/Router.js 11100 (commits: 25, sloc: 444)",
+        "lib/express.js 7875 (commits: 125, sloc: 63)",
+        "lib/utils.js 7095 (commits: 55, sloc: 129)"
+      ].join("\n")
+    );
+  });
+});

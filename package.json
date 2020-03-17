@@ -20,10 +20,9 @@
     "build": "tsc",
     "coverage": "NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "lint": "eslint --ext .ts .",
-    "prepare": "npm run build",
-    "pretest": "npm run lint",
+    "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
-    "test": "NODE_ENV=test nyc mocha test/**/*.test.js"
+    "test": "mocha test/*.ts --require ts-node/register"
   },
   "keywords": [
     "complexity",
@@ -39,9 +38,9 @@
     "node-sloc": "^0.1.12"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.10",
+    "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.9.0",
+    "@types/node": "^13.9.1",
     "@types/proxyquire": "^1.3.28",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
@@ -57,6 +56,7 @@
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "proxyquire": "^2.1.3",
+    "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   }
 }

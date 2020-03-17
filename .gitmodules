@@ -1,0 +1,3 @@
+[submodule "test/code-complexity-fixture"]
+	path = test/code-complexity-fixture
+	url = git@github.com:simonrenoult/code-complexity-fixture.git
