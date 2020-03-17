@@ -22,7 +22,7 @@
     "lint": "eslint --ext .ts .",
     "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
-    "test": "mocha --require ts-node/register test/*.ts",
+    "test": "mocha --timeout=10000 --require ts-node/register test/*.ts",
     "test:watch": "mocha --require ts-node/register --watch --watch-files src/*.ts, test/*.ts"
   },
   "keywords": [
