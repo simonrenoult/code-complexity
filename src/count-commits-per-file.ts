@@ -8,6 +8,7 @@ export async function countCommitsPerFile(
 ): Promise<CommitCountPerFile[]> {
   assertGitIsInstalled();
   assertIsDirectory(directory);
+  assertIsGitRootDirectory(directory);
 
   const command = buildCommand(directory, options);
   const stdout = execSync(command, { encoding: "utf8" });
@@ -54,6 +55,12 @@ function assertGitIsInstalled(): void {
 function assertIsDirectory(directory: string): void {
   if (!lstatSync(directory).isDirectory()) {
     throw new Error(`Argument 'dir' must be a directory.`);
+  }
+}
+
+function assertIsGitRootDirectory(directory: string): void {
+  if (!existsSync(`${directory}/.git`)) {
+    throw new Error(`Argument 'dir' must be the git root directory.`);
   }
 }
 
