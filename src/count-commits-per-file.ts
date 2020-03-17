@@ -2,6 +2,17 @@ import { execSync } from "child_process";
 import { existsSync, lstatSync } from "fs";
 import { resolve } from "path";
 
+const PER_LINE = "\n";
+const COMMITS_PER_FILE = /(?<commitCount>[0-9]+) (?<relativePathToFile>.+)/;
+
+export class CommitCountPerFile {
+  constructor(
+    public readonly relativePathToFile: string,
+    public readonly absolutePathToFile: string,
+    public readonly commitCount: number
+  ) {}
+}
+
 export async function countCommitsPerFile(
   directory,
   options: { firstParent; since }
@@ -17,31 +28,8 @@ export async function countCommitsPerFile(
     .split(PER_LINE)
     .map(trim)
     .filter(jsOrTsOnly)
-    .map(line => {
-      const { groups } = line.match(COMMITS_PER_FILE);
-      return new CommitCountPerFile(
-        groups.relativePathToFile,
-        resolve(directory, groups.relativePathToFile),
-        parseInt(groups.commitCount, 10)
-      );
-    })
+    .map(toCommitCountPerFile(directory))
     .filter(ignoreFilesThatNoLongerExist);
-}
-
-const PER_LINE = "\n";
-const trim = (s): string => s.trim();
-const jsOrTsOnly = (s): string => s.endsWith(".js") || s.endsWith(".ts");
-const COMMITS_PER_FILE = /(?<commitCount>[0-9]+) (?<relativePathToFile>.+)/;
-const ignoreFilesThatNoLongerExist = (
-  commitCountPerFile: CommitCountPerFile
-): boolean => existsSync(commitCountPerFile.absolutePathToFile);
-
-export class CommitCountPerFile {
-  constructor(
-    public readonly relativePathToFile: string,
-    public readonly absolutePathToFile: string,
-    public readonly commitCount: number
-  ) {}
 }
 
 function assertGitIsInstalled(): void {
@@ -70,6 +58,31 @@ function buildCommand(directory, { firstParent, since }): string {
   return [
     `git -C ${directory} log ${sinceParameter} ${firstParentFlag} --name-only --format=''`,
     "sort",
-    "uniq -c"
+    "uniq --count"
   ].join(" | ");
+}
+
+function trim(s): string {
+  return s.trim();
+}
+
+function jsOrTsOnly(s): string {
+  return s.endsWith(".js") || s.endsWith(".ts");
+}
+
+function toCommitCountPerFile(directory) {
+  return (line: string): CommitCountPerFile => {
+    const { groups } = line.match(COMMITS_PER_FILE);
+    return new CommitCountPerFile(
+      groups.relativePathToFile,
+      resolve(directory, groups.relativePathToFile),
+      parseInt(groups.commitCount, 10)
+    );
+  };
+}
+
+function ignoreFilesThatNoLongerExist(
+  commitCountPerFile: CommitCountPerFile
+): boolean {
+  return existsSync(commitCountPerFile.absolutePathToFile);
 }
