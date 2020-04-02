@@ -66,7 +66,8 @@ function buildCommand(directory, { firstParent, since }): string {
       "'*.[tj]s'"
     ].join(" "),
     "sort",
-    "uniq --count"
+    // --count might not be supported by all OS
+    "uniq -c"
   ].join(" | ");
 }
 
