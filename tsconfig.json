@@ -1,9 +1,15 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist",
-        "allowJs": false
-    },
-    "include": [
-        "./src/**/*"
-    ]
+  "compilerOptions": {
+    "allowJs": false,
+    "declaration": true,
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "strict": true,
+    "pretty": true,
+    "downlevelIteration": true
+  },
+  "include": [
+    "./src/**/*",
+    "./bin/**/*"
+  ]
 }
