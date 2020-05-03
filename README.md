@@ -16,50 +16,43 @@ $ npx code-complexity <path-to-git-directory>
 ## Help
 
 ```sh
-  Usage: code-complexity <dir> [options]
-  
-  Measure projects complexity based on files sloc and commit count.
-  
-  Options:
-    -l, --limit [limit]    Limit the number of files to output
-    -d, --details          Show the number of commit and computed sloc
-    -c, --commit           Show the number of commits
-    -s, --sloc             Show the computed sloc
-    -i, --since [since]    Limit the age of the commit analyzed
-    -n, --no-first-parent  Do not use the git-log flag '--first-parent' when counting commits
-    --sort [sort]          Sort results by commit, complexity, file or sloc
-    --min [min]            Exclude results below <min>
-    --max [max]            Exclude results above <max>
-    --excludes <strings>   List of strings (comma separated) used in filenames to exclude
-                           (executed after '--includes') (default: [])
-    --includes <strings>   List of strings (comma separated) used in filenames to include
-                           (executed before '--excludes') (default: [])
-    -h, --help             display help for command
-  
-  Examples:
-  
+    Usage: code-complexity <dir> [options]
+    
+    Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.
+    
+    Options:
+      -V, --version          output the version number
+      --filter <strings>     list of globs (comma separated) to filter
+      -f, --format [format]  format results using table or json
+      -l, --limit [limit]    limit the number of files to output
+      -i, --since [since]    limit the age of the commit analyzed
+      -s, --sort [sort]      sort results (allowed valued: ratio,
+                             churn, complexity or file)
+      -h, --help             display help for command
+    
+    Examples:
+    
     $ code-complexity <dir>
     $ code-complexity <dir> --limit 3
-    $ code-complexity <dir> --details
-    $ code-complexity <dir> --min 10 --max 50
-    $ code-complexity <dir> --sort complexity
-    $ code-complexity <dir> --excludes lib,test
-    $ code-complexity <dir> --includes users
-    $ code-complexity <dir> --details --limit 10 --sort complexity --excludes test
+    $ code-complexity <dir> --sort ratio
+    $ code-complexity <dir> --filter 'src/**','!src/front'
+    $ code-complexity <dir> --limit 10 --sort ratio
 ```
 
 ## Output
 
 ```sh
-$ npx code-complexity . --details --sort complexity --limit 10 
+$ npx code-complexity . --sort=ratio --limit=3
 
-test/code-complexity.test.ts 535 (commits: 5, sloc: 107)
-src/cli.ts 402 (commits: 6, sloc: 67)
-src/services/prepare-stdout.ts 348 (commits: 4, sloc: 87)
-src/services/compute-complexity.ts 108 (commits: 4, sloc: 27)
-src/services/count-commits-per-file.ts 83 (commits: 1, sloc: 83)
-src/services/compute-complexity-per-file.ts 36 (commits: 1, sloc: 36)
-.eslintrc.js 19 (commits: 1, sloc: 19)
+┌──────────────────────────────┬────────────┬───────┬───────┐
+│ file                         │ complexity │ churn │ ratio │
+├──────────────────────────────┼────────────┼───────┼───────┤
+│ src/cli.ts                   │ 103        │ 8     │ 824   │
+├──────────────────────────────┼────────────┼───────┼───────┤
+│ test/code-complexity.test.ts │ 107        │ 7     │ 749   │
+├──────────────────────────────┼────────────┼───────┼───────┤
+│ .idea/workspace.xml          │ 123        │ 6     │ 738   │
+└──────────────────────────────┴────────────┴───────┴───────┘
 ```
 
 ## Troubleshooting
