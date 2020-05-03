@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { join } from "path";
 
-import Statistics = require("../../src/lib");
+import Statistics from "../../src/lib";
 import { Options } from "../../src/lib/types";
 
 describe("Statistics", () => {
