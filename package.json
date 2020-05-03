@@ -1,6 +1,6 @@
 {
   "name": "code-complexity",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.",
   "author": "Simon Renoult <simon.renoult@gmail.com>",
   "main": "dist/src/lib",
