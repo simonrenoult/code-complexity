@@ -17,12 +17,13 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "coverage": "NODE_ENV=test nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage": "codecov",
     "lint": "eslint --ext .ts .",
     "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
     "pretest": "npm run lint",
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register test/**/*.ts",
+    "test:ci": "nyc --reporter=lcov npm test"
   },
   "keywords": [
     "quality",
