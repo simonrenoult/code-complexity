@@ -1,11 +1,18 @@
 # code-complexity
 
-> Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.
+> Measure the churn/complexity ratio. Higher values mean hotspots where 
+> refactorings should happen.
 
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coverage-image]][coverage-url]
 [![Style Status][style-image]][style-url]
 [![NPM Version][npm-image]][npm-url]
+
+Quoting Michael Feathers (source [here][michael-feathers-source]):
+
+*Often when we refactor, we look at local areas of code. If we take a wider 
+view, using information from our version control systems, we can get a better 
+sense of the effects of our refactoring efforts.*
 
 ## Usage
 
@@ -59,6 +66,7 @@ $ npx code-complexity . --sort=ratio --limit=3
 
 + `Error: stdout maxBuffer exceeded`: use the flag `--since` to limit the number of commits to analyze.
 
+[michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
 [travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
 [style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
