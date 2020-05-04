@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure projects complexity based on files sloc and commit count.
+> Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.
 
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coverage-image]][coverage-url]
