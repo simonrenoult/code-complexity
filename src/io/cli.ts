@@ -60,7 +60,7 @@ function getRawCli(
         "$ code-complexity <dir>",
         "$ code-complexity <dir> --limit 3",
         "$ code-complexity <dir> --sort score",
-        "$ code-complexity <dir> --filter 'src/**','!src/front'",
+        "$ code-complexity <dir> --filter 'src/**,!src/front/**'",
         "$ code-complexity <dir> --limit 10 --sort score",
       ].forEach((example) => console.log(example.padStart(2)));
     });
