@@ -119,7 +119,10 @@ function computeNumberOfTimesFilesChanged(
     gitLogCommand = gitLogCommand.replace(/.*(\r\n|\r|\n){2}/g, "");
   }
 
-  const changedFiles = gitLogCommand.split("\n").sort();
+  const changedFiles = gitLogCommand
+    .split("\n")
+    .filter((line) => line !== "")
+    .sort();
 
   const changedFilesCount = changedFiles.reduce(
     (fileAndTimeChanged: { [fileName: string]: number }, fileName) => {
