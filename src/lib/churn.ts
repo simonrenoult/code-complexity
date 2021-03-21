@@ -8,6 +8,7 @@ import { buildDebugger, withDuration } from "../utils";
 
 type ParsedLine = { relativePath: string; commitCount: string };
 const internal = { debug: buildDebugger("churn") };
+const PER_LINE = "\n";
 
 export default {
   compute: (...args: any[]): Promise<Map<Path, number>> =>
@@ -26,8 +27,7 @@ async function compute(options: Options): Promise<Map<Path, number>> {
   const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
 
   const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
-    gitLogStdout,
-    isWindows
+    gitLogStdout
   ).filter((parsedLine: ParsedLine) => {
     return existsSync(resolve(options.directory, parsedLine.relativePath));
   });
@@ -84,43 +84,22 @@ function buildGitLogCommand(options: Options, isWindows: boolean): string {
     `log`,
     `--follow`,
 
+    // Windows CMD handle quotes differently than linux, this is why we should put empty string as said in:
     // https://github.com/git-for-windows/git/issues/3131
-    `--format='${isWindows ? "%s" : ""}'`,
+    `--format=${isWindows ? "" : "''"}`,
     `--name-only`,
     options.since ? `--since="${options.since}"` : "",
 
-    // In windows CMD if you specify '*' it will output an empty line
+    // Windows CMD handle quotes differently
     isWindows ? "*" : "'*'",
   ]
     .filter((s) => s.length > 0)
     .join(" ");
 }
 
-function computeNumberOfTimesFilesChanged(
-  gitLogCommand: string,
-  isWindows: boolean
-): ParsedLine[] {
-  if (isWindows) {
-    /**
-     * This will remove all the commit messages from the git log output
-     * Git log output in Windows for example is:
-     * ```
-     * 'doc: add michael feathers excerpt'
-     *
-     * README.md
-     * 'fix: use valid command for travis'
-     *
-     * .travis.yml
-     * 'doc: update readme description'
-     *
-     * README.md
-     * ```
-     */
-    gitLogCommand = gitLogCommand.replace(/.*(\r\n|\r|\n){2}/g, "");
-  }
-
+function computeNumberOfTimesFilesChanged(gitLogCommand: string): ParsedLine[] {
   const changedFiles = gitLogCommand
-    .split("\n")
+    .split(PER_LINE)
     .filter((line) => line !== "")
     .sort();
 
