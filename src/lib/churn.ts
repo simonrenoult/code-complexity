@@ -8,8 +8,6 @@ import { buildDebugger, withDuration } from "../utils";
 
 type ParsedLine = { relativePath: string; commitCount: string };
 const internal = { debug: buildDebugger("churn") };
-const PER_LINE = "\n";
-const COMMITS_PER_FILE_REGEX = /(?<commitCount>[0-9]+) (?<relativePath>.+)/;
 
 export default {
   compute: (...args: any[]): Promise<Map<Path, number>> =>
@@ -20,30 +18,23 @@ async function compute(options: Options): Promise<Map<Path, number>> {
   assertGitIsInstalled();
   assertIsGitRootDirectory(options.directory);
 
-  const gitLogCommand = buildGitLogCommand(options);
+  const isWindows = process.platform === "win32";
+  const gitLogCommand = buildGitLogCommand(options, isWindows);
 
   internal.debug(`command to measure churns: ${gitLogCommand}`);
 
   const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
-  const gitLogStdoutLines = gitLogStdout.split(PER_LINE);
 
-  const parsedLines: ParsedLine[] = gitLogStdoutLines
-    .map((line: string): string => line.trim())
-    .filter((line: string): boolean => line.length !== 0)
-    .map(
-      (line: string): ParsedLine => {
-        const matches = line.match(COMMITS_PER_FILE_REGEX);
-        if (!matches || !matches.groups) {
-          throw new Error("An error occurred while computing churns");
-        }
+  // console.log(gitLogStdout);
 
-        const { relativePath, commitCount } = matches.groups;
-        return { relativePath, commitCount };
-      }
-    )
-    .filter((parsedLine: ParsedLine) => {
-      return existsSync(resolve(options.directory, parsedLine.relativePath));
-    });
+  const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
+    gitLogStdout,
+    isWindows
+  ).filter((parsedLine: ParsedLine) => {
+    return existsSync(resolve(options.directory, parsedLine.relativePath));
+  });
+
+  console.log(parsedLines);
 
   const allChurns = parsedLines.reduce(
     (map: Map<Path, number>, { relativePath, commitCount }: ParsedLine) => {
@@ -90,22 +81,63 @@ function assertIsGitRootDirectory(directory: string): void {
   }
 }
 
-function buildGitLogCommand(options: Options): string {
+function buildGitLogCommand(options: Options, isWindows: boolean): string {
   return [
-    [
-      "git",
-      `-C ${options.directory}`,
-      `log`,
-      `--follow`,
-      `--format=''`,
-      `--name-only`,
-      options.since ? `--since="${options.since}"` : "",
-      "'*'",
-    ]
-      .filter((s) => s.length > 0)
-      .join(" "),
-    "sort",
-    // --count might not be supported by all OS
-    "uniq -c",
-  ].join(" | ");
+    "git",
+    `-C ${options.directory}`,
+    `log`,
+    `--follow`,
+
+    // https://github.com/git-for-windows/git/issues/3131
+    `--format='${isWindows ? "%s" : ""}'`,
+    `--name-only`,
+    options.since ? `--since="${options.since}"` : "",
+
+    // In windows CMD if you specify '*' it will output an empty line
+    isWindows ? "*" : "'*'",
+  ]
+    .filter((s) => s.length > 0)
+    .join(" ");
+}
+
+function computeNumberOfTimesFilesChanged(
+  gitLogCommand: string,
+  isWindows: boolean
+): ParsedLine[] {
+  if (isWindows) {
+    /**
+     * This will remove all the commit messages from the git log output
+     * Git log output in Windows for example is:
+     * ```
+     * 'doc: add michael feathers excerpt'
+     *
+     * README.md
+     * 'fix: use valid command for travis'
+     *
+     * .travis.yml
+     * 'doc: update readme description'
+     *
+     * README.md
+     * ```
+     */
+    gitLogCommand = gitLogCommand.replace(/.*(\r\n|\r|\n){2}/g, "");
+  }
+
+  const changedFiles = gitLogCommand.split("\n").sort();
+
+  const changedFilesCount = changedFiles.reduce(
+    (fileAndTimeChanged: { [fileName: string]: number }, fileName) => {
+      fileAndTimeChanged[fileName] = (fileAndTimeChanged[fileName] || 0) + 1;
+      return fileAndTimeChanged;
+    },
+    {}
+  );
+
+  return Object.keys(changedFilesCount).map(
+    (changedFileName) =>
+      ({
+        relativePath: changedFileName,
+        commitCount: changedFilesCount[changedFileName].toString(),
+      } as ParsedLine)
+  );
 }
