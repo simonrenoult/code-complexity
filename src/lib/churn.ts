@@ -25,16 +25,12 @@ async function compute(options: Options): Promise<Map<Path, number>> {
 
   const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
 
-  // console.log(gitLogStdout);
-
   const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
     gitLogStdout,
     isWindows
   ).filter((parsedLine: ParsedLine) => {
     return existsSync(resolve(options.directory, parsedLine.relativePath));
   });
-
-  console.log(parsedLines);
 
   const allChurns = parsedLines.reduce(
     (map: Map<Path, number>, { relativePath, commitCount }: ParsedLine) => {
