@@ -22,7 +22,7 @@ $ npx code-complexity <path-to-git-directory>
 
 ## Help
 
-```sh
+```text
     Usage: code-complexity <dir> [options]
     
     Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.
