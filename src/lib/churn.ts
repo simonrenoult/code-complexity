@@ -97,8 +97,8 @@ function buildGitLogCommand(options: Options, isWindows: boolean): string {
     .join(" ");
 }
 
-function computeNumberOfTimesFilesChanged(gitLogCommand: string): ParsedLine[] {
-  const changedFiles = gitLogCommand
+function computeNumberOfTimesFilesChanged(gitLogOutput: string): ParsedLine[] {
+  const changedFiles = gitLogOutput
     .split(PER_LINE)
     .filter((line) => line !== "")
     .sort();
