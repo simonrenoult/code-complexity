@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure the churn/complexity ratio. Higher values mean hotspots where 
+> Measure the churn/complexity score. Higher values mean hotspots where 
 > refactorings should happen.
 
 [![Build Status][travis-image]][travis-url]
@@ -25,7 +25,7 @@ $ npx code-complexity <path-to-git-directory>
 ```text
     Usage: code-complexity <dir> [options]
     
-    Measure the churn/complexity ratio. Higher values mean hotspots where refactorings should happen.
+    Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
     
     Options:
       -V, --version          output the version number
@@ -33,7 +33,7 @@ $ npx code-complexity <path-to-git-directory>
       -f, --format [format]  format results using table or json
       -l, --limit [limit]    limit the number of files to output
       -i, --since [since]    limit the age of the commit analyzed
-      -s, --sort [sort]      sort results (allowed valued: ratio,
+      -s, --sort [sort]      sort results (allowed valued: score,
                              churn, complexity or file)
       -h, --help             display help for command
     
@@ -41,18 +41,18 @@ $ npx code-complexity <path-to-git-directory>
     
     $ code-complexity <dir>
     $ code-complexity <dir> --limit 3
-    $ code-complexity <dir> --sort ratio
+    $ code-complexity <dir> --sort score
     $ code-complexity <dir> --filter 'src/**','!src/front'
-    $ code-complexity <dir> --limit 10 --sort ratio
+    $ code-complexity <dir> --limit 10 --sort score
 ```
 
 ## Output
 
 ```sh
-$ npx code-complexity . --sort=ratio --limit=3
+$ npx code-complexity . --sort=score --limit=3
 
 ┌──────────────────────────────┬────────────┬───────┬───────┐
-│ file                         │ complexity │ churn │ ratio │
+│ file                         │ complexity │ churn │ score │
 ├──────────────────────────────┼────────────┼───────┼───────┤
 │ src/cli.ts                   │ 103        │ 8     │ 824   │
 ├──────────────────────────────┼────────────┼───────┼───────┤
