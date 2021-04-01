@@ -37,14 +37,14 @@ function toJson(statistics: Statistics[]): string {
 
 function toTable(statistics: Statistics[]): string {
   const table = new Table({
-    head: ["file", "complexity", "churn", "ratio"],
+    head: ["file", "complexity", "churn", "score"],
   });
   statistics.forEach((statistics) => {
     table.push([
       statistics.path,
       statistics.complexity,
       statistics.churn,
-      statistics.ratio,
+      statistics.score,
     ]);
   });
 

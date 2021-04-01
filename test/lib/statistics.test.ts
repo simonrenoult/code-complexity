@@ -11,7 +11,7 @@ describe("Statistics", () => {
     filter: [],
     limit: 3,
     since: undefined,
-    sort: "ratio",
+    sort: "score",
   };
 
   context("options.limit", () => {
@@ -43,19 +43,19 @@ describe("Statistics", () => {
           churn: 340,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 175440,
+          score: 175440,
         },
         {
           churn: 140,
           complexity: 381,
           path: "lib/router/index.js",
-          ratio: 53340,
+          score: 53340,
         },
         {
           churn: 159,
           complexity: 269,
           path: "lib/application.js",
-          ratio: 42771,
+          score: 42771,
         },
       ]);
     });
@@ -76,19 +76,19 @@ describe("Statistics", () => {
           churn: 1,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 516,
+          score: 516,
         },
         {
           churn: 1,
           complexity: 51,
           path: ".travis.yml",
-          ratio: 51,
+          score: 51,
         },
         {
           churn: 1,
           complexity: 48,
           path: "appveyor.yml",
-          ratio: 48,
+          score: 48,
         },
       ]);
     });
@@ -97,7 +97,7 @@ describe("Statistics", () => {
   context("options.sort=complexity", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, sort: "ratio" };
+      const options: Options = { ...defaultOptions, sort: "score" };
 
       // When
       const result = await Statistics.compute(options);
@@ -109,19 +109,19 @@ describe("Statistics", () => {
           churn: 340,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 175440,
+          score: 175440,
         },
         {
           churn: 71,
           complexity: 829,
           path: "test/app.router.js",
-          ratio: 58859,
+          score: 58859,
         },
         {
           churn: 140,
           complexity: 381,
           path: "lib/router/index.js",
-          ratio: 53340,
+          score: 53340,
         },
       ]);
     });
@@ -130,7 +130,7 @@ describe("Statistics", () => {
   context("options.sort=churn", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, sort: "ratio" };
+      const options: Options = { ...defaultOptions, sort: "score" };
 
       // When
       const result = await Statistics.compute(options);
@@ -142,19 +142,19 @@ describe("Statistics", () => {
           churn: 340,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 175440,
+          score: 175440,
         },
         {
           churn: 71,
           complexity: 829,
           path: "test/app.router.js",
-          ratio: 58859,
+          score: 58859,
         },
         {
           churn: 140,
           complexity: 381,
           path: "lib/router/index.js",
-          ratio: 53340,
+          score: 53340,
         },
       ]);
     });
@@ -163,7 +163,7 @@ describe("Statistics", () => {
   context("options.sort=file", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, sort: "ratio" };
+      const options: Options = { ...defaultOptions, sort: "score" };
 
       // When
       const result = await Statistics.compute(options);
@@ -175,28 +175,28 @@ describe("Statistics", () => {
           churn: 340,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 175440,
+          score: 175440,
         },
         {
           churn: 71,
           complexity: 829,
           path: "test/app.router.js",
-          ratio: 58859,
+          score: 58859,
         },
         {
           churn: 140,
           complexity: 381,
           path: "lib/router/index.js",
-          ratio: 53340,
+          score: 53340,
         },
       ]);
     });
   });
 
-  context("options.sort=ratio", () => {
+  context("options.sort=score", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, sort: "ratio" };
+      const options: Options = { ...defaultOptions, sort: "score" };
 
       // When
       const result = await Statistics.compute(options);
@@ -208,19 +208,19 @@ describe("Statistics", () => {
           churn: 340,
           complexity: 516,
           path: "lib/response.js",
-          ratio: 175440,
+          score: 175440,
         },
         {
           churn: 71,
           complexity: 829,
           path: "test/app.router.js",
-          ratio: 58859,
+          score: 58859,
         },
         {
           churn: 140,
           complexity: 381,
           path: "lib/router/index.js",
-          ratio: 53340,
+          score: 53340,
         },
       ]);
     });
