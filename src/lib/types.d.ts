@@ -1,5 +1,5 @@
 export type Path = string;
-export type Sort = "score" | "churn" | "complexity" | "file";
+export type Sort = "score" | "churn" | "complexity" | "file" | "ratio";
 export type Format = "table" | "json";
 export type Options = {
   directory: string;

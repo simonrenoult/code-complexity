@@ -59,7 +59,7 @@ function limit(
 
 function sort(sort: Sort | undefined) {
   return (statisticsA: Statistics, statisticsB: Statistics): number => {
-    if (sort === "score") {
+    if (sort === "score" || sort === "ratio") {
       return statisticsB.score - statisticsA.score;
     }
 
