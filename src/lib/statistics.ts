@@ -12,13 +12,13 @@ export default class Statistics {
   public readonly path: Path;
   public readonly churn: number;
   public readonly complexity: number;
-  public readonly ratio: number;
+  public readonly score: number;
 
   constructor(path: Path, churn: number, complexity: number) {
     this.path = path;
     this.churn = churn;
     this.complexity = complexity;
-    this.ratio = this.churn * this.complexity;
+    this.score = this.churn * this.complexity;
   }
 
   public static async compute(
@@ -59,8 +59,8 @@ function limit(
 
 function sort(sort: Sort | undefined) {
   return (statisticsA: Statistics, statisticsB: Statistics): number => {
-    if (sort === "ratio") {
-      return statisticsB.ratio - statisticsA.ratio;
+    if (sort === "score") {
+      return statisticsB.score - statisticsA.score;
     }
 
     if (sort === "churn") {

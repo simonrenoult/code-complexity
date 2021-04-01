@@ -49,8 +49,8 @@ function getRawCli(
     .option("-i, --since [since]", "limit the age of the commit analyzed")
     .option(
       "-s, --sort [sort]",
-      "sort results (allowed valued: ratio, churn, complexity or file)",
-      /^(ratio|churn|complexity|file)$/i
+      "sort results (allowed valued: score, churn, complexity or file)",
+      /^(score|churn|complexity|file)$/i
     )
     .on("--help", () => {
       console.log();
@@ -59,9 +59,9 @@ function getRawCli(
       [
         "$ code-complexity <dir>",
         "$ code-complexity <dir> --limit 3",
-        "$ code-complexity <dir> --sort ratio",
+        "$ code-complexity <dir> --sort score",
         "$ code-complexity <dir> --filter 'src/**','!src/front'",
-        "$ code-complexity <dir> --limit 10 --sort ratio",
+        "$ code-complexity <dir> --limit 10 --sort score",
       ].forEach((example) => console.log(example.padStart(2)));
     });
 }
