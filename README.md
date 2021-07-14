@@ -15,8 +15,7 @@ view, using information from our version control systems, we can get a better
 sense of the effects of our refactoring efforts.*
 
 
-Note: This code-complexity tool reports complexity based on source lines of 
-code using the `node-sloc` package. Other schemes are open to discussion in 
+Note: the current complexity implementation is based on source lines of code (using the `node-sloc` package). Better means are open to discussion in 
 the repo Issues.
 
 ## Usage
