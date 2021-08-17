@@ -6,7 +6,8 @@
     "outDir": "./dist",
     "strict": true,
     "pretty": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "resolveJsonModule": true
   },
   "include": [
     "./src/**/*",
