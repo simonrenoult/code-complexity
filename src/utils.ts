@@ -1,5 +1,5 @@
 import debug from "debug";
-import * as readPkgUp from "read-pkg-up";
+const pkg = import("../package.json");
 
 export function withDuration(fn: Function, args: any[], log: Function): any {
   const startedAt = Date.now();
@@ -21,11 +21,6 @@ export async function getPackageJson(): Promise<{
   name: string;
   version: string;
 }> {
-  const result = await readPkgUp();
-  if (!result || !result.packageJson) {
-    throw new Error("Error: no package.json found, exiting.");
-  }
-
-  const { description, name, version } = result.packageJson;
+  const { description, name, version } = pkg as any;
   return { description, name, version };
 }
