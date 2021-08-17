@@ -2,7 +2,10 @@
   "name": "code-complexity",
   "version": "4.0.2",
   "description": "Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.",
-  "author": "Simon Renoult <simon.renoult@gmail.com>",
+  "author": {
+    "name": "Simon Renoult",
+    "email": "contact@simonrenoult.me"
+  },
   "main": "dist/src/lib",
   "types": "dist/src/lib/types.d.ts",
   "bin": {
