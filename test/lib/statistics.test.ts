@@ -7,6 +7,7 @@ import { Options } from "../../src/lib/types";
 describe("Statistics", () => {
   const defaultOptions: Options = {
     directory: join(__dirname, "..", "code-complexity-fixture"),
+    target: join(__dirname, "..", "code-complexity-fixture"),
     format: "table",
     filter: [],
     limit: 3,

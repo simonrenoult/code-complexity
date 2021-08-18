@@ -1,20 +1,21 @@
 import * as commander from "commander";
 import { CommanderStatic } from "commander";
-import { lstatSync } from "fs";
+import { URL } from "url";
 
 import { buildDebugger, getPackageJson } from "../utils";
 import { Format, Options, Sort } from "../lib/types";
+import { lstatSync } from "fs";
+import { execSync } from "child_process";
 
 const internal = { debug: buildDebugger("cli") };
 
-export default { parse };
+export default { parse, cleanup };
 
 async function parse(): Promise<Options> {
   const { description, version } = await getPackageJson();
   const cli = getRawCli(description, version).parse(process.argv);
 
   assertArgsAreProvided(cli);
-  assertIsDirectory(cli.args[0]);
 
   const options = buildOptions(cli);
 
@@ -23,12 +24,18 @@ async function parse(): Promise<Options> {
   return options;
 }
 
+function cleanup(options: Options): void {
+  if (options.target instanceof URL) {
+    execSync(`rm -rf ${options.directory}`, { stdio: "ignore" });
+  }
+}
+
 function getRawCli(
   description: string | undefined,
   version: string | undefined
 ): CommanderStatic {
   return commander
-    .usage("<dir> [options]")
+    .usage("<target> [options]")
     .version(version || "")
     .description(description || "")
     .option(
@@ -57,34 +64,57 @@ function getRawCli(
       console.log("Examples:");
       console.log();
       [
-        "$ code-complexity <dir>",
-        "$ code-complexity <dir> --limit 3",
-        "$ code-complexity <dir> --sort score",
-        "$ code-complexity <dir> --filter 'src/**,!src/front/**'",
-        "$ code-complexity <dir> --limit 10 --sort score",
+        "$ code-complexity .",
+        "$ code-complexity https://github.com/simonrenoult/code-complexity",
+        "$ code-complexity foo --limit 3",
+        "$ code-complexity ../foo --sort score",
+        "$ code-complexity /foo/bar --filter 'src/**,!src/front/**'",
+        "$ code-complexity . --limit 10 --sort score",
       ].forEach((example) => console.log(example.padStart(2)));
     });
 }
 
 function buildOptions(cli: CommanderStatic): Options {
+  const target = parseTarget(cli.args[0]);
   return {
-    directory: cli.args[0],
+    target,
+    directory: parseDirectory(target),
     format: cli.format ? (String(cli.format) as Format) : "table",
     filter: cli.filter || [],
     limit: cli.limit ? Number(cli.limit) : undefined,
     since: cli.since ? String(cli.since) : undefined,
     sort: cli.sort ? (String(cli.sort) as Sort) : undefined,
   };
+
+  // FIXME: I'm not a fan of pulling the code here but it's good enough.
+  function parseDirectory(target: string | URL): string {
+    if (target instanceof URL) {
+      const tmp = `code-complexity-${new Date().getTime()}`;
+      execSync(`git clone ${target} ${tmp}`, { stdio: "ignore" });
+      return tmp;
+    } else {
+      return target;
+    }
+  }
+
+  function parseTarget(target: string): string | URL {
+    try {
+      return new URL(target);
+    } catch (e) {
+      try {
+        lstatSync(target);
+        return target;
+      } catch (e) {
+        throw new Error(
+          "Argument 'target' is neither a directory nor a valid URL."
+        );
+      }
+    }
+  }
 }
 
 function commaSeparatedList(value: string): string[] {
   return value.split(",");
-}
-
-function assertIsDirectory(directory: string): void {
-  if (!lstatSync(directory).isDirectory()) {
-    throw new Error(`Argument 'dir' must be a directory.`);
-  }
 }
 
 function assertArgsAreProvided(internalCli: CommanderStatic): void {

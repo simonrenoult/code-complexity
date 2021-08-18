@@ -15,13 +15,13 @@ view, using information from our version control systems, we can get a better
 sense of the effects of our refactoring efforts.*
 
 
-Note: the current complexity implementation is based on source lines of code (using the `node-sloc` package). Better means are open to discussion in 
-the repo Issues.
+Note: `code-complexity` currently measures complexity using lines of code count. 
+While imperfect, this measure gives a good enough idea of what's going on. 
 
 ## Usage
 
 ```sh
-$ npx code-complexity <path-to-git-directory>
+$ npx code-complexity <path-to-git-directory or URL>
 ```
 
 ## Help
@@ -43,17 +43,18 @@ $ npx code-complexity <path-to-git-directory>
     
     Examples:
     
-    $ code-complexity <dir>
-    $ code-complexity <dir> --limit 3
-    $ code-complexity <dir> --sort score
-    $ code-complexity <dir> --filter 'src/**,!src/front/**'
-    $ code-complexity <dir> --limit 10 --sort score
+    $ code-complexity .
+    $ code-complexity https://github.com/simonrenoult/code-complexity
+    $ code-complexity foo --limit 3
+    $ code-complexity ../foo --sort score
+    $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
+    $ code-complexity . --limit 10 --sort score
 ```
 
 ## Output
 
 ```sh
-$ npx code-complexity . --sort=score --limit=3
+$ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=score --limit=3
 
 ┌──────────────────────────────┬────────────┬───────┬───────┐
 │ file                         │ complexity │ churn │ score │
