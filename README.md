@@ -27,28 +27,28 @@ $ npx code-complexity <path-to-git-directory or URL>
 ## Help
 
 ```text
-    Usage: code-complexity <target> [options]
-    
-    Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
-    
-    Options:
-      -V, --version          output the version number
-      --filter <strings>     list of globs (comma separated) to filter
-      -f, --format [format]  format results using table or json
-      -l, --limit [limit]    limit the number of files to output
-      -i, --since [since]    limit the age of the commit analyzed
-      -s, --sort [sort]      sort results (allowed valued: score,
-                             churn, complexity or file)
-      -h, --help             display help for command
-    
-    Examples:
-    
-    $ code-complexity .
-    $ code-complexity https://github.com/simonrenoult/code-complexity
-    $ code-complexity foo --limit 3
-    $ code-complexity ../foo --sort score
-    $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
-    $ code-complexity . --limit 10 --sort score
+Usage: code-complexity <target> [options]
+
+Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
+
+Options:
+  -V, --version          output the version number
+  --filter <strings>     list of globs (comma separated) to filter
+  -f, --format [format]  format results using table or json
+  -l, --limit [limit]    limit the number of files to output
+  -i, --since [since]    limit the age of the commit analyzed
+  -s, --sort [sort]      sort results (allowed valued: score,
+                         churn, complexity or file)
+  -h, --help             display help for command
+
+Examples:
+
+$ code-complexity .
+$ code-complexity https://github.com/simonrenoult/code-complexity
+$ code-complexity foo --limit 3
+$ code-complexity ../foo --sort score
+$ code-complexity /foo/bar --filter 'src/**,!src/front/**'
+$ code-complexity . --limit 10 --sort score
 ```
 
 ## Output
