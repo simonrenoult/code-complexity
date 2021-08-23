@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure the churn/complexity score. Higher values mean hotspots where 
+> Measure the churn/complexity score. Higher values mean hotspots where
 > refactorings should happen.
 
 [![Build Status][travis-image]][travis-url]
@@ -10,13 +10,13 @@
 
 Quoting Michael Feathers (source [here][michael-feathers-source]):
 
-*Often when we refactor, we look at local areas of code. If we take a wider 
-view, using information from our version control systems, we can get a better 
+*Often when we refactor, we look at local areas of code. If we take a wider
+view, using information from our version control systems, we can get a better
 sense of the effects of our refactoring efforts.*
 
 
-Note: `code-complexity` currently measures complexity using lines of code count. 
-While imperfect, this measure gives a good enough idea of what's going on. 
+Note: `code-complexity` currently measures complexity using lines of code count.
+While imperfect, this measure gives a good enough idea of what's going on.
 
 ## Usage
 
@@ -28,21 +28,21 @@ $ npx code-complexity <path-to-git-directory or URL>
 
 ```text
     Usage: code-complexity <target> [options]
-    
+
     Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
-    
+
     Options:
       -V, --version          output the version number
       --filter <strings>     list of globs (comma separated) to filter
-      -f, --format [format]  format results using table or json
+      -f, --format [format]  format results using table, json or csv
       -l, --limit [limit]    limit the number of files to output
       -i, --since [since]    limit the age of the commit analyzed
       -s, --sort [sort]      sort results (allowed valued: score,
                              churn, complexity or file)
       -h, --help             display help for command
-    
+
     Examples:
-    
+
     $ code-complexity .
     $ code-complexity https://github.com/simonrenoult/code-complexity
     $ code-complexity foo --limit 3

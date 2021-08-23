@@ -46,7 +46,7 @@ function getRawCli(
     .option(
       "-f, --format [format]",
       "format results using table or json",
-      /^(table|json)$/i
+      /^(table|json|csv)$/i
     )
     .option(
       "-l, --limit [limit]",
