@@ -36,7 +36,8 @@ $ npx code-complexity <path-to-git-directory or URL>
       --filter <strings>     list of globs (comma separated) to filter
       -f, --format [format]  format results using table, json or csv
       -l, --limit [limit]    limit the number of files to output
-      -i, --since [since]    limit the age of the commit analyzed
+      -i, --since [since]    limit analysis to commits more recent in age than date
+      -u, --until [until]    limit analysis to commits older in age than date
       -s, --sort [sort]      sort results (allowed valued: score,
                              churn, complexity or file)
       -h, --help             display help for command
