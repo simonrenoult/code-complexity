@@ -8,6 +8,7 @@ export type Options = {
   directory: string;
   limit?: number;
   since?: string;
+  until?: string;
   sort?: Sort;
   filter?: string[];
   format?: Format;

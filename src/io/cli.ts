@@ -53,7 +53,14 @@ function getRawCli(
       "limit the number of files to output",
       parseInt
     )
-    .option("-i, --since [since]", "limit the age of the commit analyzed")
+    .option(
+      "-i, --since [since]",
+      "limit analysis to commits more recent in age than date"
+    )
+    .option(
+      "-u, --until [until]",
+      "limit analysis to commits older in age than date"
+    )
     .option(
       "-s, --sort [sort]",
       "sort results (allowed valued: score, churn, complexity or file)",
@@ -83,6 +90,7 @@ function buildOptions(cli: CommanderStatic): Options {
     filter: cli.filter || [],
     limit: cli.limit ? Number(cli.limit) : undefined,
     since: cli.since ? String(cli.since) : undefined,
+    until: cli.until ? String(cli.until) : undefined,
     sort: cli.sort ? (String(cli.sort) as Sort) : undefined,
   };
 
