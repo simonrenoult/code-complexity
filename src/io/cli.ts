@@ -53,6 +53,11 @@ function getRawCli(
       "limit the number of files to output",
       parseInt
     )
+    .option(
+      "-cs, --complexity-strategy [sloc|cyclomatic|halstead]",
+      "choose the complexity strategy to analyze your codebase with",
+      /^(sloc|cyclomatic|halstead)$/i
+    )
     .option("-i, --since [since]", "limit the age of the commit analyzed")
     .option(
       "-s, --sort [sort]",
@@ -80,6 +85,9 @@ function buildOptions(cli: CommanderStatic): Options {
     target,
     directory: parseDirectory(target),
     format: cli.format ? (String(cli.format) as Format) : "table",
+    complexityStrategy: cli.complexityStrategy
+      ? (String(cli.complexityStrategy) as Format)
+      : "sloc",
     filter: cli.filter || [],
     limit: cli.limit ? Number(cli.limit) : undefined,
     since: cli.since ? String(cli.since) : undefined,
