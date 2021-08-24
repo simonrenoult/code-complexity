@@ -1,11 +1,9 @@
-// FIXME: use something else than node-sloc, it's not widely used
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import * as nodeSloc from "node-sloc";
 import { resolve } from "path";
-
 import { Options, Path } from "./types";
 import { buildDebugger, withDuration } from "../utils";
+import { calculate as calcCyclomaticComplexity } from "./complexity/cyclomatic-complexity";
+import { calculate as calcHalsteadComplexity } from "./complexity/halstead";
+import { calculate as calcSlocComplexity } from "./complexity/sloc";
 
 type ComplexityEntry = { path: Path; complexity: number };
 const internal = { debug: buildDebugger("complexity") };
@@ -41,6 +39,20 @@ async function compute(
 
 async function getComplexity(path: Path, options: Options): Promise<number> {
   const absolutePath = resolve(options.directory, path);
-  const result = await nodeSloc({ path: absolutePath });
-  return result.sloc.sloc || 1;
+
+  try {
+    switch (options.complexityStrategy) {
+      case "sloc":
+        return calcSlocComplexity(absolutePath);
+      case "cyclomatic":
+        return calcCyclomaticComplexity(absolutePath);
+      case "halstead":
+        return calcHalsteadComplexity(absolutePath);
+      default:
+        return calcSlocComplexity(absolutePath);
+    }
+  } catch (e) {
+    console.error(`${absolutePath} ${e?.toString()}`);
+    return 1;
+  }
 }

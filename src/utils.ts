@@ -1,4 +1,5 @@
 import debug from "debug";
+import { isIdentifier } from "typescript";
 const pkg = import("../package.json");
 
 export function withDuration(fn: Function, args: any[], log: Function): any {
@@ -23,4 +24,13 @@ export async function getPackageJson(): Promise<{
 }> {
   const { description, name, version } = pkg as any;
   return { description, name, version };
+}
+
+export function getNodeName(node: any): string {
+  const { name, pos, end } = node;
+  const key =
+    name !== undefined && isIdentifier(name)
+      ? name.text
+      : JSON.stringify({ pos, end });
+  return key;
 }

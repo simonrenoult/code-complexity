@@ -61,6 +61,12 @@ function getRawCli(
       "-u, --until [until]",
       "limit analysis to commits older in age than date"
     )
+    .option("-i, --since [since]", "limit the age of the commit analyzed")
+    .option(
+      "-cs, --complexity-strategy [sloc|cyclomatic|halstead]",
+      "choose the complexity strategy to analyze your codebase with",
+      /^(sloc|cyclomatic|halstead)$/i
+    )
     .option(
       "-s, --sort [sort]",
       "sort results (allowed valued: score, churn, complexity or file)",
@@ -87,6 +93,9 @@ function buildOptions(cli: CommanderStatic): Options {
     target,
     directory: parseDirectory(target),
     format: cli.format ? (String(cli.format) as Format) : "table",
+    complexityStrategy: cli.complexityStrategy
+      ? (String(cli.complexityStrategy) as Format)
+      : "sloc",
     filter: cli.filter || [],
     limit: cli.limit ? Number(cli.limit) : undefined,
     since: cli.since ? String(cli.since) : undefined,
