@@ -94,6 +94,12 @@ const calculateFromSource = (ctx: any): any => {
 };
 
 export function calculate(path: string): number {
+  if (!(path.endsWith("ts") || path.endsWith("js"))) {
+    throw new Error(
+      "Halstead strategy is only available for JavaScript/TypeScript files."
+    );
+  }
+
   const contents = fs.readFileSync(path).toString("utf8");
   const source = createSourceFile(path, contents, ScriptTarget.ES2015);
   const result = calculateFromSource(source);

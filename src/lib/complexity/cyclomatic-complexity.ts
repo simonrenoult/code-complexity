@@ -59,6 +59,12 @@ export function calculateFromSource(ctx: any): any {
 }
 
 export function calculate(path: string): any {
+  if (!(path.endsWith("ts") || path.endsWith("js"))) {
+    throw new Error(
+      "Cyclomatic strategy is only available for JavaScript/TypeScript files."
+    );
+  }
+
   const contents = fs.readFileSync(path).toString("utf8");
   const source = createSourceFile(path, contents, ScriptTarget.ES2015);
   const result = calculateFromSource(source);

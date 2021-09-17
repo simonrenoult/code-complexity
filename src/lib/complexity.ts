@@ -40,19 +40,14 @@ async function compute(
 async function getComplexity(path: Path, options: Options): Promise<number> {
   const absolutePath = resolve(options.directory, path);
 
-  try {
-    switch (options.complexityStrategy) {
-      case "sloc":
-        return calcSlocComplexity(absolutePath);
-      case "cyclomatic":
-        return calcCyclomaticComplexity(absolutePath);
-      case "halstead":
-        return calcHalsteadComplexity(absolutePath);
-      default:
-        return calcSlocComplexity(absolutePath);
-    }
-  } catch (e) {
-    console.error(`${absolutePath} ${e?.toString()}`);
-    return 1;
+  switch (options.complexityStrategy) {
+    case "sloc":
+      return calcSlocComplexity(absolutePath);
+    case "cyclomatic":
+      return calcCyclomaticComplexity(absolutePath);
+    case "halstead":
+      return calcHalsteadComplexity(absolutePath);
+    default:
+      return calcSlocComplexity(absolutePath);
   }
 }
