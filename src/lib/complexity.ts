@@ -1,7 +1,7 @@
 import { resolve } from "path";
 import { Options, Path } from "./types";
 import { buildDebugger, withDuration } from "../utils";
-import { calculate as calcCyclomaticComplexity } from "./complexity/cyclomatic-complexity";
+import { calculate as calcCyclomaticComplexity } from "./complexity/cyclomatic";
 import { calculate as calcHalsteadComplexity } from "./complexity/halstead";
 import { calculate as calcSlocComplexity } from "./complexity/sloc";
 
