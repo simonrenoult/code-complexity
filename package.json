@@ -38,13 +38,18 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-transform-typescript": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
     "cli-table3": "^0.6.0",
     "commander": "^5.0.0",
     "debug": "^4.1.1",
+    "escomplex": "^2.0.0-alpha",
     "micromatch": "^4.0.2",
     "node-sloc": "^0.2.0"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.1.16",
     "@types/chai": "^4.2.11",
     "@types/debug": "^4.1.5",
     "@types/micromatch": "^4.0.1",
