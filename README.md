@@ -52,6 +52,7 @@ $ npx code-complexity <path-to-git-directory or URL>
     $ code-complexity . --limit 10 --sort score
     $ code-complexity . --since=2021-06-01 --limit 100
     $ code-complexity . --since=2021-04-01 --until=2021-07-01
+    $ code-complexity . --since=6.month --limit 8 --sort score
 ```
 
 ## Output
