@@ -1,7 +1,7 @@
+import { buildDebugger } from "../utils";
 import Churn from "./churn";
 import Complexity from "./complexity";
 import { Options, Path, Sort } from "./types";
-import { buildDebugger } from "../utils";
 
 const DEFAULT_CHURN = 1;
 const DEFAULT_COMPLEXITY = 1;
@@ -31,6 +31,7 @@ export default class Statistics {
     const paths = Array.from(churns.keys());
     const complexities = await Complexity.compute(paths, options);
 
+    
     const statistics = paths
       .map(toStatistics(churns, complexities))
       .sort(sort(options.sort))
