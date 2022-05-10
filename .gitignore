@@ -61,7 +61,6 @@ typings/
 .next
 
 # TypeScript
-dist/
 build/
 
 # IntelliJ stuff
