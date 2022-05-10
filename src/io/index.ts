@@ -1,7 +1,7 @@
+import Statistics from "../lib";
+import { Path } from "../lib/types";
 import Cli from "./cli";
 import Output from "./output";
-import { Path } from "../lib/types";
-import Statistics from "../lib";
 
 export default async function main(): Promise<void> {
   const options = await Cli.parse();

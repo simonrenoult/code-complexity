@@ -1,10 +1,10 @@
-import { execSync } from "child_process";
 import { existsSync } from "fs";
 import * as micromatch from "micromatch";
 import { resolve } from "path";
 
-import { Options, Path } from "./types";
+import git from "simple-git";
 import { buildDebugger, withDuration } from "../utils";
+import { Options, Path } from "./types";
 
 type ParsedLine = { relativePath: string; commitCount: string };
 const internal = { debug: buildDebugger("churn") };
@@ -16,18 +16,24 @@ export default {
 };
 
 async function compute(options: Options): Promise<Map<Path, number>> {
-  assertGitIsInstalled();
-  assertIsGitRootDirectory(options.directory);
+  //assertGitIsInstalled();
+  //assertIsGitRootDirectory(options.directory);
 
   const isWindows = process.platform === "win32";
-  const gitLogCommand = buildGitLogCommand(options, isWindows);
+
+  const gitcli = await git(options.directory);
+  const gitLogCommand = await buildGitLogCommand(options, isWindows);
+  console.log(gitLogCommand);
+
+  const log = await gitcli.log(gitLogCommand.filter(r => r !== ''));
+  
 
   internal.debug(`command to measure churns: ${gitLogCommand}`);
 
-  const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
+  //const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
 
   const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
-    gitLogStdout
+    log.latest?.hash || ""
   ).filter((parsedLine: ParsedLine) => {
     return existsSync(resolve(options.directory, parsedLine.relativePath));
   });
@@ -63,39 +69,34 @@ async function compute(options: Options): Promise<Map<Path, number>> {
   return filteredChurns;
 }
 
-function assertGitIsInstalled(): void {
+/*function assertGitIsInstalled(): void {
   try {
     execSync("which git");
   } catch (error) {
     throw new Error("Program 'git' must be installed");
   }
-}
+}*/
 
-function assertIsGitRootDirectory(directory: string): void {
+/*function assertIsGitRootDirectory(directory: string): void {
   if (!existsSync(`${directory}/.git`)) {
     throw new Error(`Argument 'dir' must be the git root directory.`);
   }
-}
+}*/
 
-function buildGitLogCommand(options: Options, isWindows: boolean): string {
+async function buildGitLogCommand(options: Options, isWindows: boolean): Promise<string[]> {
   return [
-    "git",
-    `-C ${options.directory}`,
-    `log`,
     `--follow`,
 
     // Windows CMD handle quotes differently than linux, this is why we should put empty string as said in:
     // https://github.com/git-for-windows/git/issues/3131
-    `--format=${isWindows ? "" : "''"}`,
+    `--pretty=format:${isWindows ? "" : "''"}`,
     `--name-only`,
     options.since ? `--since="${options.since}"` : "",
     options.until ? `--until="${options.until}"` : "",
 
     // Windows CMD handle quotes differently
     isWindows ? "*" : "'*'",
-  ]
-    .filter((s) => s.length > 0)
-    .join(" ");
+  ];
 }
 
 function computeNumberOfTimesFilesChanged(gitLogOutput: string): ParsedLine[] {
