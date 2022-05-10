@@ -39,10 +39,13 @@
   "license": "MIT",
   "dependencies": {
     "cli-table3": "^0.6.0",
+    "code-complexity": "^4.1.0",
     "commander": "^5.0.0",
     "debug": "^4.1.1",
+    "del": "^6.0.0",
     "micromatch": "^4.0.2",
-    "node-sloc": "^0.1.12"
+    "node-sloc": "^0.1.12",
+    "simple-git": "^3.7.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

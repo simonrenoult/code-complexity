@@ -2,31 +2,37 @@ import * as commander from "commander";
 import { CommanderStatic } from "commander";
 import { URL } from "url";
 
-import { buildDebugger, getPackageJson } from "../utils";
-import { Format, Options, Sort } from "../lib/types";
 import { lstatSync } from "fs";
-import { execSync } from "child_process";
+import git from "simple-git";
+import { Command, Format, Options, Sort } from "../lib/types";
+import { buildDebugger, getPackageJson } from "../utils";
+import del = require("del");
 
 const internal = { debug: buildDebugger("cli") };
 
 export default { parse, cleanup };
 
-async function parse(): Promise<Options> {
-  const { description, version } = await getPackageJson();
-  const cli = getRawCli(description, version).parse(process.argv);
+async function parse(params?: Command): Promise<Options> {
+  let cli;
+  let options;
 
-  assertArgsAreProvided(cli);
-
-  const options = buildOptions(cli);
+  if(!params) {
+    const { description, version } = await getPackageJson();
+    cli = getRawCli(description, version).parse(process.argv);
+    assertArgsAreProvided(cli);
+    options = await buildOptions(cli as any);
+  } else {
+    options = await buildOptions(params as any);
+  }; 
 
   internal.debug(`applying options: ${JSON.stringify(options)}`);
 
   return options;
 }
 
-function cleanup(options: Options): void {
-  if (options.target instanceof URL) {
-    execSync(`rm -rf ${options.directory}`, { stdio: "ignore" });
+async function cleanup(options: Options) {
+  if (options.target.startsWith("https://") || options.target.startsWith("http://")) {
+    await del(options.directory);
   }
 }
 
@@ -81,11 +87,20 @@ function getRawCli(
     });
 }
 
-function buildOptions(cli: CommanderStatic): Options {
-  const target = parseTarget(cli.args[0]);
+async function buildOptions(cli: CommanderStatic): Promise<Options> {
+  let target;
+
+  if(cli.target) {
+    target = String(cli.target);
+  } else if(cli.args[0]) {
+    target = parseTarget(cli.args[0] as any);
+  } else {
+    throw new Error("Target is not defined.");
+  };
+
   return {
     target,
-    directory: parseDirectory(target),
+    directory: await parseDirectory(target),
     format: cli.format ? (String(cli.format) as Format) : "table",
     filter: cli.filter || [],
     limit: cli.limit ? Number(cli.limit) : undefined,
@@ -95,19 +110,20 @@ function buildOptions(cli: CommanderStatic): Options {
   };
 
   // FIXME: I'm not a fan of pulling the code here but it's good enough.
-  function parseDirectory(target: string | URL): string {
-    if (target instanceof URL) {
-      const tmp = `code-complexity-${new Date().getTime()}`;
-      execSync(`git clone ${target} ${tmp}`, { stdio: "ignore" });
+  async function parseDirectory(target: string): Promise<string> {
+    if (target.startsWith("https://github.com/") || target.startsWith("http://github.com/")) {
+      const tmp = `src/temp/${target?.split("//github.com/")[1].replace(/\//g, "-")}-${new Date().getTime()}`;
+      //old: execSync(`git clone ${target} ${tmp}`, { stdio: "ignore" });
+      await git().clone(target, tmp);
       return tmp;
     } else {
       return target;
     }
   }
 
-  function parseTarget(target: string): string | URL {
+  function parseTarget(target: string): string {
     try {
-      return new URL(target);
+      return new URL(target) as any; // \o/ typescript momments
     } catch (e) {
       try {
         lstatSync(target);
