@@ -24,7 +24,10 @@ async function compute(options: Options): Promise<Map<Path, number>> {
 
   internal.debug(`command to measure churns: ${gitLogCommand}`);
 
-  const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
+  const gitLogStdout = execSync(gitLogCommand, {
+    encoding: "utf8",
+    maxBuffer: 32 * 1024 * 1024,
+  });
 
   const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
     gitLogStdout
