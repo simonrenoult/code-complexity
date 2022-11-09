@@ -9,7 +9,7 @@ describe("Statistics", () => {
     directory: join(__dirname, "..", "code-complexity-fixture"),
     target: join(__dirname, "..", "code-complexity-fixture"),
     format: "table",
-    filter: [],
+    filter: ["(*.(js|yml))|((lib|test)/*.(js|yml))|((lib|test)/**/*.(js|yml))"],
     limit: 3,
     since: undefined,
     sort: "score",
@@ -32,7 +32,10 @@ describe("Statistics", () => {
   context("options.filter", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, filter: ["!test/**"] };
+      const options: Options = {
+        ...defaultOptions,
+        filter: ["lib/*.js", "lib/**/*.js"],
+      };
 
       // When
       const result = await Statistics.compute(options);
@@ -47,16 +50,16 @@ describe("Statistics", () => {
           score: 175440,
         },
         {
-          churn: 140,
-          complexity: 381,
-          path: "lib/router/index.js",
-          score: 53340,
-        },
-        {
           churn: 159,
           complexity: 269,
           path: "lib/application.js",
           score: 42771,
+        },
+        {
+          churn: 162,
+          complexity: 166,
+          path: "lib/request.js",
+          score: 26892,
         },
       ]);
     });

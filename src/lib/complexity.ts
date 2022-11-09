@@ -6,6 +6,7 @@ import { resolve } from "path";
 
 import { Options, Path } from "./types";
 import { buildDebugger, withDuration } from "../utils";
+import { createReadStream } from "fs";
 
 type ComplexityEntry = { path: Path; complexity: number };
 const internal = { debug: buildDebugger("complexity") };
@@ -42,5 +43,22 @@ async function compute(
 async function getComplexity(path: Path, options: Options): Promise<number> {
   const absolutePath = resolve(options.directory, path);
   const result = await nodeSloc({ path: absolutePath });
-  return result.sloc.sloc || 1;
+  if (result.sloc.sloc) {
+    return result.sloc.sloc;
+  } else {
+    return countLineNumber(absolutePath);
+  }
+}
+
+async function countLineNumber(absolutePath: string): Promise<number> {
+  let count = 0;
+  return new Promise((resolve) => {
+    createReadStream(absolutePath)
+      .on("data", function (chunk) {
+        for (let i = 0; i < chunk.length; ++i) if (chunk[i] == 10) count++;
+      })
+      .on("end", function () {
+        resolve(count);
+      });
+  });
 }
