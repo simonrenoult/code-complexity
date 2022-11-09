@@ -19,20 +19,36 @@ async function compute(options: Options): Promise<Map<Path, number>> {
   assertGitIsInstalled();
   assertIsGitRootDirectory(options.directory);
 
-  const isWindows = process.platform === "win32";
-  const gitLogCommand = buildGitLogCommand(options, isWindows);
+  const gitLogCommand = buildGitLogCommand(options);
+  const rawStringOfAllChurns = executeGitLogCommand(gitLogCommand);
+  const arrayOfAllChurns = computeNumberOfTimesFilesChanged(
+    rawStringOfAllChurns,
+    options.directory
+  );
+  const mapOfAllChurns = createMapOfChurnsPerFile(arrayOfAllChurns);
+  return applyUserFilters(mapOfAllChurns, options.filter);
+}
 
-  internal.debug(`command to measure churns: ${gitLogCommand}`);
+function applyUserFilters(
+  allChurns: Map<Path, number>,
+  filter: string[] | undefined
+): Map<Path, number> {
+  const filteredChurns: Map<Path, number> = new Map();
+  allChurns.forEach((churn: number, path: Path) => {
+    const patchIsAMatch =
+      filter && filter.length > 0
+        ? filter.every((f) => micromatch.isMatch(path, f))
+        : true;
 
-  const gitLogStdout = execSync(gitLogCommand, { encoding: "utf8" });
-
-  const parsedLines: ParsedLine[] = computeNumberOfTimesFilesChanged(
-    gitLogStdout
-  ).filter((parsedLine: ParsedLine) => {
-    return existsSync(resolve(options.directory, parsedLine.relativePath));
+    if (patchIsAMatch) filteredChurns.set(path, churn);
   });
+  return filteredChurns;
+}
 
-  const allChurns = parsedLines.reduce(
+function createMapOfChurnsPerFile(
+  numberOfTimesFilesChanged: ParsedLine[]
+): Map<Path, number> {
+  return numberOfTimesFilesChanged.reduce(
     (map: Map<Path, number>, { relativePath, commitCount }: ParsedLine) => {
       const path: Path = relativePath;
       const churn = parseInt(commitCount, 10);
@@ -41,26 +57,10 @@ async function compute(options: Options): Promise<Map<Path, number>> {
     },
     new Map()
   );
+}
 
-  internal.debug(
-    `${allChurns.size} files to compute churn on (before filters)`
-  );
-
-  const filteredChurns: Map<Path, number> = new Map();
-  allChurns.forEach((churn: number, path: Path) => {
-    const patchIsAMatch =
-      options.filter && options.filter.length > 0
-        ? options.filter.every((f) => micromatch.isMatch(path, f))
-        : true;
-
-    if (patchIsAMatch) filteredChurns.set(path, churn);
-  });
-
-  internal.debug(
-    `${filteredChurns.size} files to compute churn on (after filters)`
-  );
-
-  return filteredChurns;
+function executeGitLogCommand(gitLogCommand: string): string {
+  return execSync(gitLogCommand, { encoding: "utf8" });
 }
 
 function assertGitIsInstalled(): void {
@@ -77,7 +77,9 @@ function assertIsGitRootDirectory(directory: string): void {
   }
 }
 
-function buildGitLogCommand(options: Options, isWindows: boolean): string {
+function buildGitLogCommand(options: Options): string {
+  const isWindows = process.platform === "win32";
+
   return [
     "git",
     `-C ${options.directory}`,
@@ -98,7 +100,10 @@ function buildGitLogCommand(options: Options, isWindows: boolean): string {
     .join(" ");
 }
 
-function computeNumberOfTimesFilesChanged(gitLogOutput: string): ParsedLine[] {
+function computeNumberOfTimesFilesChanged(
+  gitLogOutput: string,
+  directory: string
+): ParsedLine[] {
   const changedFiles = gitLogOutput
     .split(PER_LINE)
     .filter((line) => line !== "")
@@ -112,11 +117,15 @@ function computeNumberOfTimesFilesChanged(gitLogOutput: string): ParsedLine[] {
     {}
   );
 
-  return Object.keys(changedFilesCount).map(
-    (changedFileName) =>
-      ({
-        relativePath: changedFileName,
-        commitCount: changedFilesCount[changedFileName].toString(),
-      } as ParsedLine)
-  );
+  return Object.keys(changedFilesCount)
+    .map(
+      (changedFileName) =>
+        ({
+          relativePath: changedFileName,
+          commitCount: changedFilesCount[changedFileName].toString(),
+        } as ParsedLine)
+    )
+    .filter((parsedLine: ParsedLine) => {
+      return existsSync(resolve(directory, parsedLine.relativePath));
+    });
 }
