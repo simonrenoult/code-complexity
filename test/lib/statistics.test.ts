@@ -1,15 +1,17 @@
 import { expect } from "chai";
-import { join } from "path";
+import { sep } from "path";
 
 import Statistics from "../../src/lib";
 import { Options } from "../../src/lib/types";
+import { tmpdir } from "os";
+import TestRepositoryFixture from "../fixtures/test-repository.fixture";
 
 describe("Statistics", () => {
   const defaultOptions: Options = {
-    directory: join(__dirname, "..", "code-complexity-fixture"),
-    target: join(__dirname, "..", "code-complexity-fixture"),
+    directory: tmpdir() + sep + TestRepositoryFixture.testRepositoryName,
+    target: tmpdir() + sep + TestRepositoryFixture.testRepositoryName,
     format: "table",
-    filter: ["(*.(js|yml))|((lib|test)/*.(js|yml))|((lib|test)/**/*.(js|yml))"],
+    filter: [],
     limit: 3,
     since: undefined,
     sort: "score",
@@ -19,12 +21,18 @@ describe("Statistics", () => {
     it("returns the appropriate number of elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, limit: 3 };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", lines: 4, commits: 5 })
+        .addFile({ name: "b.js", lines: 3, commits: 5 })
+        .addFile({ name: "c.js", lines: 2, commits: 5 })
+        .addFile({ name: "d.js", lines: 1, commits: 5 })
+        .writeOnDisk();
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
 
       // Then
+      const statistics = Array.from(result.values());
       expect(statistics).to.have.length(3);
     });
   });
@@ -34,8 +42,13 @@ describe("Statistics", () => {
       // Given
       const options: Options = {
         ...defaultOptions,
-        filter: ["lib/*.js", "lib/**/*.js"],
+        filter: ["*.js"],
       };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js" })
+        .addFile({ name: "b.md" })
+        .addFile({ name: "c.js" })
+        .writeOnDisk();
 
       // When
       const result = await Statistics.compute(options);
@@ -44,22 +57,16 @@ describe("Statistics", () => {
       // Then
       expect(statistics).to.deep.equal([
         {
-          churn: 340,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 175440,
+          churn: 1,
+          complexity: 1,
+          path: "a.js",
+          score: 1,
         },
         {
-          churn: 159,
-          complexity: 269,
-          path: "lib/application.js",
-          score: 42771,
-        },
-        {
-          churn: 162,
-          complexity: 166,
-          path: "lib/request.js",
-          score: 26892,
+          churn: 1,
+          complexity: 1,
+          path: "c.js",
+          score: 1,
         },
       ]);
     });
@@ -68,7 +75,12 @@ describe("Statistics", () => {
   context("options.since", () => {
     it("returns the appropriate elements", async () => {
       // Given
-      const options: Options = { ...defaultOptions, since: "2019-05-24" };
+      const options: Options = { ...defaultOptions, since: "2010-01-01" };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", date: "2000-01-01T00:00:00" })
+        .addFile({ name: "b.js", date: "2020-01-01T00:00:00" })
+        .addFile({ name: "c.js", date: "2020-01-01T00:00:00" })
+        .writeOnDisk();
 
       // When
       const result = await Statistics.compute(options);
@@ -78,120 +90,15 @@ describe("Statistics", () => {
       expect(statistics).to.deep.equal([
         {
           churn: 1,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 516,
+          complexity: 1,
+          path: "b.js",
+          score: 1,
         },
         {
           churn: 1,
-          complexity: 51,
-          path: ".travis.yml",
-          score: 51,
-        },
-        {
-          churn: 1,
-          complexity: 48,
-          path: "appveyor.yml",
-          score: 48,
-        },
-      ]);
-    });
-  });
-
-  context("options.sort=complexity", () => {
-    it("returns the appropriate elements", async () => {
-      // Given
-      const options: Options = { ...defaultOptions, sort: "score" };
-
-      // When
-      const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
-
-      // Then
-      expect(statistics).to.deep.equal([
-        {
-          churn: 340,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 175440,
-        },
-        {
-          churn: 71,
-          complexity: 829,
-          path: "test/app.router.js",
-          score: 58859,
-        },
-        {
-          churn: 140,
-          complexity: 381,
-          path: "lib/router/index.js",
-          score: 53340,
-        },
-      ]);
-    });
-  });
-
-  context("options.sort=churn", () => {
-    it("returns the appropriate elements", async () => {
-      // Given
-      const options: Options = { ...defaultOptions, sort: "score" };
-
-      // When
-      const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
-
-      // Then
-      expect(statistics).to.deep.equal([
-        {
-          churn: 340,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 175440,
-        },
-        {
-          churn: 71,
-          complexity: 829,
-          path: "test/app.router.js",
-          score: 58859,
-        },
-        {
-          churn: 140,
-          complexity: 381,
-          path: "lib/router/index.js",
-          score: 53340,
-        },
-      ]);
-    });
-  });
-
-  context("options.sort=file", () => {
-    it("returns the appropriate elements", async () => {
-      // Given
-      const options: Options = { ...defaultOptions, sort: "score" };
-
-      // When
-      const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
-
-      // Then
-      expect(statistics).to.deep.equal([
-        {
-          churn: 340,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 175440,
-        },
-        {
-          churn: 71,
-          complexity: 829,
-          path: "test/app.router.js",
-          score: 58859,
-        },
-        {
-          churn: 140,
-          complexity: 381,
-          path: "lib/router/index.js",
-          score: 53340,
+          complexity: 1,
+          path: "c.js",
+          score: 1,
         },
       ]);
     });
@@ -201,6 +108,12 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, sort: "score" };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", lines: 8, commits: 4 })
+        .addFile({ name: "b.js", lines: 6, commits: 3 })
+        .addFile({ name: "c.js", lines: 2, commits: 100 })
+        .addFile({ name: "d.js", lines: 4, commits: 2 })
+        .writeOnDisk();
 
       // When
       const result = await Statistics.compute(options);
@@ -209,22 +122,139 @@ describe("Statistics", () => {
       // Then
       expect(statistics).to.deep.equal([
         {
-          churn: 340,
-          complexity: 516,
-          path: "lib/response.js",
-          score: 175440,
+          churn: 100,
+          complexity: 2,
+          path: "c.js",
+          score: 200,
         },
         {
-          churn: 71,
-          complexity: 829,
-          path: "test/app.router.js",
-          score: 58859,
+          churn: 4,
+          complexity: 8,
+          path: "a.js",
+          score: 32,
         },
         {
-          churn: 140,
-          complexity: 381,
-          path: "lib/router/index.js",
-          score: 53340,
+          churn: 3,
+          complexity: 6,
+          path: "b.js",
+          score: 18,
+        },
+      ]);
+    });
+  });
+
+  context("options.sort=complexity", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, sort: "complexity" };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", lines: 8 })
+        .addFile({ name: "b.js", lines: 6 })
+        .addFile({ name: "c.js", lines: 2 })
+        .addFile({ name: "d.js", lines: 4 })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = Array.from(result.values());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          churn: 1,
+          complexity: 8,
+          path: "a.js",
+          score: 8,
+        },
+        {
+          churn: 1,
+          complexity: 6,
+          path: "b.js",
+          score: 6,
+        },
+        {
+          churn: 1,
+          complexity: 4,
+          path: "d.js",
+          score: 4,
+        },
+      ]);
+    });
+  });
+
+  context("options.sort=churn", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, sort: "churn" };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", commits: 10 })
+        .addFile({ name: "b.js", commits: 3 })
+        .addFile({ name: "c.js", commits: 7 })
+        .addFile({ name: "d.js", commits: 2 })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = Array.from(result.values());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          churn: 10,
+          complexity: 1,
+          path: "a.js",
+          score: 10,
+        },
+        {
+          churn: 7,
+          complexity: 1,
+          path: "c.js",
+          score: 7,
+        },
+        {
+          churn: 3,
+          complexity: 1,
+          path: "b.js",
+          score: 3,
+        },
+      ]);
+    });
+  });
+
+  context("options.sort=file", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, sort: "file" };
+      new TestRepositoryFixture()
+        .addFile({ name: "d.js", lines: 1, commits: 4 })
+        .addFile({ name: "a.js", lines: 2, commits: 3 })
+        .addFile({ name: "c.js", lines: 3, commits: 2 })
+        .addFile({ name: "b.js", lines: 4, commits: 1 })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = Array.from(result.values());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          churn: 3,
+          complexity: 2,
+          path: "a.js",
+          score: 6,
+        },
+        {
+          churn: 1,
+          complexity: 4,
+          path: "b.js",
+          score: 4,
+        },
+        {
+          churn: 2,
+          complexity: 3,
+          path: "c.js",
+          score: 6,
         },
       ]);
     });
