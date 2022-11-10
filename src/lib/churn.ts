@@ -60,7 +60,7 @@ function createMapOfChurnsPerFile(
 }
 
 function executeGitLogCommand(gitLogCommand: string): string {
-  return execSync(gitLogCommand, { encoding: "utf8" });
+  return execSync(gitLogCommand, { encoding: "utf8", maxBuffer: 32_000_000 });
 }
 
 function assertGitIsInstalled(): void {
