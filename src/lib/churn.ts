@@ -89,6 +89,7 @@ function buildGitLogCommand(options: Options, isWindows: boolean): string {
     `--format=${isWindows ? "" : "''"}`,
     `--name-only`,
     options.since ? `--since="${options.since}"` : "",
+    options.until ? `--until="${options.until}"` : "",
 
     // Windows CMD handle quotes differently
     isWindows ? "*" : "'*'",

@@ -24,6 +24,9 @@ function render(
     case "json":
       stdout = toJson(values);
       break;
+    case "csv":
+      stdout = toCSV(values);
+      break;
     default:
       stdout = toTable(values);
   }
@@ -49,4 +52,14 @@ function toTable(statistics: Statistics[]): string {
   });
 
   return table.toString();
+}
+
+function toCSV(statistics: Statistics[]): string {
+  let csv = "file,complexity,churn,score\n";
+  statistics.forEach((stat) => {
+    csv +=
+      [stat.path, stat.complexity, stat.churn, stat.score].join(",") + "\n";
+  });
+
+  return csv;
 }
