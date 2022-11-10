@@ -1,7 +1,4 @@
-// FIXME: use something else than node-sloc, it's not widely used
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import * as nodeSloc from "node-sloc";
+import * as sloc from "node-sloc";
 import { resolve } from "path";
 
 import { Options, Path } from "./types";
@@ -29,22 +26,19 @@ async function compute(
     })
   );
 
-  const complexityPerPath: Map<Path, number> = entries.reduce(
-    (map: Map<Path, number>, entry: ComplexityEntry) => {
-      map.set(entry.path, entry.complexity);
-      return map;
-    },
-    new Map()
-  );
-
-  return complexityPerPath;
+  return entries.reduce((map: Map<Path, number>, entry: ComplexityEntry) => {
+    map.set(entry.path, entry.complexity);
+    return map;
+  }, new Map());
 }
 
 async function getComplexity(path: Path, options: Options): Promise<number> {
   const absolutePath = resolve(options.directory, path);
-  const result = await nodeSloc({ path: absolutePath });
-  if (result.sloc.sloc) {
-    return result.sloc.sloc;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const result = await sloc({ path: absolutePath });
+  if (result?.sloc) {
+    return result?.sloc;
   } else {
     return countLineNumber(absolutePath);
   }

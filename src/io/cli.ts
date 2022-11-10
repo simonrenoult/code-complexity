@@ -1,11 +1,12 @@
-import * as commander from "commander";
-import { CommanderStatic } from "commander";
 import { URL } from "url";
 
 import { buildDebugger, getPackageJson } from "../utils";
 import { Format, Options, Sort } from "../lib/types";
 import { lstatSync } from "fs";
 import { execSync } from "child_process";
+import { Command, program } from "commander";
+import { tmpdir } from "os";
+import { sep } from "path";
 
 const internal = { debug: buildDebugger("cli") };
 
@@ -13,11 +14,11 @@ export default { parse, cleanup };
 
 async function parse(): Promise<Options> {
   const { description, version } = await getPackageJson();
-  const cli = getRawCli(description, version).parse(process.argv);
+  const cli = getRawCli(description, version).parse();
 
   assertArgsAreProvided(cli);
 
-  const options = buildOptions(cli);
+  const options = buildOptions(cli.args, cli.opts());
 
   internal.debug(`applying options: ${JSON.stringify(options)}`);
 
@@ -33,9 +34,11 @@ function cleanup(options: Options): void {
 function getRawCli(
   description: string | undefined,
   version: string | undefined
-): CommanderStatic {
-  return commander
+): Command {
+  return program
+    .name("code-complexity")
     .usage("<target> [options]")
+    .argument("<target>")
     .version(version || "")
     .description(description || "")
     .option(
@@ -81,25 +84,28 @@ function getRawCli(
     });
 }
 
-function buildOptions(cli: CommanderStatic): Options {
-  const target = parseTarget(cli.args[0]);
+function buildOptions(args: string[], options: any): Options {
+  const target = parseTarget(args[0]);
   return {
     target,
     directory: parseDirectory(target),
-    format: cli.format ? (String(cli.format) as Format) : "table",
-    filter: cli.filter || [],
-    limit: cli.limit ? Number(cli.limit) : undefined,
-    since: cli.since ? String(cli.since) : undefined,
-    until: cli.until ? String(cli.until) : undefined,
-    sort: cli.sort ? (String(cli.sort) as Sort) : undefined,
+    format: options.format ? (String(options.format) as Format) : "table",
+    filter: options.filter || [],
+    limit: options.limit ? Number(options.limit) : undefined,
+    since: options.since ? String(options.since) : undefined,
+    until: options.until ? String(options.until) : undefined,
+    sort: options.sort ? (String(options.sort) as Sort) : undefined,
   };
 
   // FIXME: I'm not a fan of pulling the code here but it's good enough.
   function parseDirectory(target: string | URL): string {
     if (target instanceof URL) {
-      const tmp = `code-complexity-${new Date().getTime()}`;
-      execSync(`git clone ${target} ${tmp}`, { stdio: "ignore" });
-      return tmp;
+      const temporaryDirLocation =
+        tmpdir() + sep + `code-complexity-${new Date().getTime()}`;
+      execSync(`git clone ${target} ${temporaryDirLocation}`, {
+        stdio: "ignore",
+      });
+      return temporaryDirLocation;
     } else {
       return target;
     }
@@ -125,7 +131,7 @@ function commaSeparatedList(value: string): string[] {
   return value.split(",");
 }
 
-function assertArgsAreProvided(internalCli: CommanderStatic): void {
+function assertArgsAreProvided(internalCli: Command): void {
   if (!internalCli.args || !internalCli.args.length) {
     internalCli.help();
     process.exit(1);

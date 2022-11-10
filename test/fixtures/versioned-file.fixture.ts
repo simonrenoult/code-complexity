@@ -45,7 +45,7 @@ export default class VersionedFileFixture {
       : `git -C ${this.repositoryLocation} commit --all --message=${commitMessage}`;
     try {
       execSync(command);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.stdout.toString());
       throw e;
     }

@@ -1,6 +1,7 @@
 import debug from "debug";
 const pkg = import("../package.json");
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function withDuration(fn: Function, args: any[], log: Function): any {
   const startedAt = Date.now();
   const result = fn(...args);
