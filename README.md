@@ -83,3 +83,9 @@ $ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=sco
 [coverage-url]: https://codecov.io/gh/simonrenoult/code-complexity/branch/master
 [npm-image]: https://img.shields.io/npm/v/code-complexity.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/code-complexity
+
+## Special thanks
+
+A special thanks to a few contributors that helped me make `code-complexity` better.
+
+- Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
