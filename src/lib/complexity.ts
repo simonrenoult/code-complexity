@@ -45,11 +45,20 @@ async function getComplexity(path: Path, options: Options): Promise<number> {
 }
 
 async function countLineNumber(absolutePath: string): Promise<number> {
+  const ASCII_FOR_NEW_LINE = "10";
+  const ASCII_FOR_CARRIAGE_RETURN = "13";
+
   let count = 0;
   return new Promise((resolve) => {
     createReadStream(absolutePath)
       .on("data", function (chunk) {
-        for (let i = 0; i < chunk.length; ++i) if (chunk[i] == 10) count++;
+        for (let i = 0; i < chunk.length; ++i) {
+          const char = chunk[i];
+          // Use "==" instead of "===" to use type coercion
+          if (char == ASCII_FOR_NEW_LINE || char == ASCII_FOR_CARRIAGE_RETURN) {
+            count += 1;
+          }
+        }
       })
       .on("end", function () {
         resolve(count);
