@@ -55,11 +55,6 @@ $ npx code-complexity <path-to-git-directory or URL>
     $ code-complexity . --since=2021-04-01 --until=2021-07-01
 ```
 
-## Notes
-
-- The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.  
-- We only currently support Halstead and Cyclomatic for JavaScript and TypeScript
-
 ## Output
 
 ```sh
@@ -76,11 +71,17 @@ $ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=sco
 └──────────────────────────────┴────────────┴───────┴───────┘
 ```
 
+## Notes
+
+- The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.
+- We only currently support Halstead and Cyclomatic for JavaScript and TypeScript
+
 ## Special thanks
 
 A special thanks to a few contributors that helped me make `code-complexity` better.
 
 - Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
+- Scott Brooks (scottamplitude) for initiating the work on complexity strategies
 
 [michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
 [travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
