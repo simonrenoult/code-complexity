@@ -11,6 +11,7 @@ export default class TestRepositoryFixture {
   public readonly location: string;
   private files: {
     name: string;
+    content?: string;
     commits?: number;
     lines?: number;
     date?: string;
@@ -22,6 +23,7 @@ export default class TestRepositoryFixture {
 
   addFile(args: {
     name: string;
+    content?: string;
     commits?: number;
     lines?: number;
     date?: string;
@@ -37,11 +39,11 @@ export default class TestRepositoryFixture {
     mkdirSync(this.location);
     execSync(`git -C ${this.location} init`);
 
-    this.files.forEach((f) => {
+    this.files.forEach((file) => {
       new VersionedFileFixture(this.location)
-        .withName(f.name)
-        .containing({ lines: f.lines || 1 })
-        .committed({ times: f.commits || 1, date: f.date })
+        .withName(file.name)
+        .containing(file.content ?? { lines: file.lines ?? 1 })
+        .committed({ times: file.commits ?? 1, date: file.date })
         .writeOnDisk();
     });
 

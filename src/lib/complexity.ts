@@ -1,9 +1,10 @@
-import * as sloc from "node-sloc";
 import { resolve } from "path";
 
 import { Options, Path } from "./types";
-import { buildDebugger, withDuration } from "../utils";
-import { createReadStream } from "fs";
+import { buildDebugger, UnsupportedExtension, withDuration } from "../utils";
+import computeSloc from "./complexity/sloc";
+import { calculate as calculateCyclomatic } from "./complexity/cyclomatic";
+import { calculate as calculateHalstead } from "./complexity/halstead";
 
 type ComplexityEntry = { path: Path; complexity: number };
 const internal = { debug: buildDebugger("complexity") };
@@ -21,7 +22,7 @@ async function compute(
 
   const entries: ComplexityEntry[] = await Promise.all(
     paths.map(async (path) => {
-      const complexity = await getComplexity(path, options);
+      const complexity = await computeComplexity(path, options);
       return { path, complexity };
     })
   );
@@ -32,36 +33,30 @@ async function compute(
   }, new Map());
 }
 
-async function getComplexity(path: Path, options: Options): Promise<number> {
+async function computeComplexity(
+  path: Path,
+  options: Options
+): Promise<number> {
   const absolutePath = resolve(options.directory, path);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const result = await sloc({ path: absolutePath });
-  if (result?.sloc) {
-    return result?.sloc;
-  } else {
-    return countLineNumber(absolutePath);
+
+  let result: number | UnsupportedExtension;
+  switch (options.complexityStrategy) {
+    case "sloc":
+      result = await computeSloc(absolutePath);
+      break;
+    case "cyclomatic":
+      result = await calculateCyclomatic(absolutePath);
+      break;
+    case "halstead":
+      result = await calculateHalstead(absolutePath);
+      break;
+    default:
+      result = await computeSloc(absolutePath);
   }
-}
 
-async function countLineNumber(absolutePath: string): Promise<number> {
-  const ASCII_FOR_NEW_LINE = "10";
-  const ASCII_FOR_CARRIAGE_RETURN = "13";
+  if (result instanceof UnsupportedExtension) {
+    result = await computeSloc(absolutePath);
+  }
 
-  let count = 0;
-  return new Promise((resolve) => {
-    createReadStream(absolutePath)
-      .on("data", function (chunk) {
-        for (let i = 0; i < chunk.length; ++i) {
-          const char = chunk[i];
-          // Use "==" instead of "===" to use type coercion
-          if (char == ASCII_FOR_NEW_LINE || char == ASCII_FOR_CARRIAGE_RETURN) {
-            count += 1;
-          }
-        }
-      })
-      .on("end", function () {
-        resolve(count);
-      });
-  });
+  return result as number;
 }

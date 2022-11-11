@@ -144,41 +144,105 @@ describe("Statistics", () => {
   });
 
   context("options.sort=complexity", () => {
-    it("returns the appropriate elements", async () => {
-      // Given
-      const options: Options = { ...defaultOptions, sort: "complexity" };
-      await new TestRepositoryFixture()
-        .addFile({ name: "a.js", lines: 8 })
-        .addFile({ name: "b.js", lines: 6 })
-        .addFile({ name: "c.js", lines: 2 })
-        .addFile({ name: "d.js", lines: 4 })
-        .writeOnDisk();
+    context("when using cyclomatic strategy", () => {
+      it("returns the appropriate elements", async () => {
+        // Given
+        const options: Options = {
+          ...defaultOptions,
+          sort: "complexity",
+          complexityStrategy: "cyclomatic",
+        };
+        await new TestRepositoryFixture()
+          .addFile({
+            name: "a.ts",
+            content: "if (true) if (true) console.log();",
+          })
+          .writeOnDisk();
 
-      // When
-      const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+        // When
+        const result = await Statistics.compute(options);
+        const statistics = Array.from(result.values());
 
-      // Then
-      expect(statistics).to.deep.equal([
-        {
-          churn: 1,
-          complexity: 8,
-          path: "a.js",
-          score: 8,
-        },
-        {
-          churn: 1,
-          complexity: 6,
-          path: "b.js",
-          score: 6,
-        },
-        {
-          churn: 1,
-          complexity: 4,
-          path: "d.js",
-          score: 4,
-        },
-      ]);
+        // Then
+        expect(statistics).to.deep.equal([
+          {
+            churn: 1,
+            complexity: 3,
+            path: "a.ts",
+            score: 3,
+          },
+        ]);
+      });
+    });
+
+    context("when using halstead strategy", () => {
+      it("returns the appropriate elements", async () => {
+        // Given
+        const options: Options = {
+          ...defaultOptions,
+          sort: "complexity",
+          complexityStrategy: "halstead",
+        };
+        await new TestRepositoryFixture()
+          .addFile({
+            name: "a.ts",
+            content: "if (true) if (true) console.log();",
+          })
+          .writeOnDisk();
+
+        // When
+        const result = await Statistics.compute(options);
+        const statistics = Array.from(result.values());
+
+        // Then
+        expect(statistics).to.deep.equal([
+          {
+            churn: 1,
+            complexity: 25.26619429851844,
+            path: "a.ts",
+            score: 25.26619429851844,
+          },
+        ]);
+      });
+    });
+
+    context("when using sloc strategy", () => {
+      it("returns the appropriate elements", async () => {
+        // Given
+        const options: Options = { ...defaultOptions, sort: "complexity" };
+        await new TestRepositoryFixture()
+          .addFile({ name: "a.js", lines: 8 })
+          .addFile({ name: "b.js", lines: 6 })
+          .addFile({ name: "c.js", lines: 2 })
+          .addFile({ name: "d.js", lines: 4 })
+          .writeOnDisk();
+
+        // When
+        const result = await Statistics.compute(options);
+        const statistics = Array.from(result.values());
+
+        // Then
+        expect(statistics).to.deep.equal([
+          {
+            churn: 1,
+            complexity: 8,
+            path: "a.js",
+            score: 8,
+          },
+          {
+            churn: 1,
+            complexity: 6,
+            path: "b.js",
+            score: 6,
+          },
+          {
+            churn: 1,
+            complexity: 4,
+            path: "d.js",
+            score: 4,
+          },
+        ]);
+      });
     });
   });
 

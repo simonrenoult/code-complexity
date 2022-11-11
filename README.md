@@ -32,15 +32,15 @@ $ npx code-complexity <path-to-git-directory or URL>
     Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
 
     Options:
-      -V, --version          output the version number
-      --filter <strings>     list of globs (comma separated) to filter
-      -f, --format [format]  format results using table, json or csv
-      -l, --limit [limit]    limit the number of files to output
-      -i, --since [since]    limit analysis to commits more recent in age than date
-      -u, --until [until]    limit analysis to commits older in age than date
-      -s, --sort [sort]      sort results (allowed valued: score,
-                             churn, complexity or file)
-      -h, --help             display help for command
+      -V, --version                         output the version number
+      --filter <strings>                    list of globs (comma separated) to filter
+      -cs, --complexity-strategy [strategy] choose the complexity strategy to analyze your codebase with (allowed values: sloc, cyclomatic, halstead).
+      -f, --format [format]                 format results using table, json or csv
+      -l, --limit [limit]                   limit the number of files to output
+      -i, --since [since]                   limit analysis to commits more recent in age than date
+      -u, --until [until]                   limit analysis to commits older in age than date
+      -s, --sort [sort]                     sort results (allowed valued: score, churn, complexity or file)
+      -h, --help                            display help for command
 
     Examples:
 
@@ -50,9 +50,14 @@ $ npx code-complexity <path-to-git-directory or URL>
     $ code-complexity ../foo --sort score
     $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
     $ code-complexity . --limit 10 --sort score
+    $ code-complexity . --limit 10 --sort score -cs halstead
     $ code-complexity . --since=2021-06-01 --limit 100
     $ code-complexity . --since=2021-04-01 --until=2021-07-01
 ```
+
+## Notes
+
+The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.  
 
 ## Output
 
@@ -70,9 +75,11 @@ $ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=sco
 └──────────────────────────────┴────────────┴───────┴───────┘
 ```
 
-## Troubleshooting
+## Special thanks
 
-+ `Error: stdout maxBuffer exceeded`: use the flag `--since` to limit the number of commits to analyze.
+A special thanks to a few contributors that helped me make `code-complexity` better.
+
+- Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
 
 [michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
 [travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
@@ -83,9 +90,3 @@ $ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=sco
 [coverage-url]: https://codecov.io/gh/simonrenoult/code-complexity/branch/master
 [npm-image]: https://img.shields.io/npm/v/code-complexity.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/code-complexity
-
-## Special thanks
-
-A special thanks to a few contributors that helped me make `code-complexity` better.
-
-- Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).

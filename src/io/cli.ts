@@ -1,7 +1,7 @@
 import { URL } from "url";
 
 import { buildDebugger, getPackageJson } from "../utils";
-import { Format, Options, Sort } from "../lib/types";
+import { ComplexityStrategy, Format, Options, Sort } from "../lib/types";
 import { lstatSync } from "fs";
 import { execSync } from "child_process";
 import { Command, program } from "commander";
@@ -45,6 +45,11 @@ function getRawCli(
       "--filter <strings>",
       "list of globs (comma separated) to filter",
       commaSeparatedList
+    )
+    .option(
+      "-cs, --complexity-strategy [sloc|cyclomatic|halstead]",
+      "choose the complexity strategy to analyze your codebase with",
+      /^(sloc|cyclomatic|halstead)$/i
     )
     .option(
       "-f, --format [format]",
@@ -95,6 +100,9 @@ function buildOptions(args: string[], options: any): Options {
     since: options.since ? String(options.since) : undefined,
     until: options.until ? String(options.until) : undefined,
     sort: options.sort ? (String(options.sort) as Sort) : undefined,
+    complexityStrategy: options.complexityStrategy
+      ? (String(options.complexityStrategy) as ComplexityStrategy)
+      : "sloc",
   };
 
   // FIXME: I'm not a fan of pulling the code here but it's good enough.

@@ -8,6 +8,7 @@ export default class VersionedFileFixture {
   private name = "example.js";
   private numberOfLinesInFile = 10;
   private numberOfCommitsForFile = 10;
+  private content?: string;
   private commitDate?: string;
 
   withName(name: string): VersionedFileFixture {
@@ -15,8 +16,12 @@ export default class VersionedFileFixture {
     return this;
   }
 
-  containing(args: { lines: number }): VersionedFileFixture {
-    this.numberOfLinesInFile = args.lines;
+  containing(args: { lines: number } | string): VersionedFileFixture {
+    if (typeof args === "string") {
+      this.content = args;
+    } else {
+      this.numberOfLinesInFile = args.lines;
+    }
     return this;
   }
 
@@ -29,7 +34,7 @@ export default class VersionedFileFixture {
   writeOnDisk(): void {
     for (let i = 0; i < this.numberOfCommitsForFile; i++) {
       if (i === 0) {
-        this.createFileWithContentInRepository(this.name);
+        this.createFileWithContentInRepository();
         this.addFileToRepository();
       } else {
         this.modifyFileWithoutChangingItsLength(i);
@@ -38,8 +43,8 @@ export default class VersionedFileFixture {
     }
   }
 
-  private commitFile(i: number): void {
-    const commitMessage = `"${this.name}: commit #${i + 1}"`;
+  private commitFile(commitNumber: number): void {
+    const commitMessage = `"${this.name}: commit #${commitNumber + 1}"`;
     const command = this.commitDate
       ? `GIT_COMMITTER_DATE="${this.commitDate}" git -C ${this.repositoryLocation} commit --all --message=${commitMessage} --date=${this.commitDate}`
       : `git -C ${this.repositoryLocation} commit --all --message=${commitMessage}`;
@@ -51,21 +56,22 @@ export default class VersionedFileFixture {
     }
   }
 
-  private modifyFileWithoutChangingItsLength(i: number): void {
+  private modifyFileWithoutChangingItsLength(commitNumber: number): void {
     appendFileSync(
       `${this.repositoryLocation}${sep}${this.name}`,
-      `// change for commit #${i + 1} `
+      `// change for commit #${commitNumber + 1} `
     );
   }
 
-  private createFileWithContentInRepository(fileName: string): void {
-    writeFileSync(
-      `${this.repositoryLocation}${sep}${fileName}`,
+  private createFileWithContentInRepository(): void {
+    const fileContent =
+      this.content ||
       new Array(this.numberOfLinesInFile)
         .fill(null)
         .map((value, index) => `console.log(${index});`)
-        .join("\n")
-    );
+        .join("\n");
+
+    writeFileSync(`${this.repositoryLocation}${sep}${this.name}`, fileContent);
   }
 
   private addFileToRepository(): void {

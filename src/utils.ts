@@ -25,3 +25,5 @@ export async function getPackageJson(): Promise<{
   const { description, name, version } = pkg as any;
   return { description, name, version };
 }
+
+export class UnsupportedExtension {}
