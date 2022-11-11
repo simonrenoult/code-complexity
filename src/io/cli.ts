@@ -83,6 +83,7 @@ function getRawCli(
         "$ code-complexity https://github.com/simonrenoult/code-complexity",
         "$ code-complexity foo --limit 3",
         "$ code-complexity ../foo --sort score",
+        "$ code-complexity . -cs halstead",
         "$ code-complexity /foo/bar --filter 'src/**,!src/front/**'",
         "$ code-complexity . --limit 10 --sort score",
       ].forEach((example) => console.log(example.padStart(2)));
