@@ -57,7 +57,8 @@ $ npx code-complexity <path-to-git-directory or URL>
 
 ## Notes
 
-The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.  
+- The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.  
+- We only currently support Halstead and Cyclomatic for JavaScript and TypeScript
 
 ## Output
 
