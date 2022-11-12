@@ -30,7 +30,7 @@ function fromJavaScript(path: string): number {
   });
   if (!babelResult) throw new Error(`Error while parsing file ${path}`);
   const result = escomplex.analyse(babelResult.code, {});
-  return result.aggregate.halstead;
+  return result.aggregate.halstead.volume;
 }
 
 function fromTypeScript(path: string): number {
