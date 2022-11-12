@@ -1,4 +1,4 @@
-import Churn from "./churn";
+import Churn from "./churn/churn";
 import Complexity from "./complexity";
 import { Options, Path, Sort } from "./types";
 import { buildDebugger } from "../utils";

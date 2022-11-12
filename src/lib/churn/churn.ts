@@ -3,8 +3,8 @@ import { existsSync } from "fs";
 import * as micromatch from "micromatch";
 import { resolve } from "path";
 
-import { Options, Path } from "./types";
-import { buildDebugger, withDuration } from "../utils";
+import { Options, Path } from "../types";
+import { buildDebugger, withDuration } from "../../utils";
 
 type ParsedLine = { relativePath: string; commitCount: string };
 const internal = { debug: buildDebugger("churn") };

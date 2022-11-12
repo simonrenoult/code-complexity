@@ -1,10 +1,10 @@
 import { resolve } from "path";
 
-import { Options, Path } from "./types";
-import { buildDebugger, UnsupportedExtension, withDuration } from "../utils";
-import computeSloc from "./complexity/sloc";
-import { calculate as calculateCyclomatic } from "./complexity/cyclomatic";
-import { calculate as calculateHalstead } from "./complexity/halstead";
+import { Options, Path } from "../types";
+import { buildDebugger, UnsupportedExtension, withDuration } from "../../utils";
+import computeSloc from "./sloc";
+import { calculate as calculateCyclomatic } from "./cyclomatic";
+import { calculate as calculateHalstead } from "./halstead";
 
 type ComplexityEntry = { path: Path; complexity: number };
 const internal = { debug: buildDebugger("complexity") };
