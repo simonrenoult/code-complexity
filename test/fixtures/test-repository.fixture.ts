@@ -15,6 +15,7 @@ export default class TestRepositoryFixture {
     commits?: number;
     lines?: number;
     date?: string;
+    removed?: boolean;
   }[] = [];
 
   constructor() {
@@ -27,6 +28,7 @@ export default class TestRepositoryFixture {
     commits?: number;
     lines?: number;
     date?: string;
+    removed?: boolean;
   }): this {
     this.files.push(args);
     return this;
@@ -44,6 +46,7 @@ export default class TestRepositoryFixture {
         .withName(file.name)
         .containing(file.content ?? { lines: file.lines ?? 1 })
         .committed({ times: file.commits ?? 1, date: file.date })
+        .isRemoved(file.removed ?? false)
         .writeOnDisk();
     });
 

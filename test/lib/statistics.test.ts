@@ -21,7 +21,7 @@ describe("Statistics", () => {
     it("returns the appropriate number of elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, limit: 3 };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js" })
         .addFile({ name: "b.js" })
         .addFile({ name: "c.js" })
@@ -44,7 +44,7 @@ describe("Statistics", () => {
         ...defaultOptions,
         filter: ["*.js"],
       };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js" })
         .addFile({ name: "b.md" })
         .addFile({ name: "c.js" })
@@ -76,7 +76,7 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, since: "2010-01-01" };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js", date: "2000-01-01T00:00:00" })
         .addFile({ name: "b.js", date: "2020-01-01T00:00:00" })
         .addFile({ name: "c.js", date: "2020-01-01T00:00:00" })
@@ -108,7 +108,7 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, until: "2010-01-01" };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js", date: "2000-01-01T00:00:00" })
         .addFile({ name: "b.js", date: "2020-01-01T00:00:00" })
         .addFile({ name: "c.js", date: "2020-01-01T00:00:00" })
@@ -134,7 +134,7 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, sort: "score" };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js", lines: 1, commits: 4 })
         .addFile({ name: "b.js", lines: 3, commits: 3 })
         .addFile({ name: "c.js", lines: 3, commits: 2 })
@@ -178,7 +178,7 @@ describe("Statistics", () => {
           sort: "complexity",
           complexityStrategy: "cyclomatic",
         };
-        await new TestRepositoryFixture()
+        new TestRepositoryFixture()
           .addFile({
             name: "a.ts",
             content: "if (true) if (true) console.log();",
@@ -219,7 +219,7 @@ describe("Statistics", () => {
           sort: "complexity",
           complexityStrategy: "halstead",
         };
-        await new TestRepositoryFixture()
+        new TestRepositoryFixture()
           .addFile({
             name: "a.ts",
             content: "if (true) if (true) console.log();",
@@ -261,7 +261,7 @@ describe("Statistics", () => {
             complexityStrategy: "sloc",
             sort: "complexity",
           };
-          await new TestRepositoryFixture()
+          new TestRepositoryFixture()
             .addFile({ name: "a.js", lines: 8 })
             .addFile({ name: "b.js", lines: 6 })
             .addFile({ name: "c.js", lines: 2 })
@@ -304,7 +304,7 @@ describe("Statistics", () => {
             complexityStrategy: "sloc",
             sort: "complexity",
           };
-          await new TestRepositoryFixture()
+          new TestRepositoryFixture()
             .addFile({ name: "a.txt", lines: 8 })
             .writeOnDisk();
 
@@ -330,7 +330,7 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, sort: "churn" };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "a.js", commits: 7 })
         .addFile({ name: "b.js", commits: 3 })
         .addFile({ name: "c.js", commits: 5 })
@@ -369,7 +369,7 @@ describe("Statistics", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, sort: "file" };
-      await new TestRepositoryFixture()
+      new TestRepositoryFixture()
         .addFile({ name: "d.js", lines: 1, commits: 4 })
         .addFile({ name: "a.js", lines: 2, commits: 3 })
         .addFile({ name: "c.js", lines: 3, commits: 2 })
@@ -399,6 +399,31 @@ describe("Statistics", () => {
           complexity: 3,
           path: "c.js",
           score: 6,
+        },
+      ]);
+    });
+  });
+
+  context("when file no longer exists", () => {
+    it("it is ignored", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, sort: "file" };
+      new TestRepositoryFixture()
+        .addFile({ name: "a.js", removed: true })
+        .addFile({ name: "b.ts" })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = Array.from(result.values());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          churn: 1,
+          complexity: 1,
+          path: "b.ts",
+          score: 1,
         },
       ]);
     });

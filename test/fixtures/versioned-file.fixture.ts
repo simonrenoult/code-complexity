@@ -10,6 +10,7 @@ export default class VersionedFileFixture {
   private numberOfCommitsForFile = 10;
   private content?: string;
   private commitDate?: string;
+  private removed = false;
 
   withName(name: string): VersionedFileFixture {
     this.name = name;
@@ -31,6 +32,11 @@ export default class VersionedFileFixture {
     return this;
   }
 
+  isRemoved(value: boolean): VersionedFileFixture {
+    this.removed = value;
+    return this;
+  }
+
   writeOnDisk(): void {
     for (let i = 0; i < this.numberOfCommitsForFile; i++) {
       if (i === 0) {
@@ -40,6 +46,10 @@ export default class VersionedFileFixture {
         this.modifyFileWithoutChangingItsLength(i);
       }
       this.commitFile(i);
+    }
+
+    if (this.removed) {
+      this.removeAndCommit();
     }
   }
 
@@ -58,7 +68,7 @@ export default class VersionedFileFixture {
 
   private modifyFileWithoutChangingItsLength(commitNumber: number): void {
     appendFileSync(
-      `${this.repositoryLocation}${sep}${this.name}`,
+      `${this.getFileLocation()}`,
       `// change for commit #${commitNumber + 1} `
     );
   }
@@ -71,10 +81,28 @@ export default class VersionedFileFixture {
         .map((value, index) => `console.log(${index});`)
         .join("\n");
 
-    writeFileSync(`${this.repositoryLocation}${sep}${this.name}`, fileContent);
+    writeFileSync(`${this.getFileLocation()}`, fileContent);
   }
 
   private addFileToRepository(): void {
     execSync(`git -C ${this.repositoryLocation} add --all`);
+  }
+
+  private removeAndCommit() {
+    const message = `"${this.name}: removed"`;
+    const commands = [
+      `git -C ${this.repositoryLocation} rm ${this.getFileLocation()}`,
+      `git -C ${this.repositoryLocation} commit --message=${message}`,
+    ].join("&&");
+    try {
+      execSync(commands);
+    } catch (e: any) {
+      console.log(e.stdout.toString());
+      throw e;
+    }
+  }
+
+  private getFileLocation(): string {
+    return `${this.repositoryLocation}${sep}${this.name}`;
   }
 }

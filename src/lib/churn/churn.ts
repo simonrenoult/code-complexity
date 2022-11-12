@@ -1,12 +1,11 @@
 import { execSync } from "child_process";
-import { existsSync } from "fs";
 import * as micromatch from "micromatch";
-import { resolve } from "path";
 
 import { Options, Path } from "../types";
 import { buildDebugger, withDuration } from "../../utils";
+import { resolve } from "path";
+import { existsSync } from "fs";
 
-type ParsedLine = { relativePath: string; commitCount: string };
 const internal = { debug: buildDebugger("churn") };
 const PER_LINE = "\n";
 
@@ -16,65 +15,17 @@ export default {
 };
 
 async function compute(options: Options): Promise<Map<Path, number>> {
-  assertGitIsInstalled();
-  assertIsGitRootDirectory(options.directory);
-
   const gitLogCommand = buildGitLogCommand(options);
-  const rawStringOfAllChurns = executeGitLogCommand(gitLogCommand);
-  const arrayOfAllChurns = computeChurnsPerFiles(
-    rawStringOfAllChurns,
-    options.directory
-  );
-  const mapOfAllChurns = createMapOfChurnsPerFile(arrayOfAllChurns);
-  return applyUserFilters(mapOfAllChurns, options.filter);
-}
-
-function applyUserFilters(
-  allChurns: Map<Path, number>,
-  filter: string[] | undefined
-): Map<Path, number> {
-  const filteredChurns: Map<Path, number> = new Map();
-  allChurns.forEach((churn: number, path: Path) => {
-    const patchIsAMatch =
-      filter && filter.length > 0
-        ? filter.every((f) => micromatch.isMatch(path, f))
-        : true;
-
-    if (patchIsAMatch) filteredChurns.set(path, churn);
-  });
-  return filteredChurns;
-}
-
-function createMapOfChurnsPerFile(
-  numberOfTimesFilesChanged: ParsedLine[]
-): Map<Path, number> {
-  return numberOfTimesFilesChanged.reduce(
-    (map: Map<Path, number>, { relativePath, commitCount }: ParsedLine) => {
-      const path: Path = relativePath;
-      const churn = parseInt(commitCount, 10);
-      map.set(path, churn);
-      return map;
-    },
-    new Map()
+  const singleStringWithAllChurns = executeGitLogCommand(gitLogCommand);
+  return computeChurnsPerFiles(
+    singleStringWithAllChurns,
+    options.directory,
+    options.filter
   );
 }
 
 function executeGitLogCommand(gitLogCommand: string): string {
   return execSync(gitLogCommand, { encoding: "utf8", maxBuffer: 32_000_000 });
-}
-
-function assertGitIsInstalled(): void {
-  try {
-    execSync("which git");
-  } catch (error) {
-    throw new Error("Program 'git' must be installed");
-  }
-}
-
-function assertIsGitRootDirectory(directory: string): void {
-  if (!existsSync(`${directory}/.git`)) {
-    throw new Error(`Argument 'dir' must be the git root directory.`);
-  }
 }
 
 function buildGitLogCommand(options: Options): string {
@@ -102,30 +53,42 @@ function buildGitLogCommand(options: Options): string {
 
 function computeChurnsPerFiles(
   gitLogOutput: string,
-  directory: string
-): ParsedLine[] {
+  directory: string,
+  filters: string[] | undefined
+): Map<Path, number> {
   const changedFiles = gitLogOutput
     .split(PER_LINE)
     .filter((line) => line !== "")
     .sort();
 
-  const changedFilesCount = changedFiles.reduce(
-    (fileAndTimeChanged: { [fileName: string]: number }, fileName) => {
-      fileAndTimeChanged[fileName] = (fileAndTimeChanged[fileName] || 0) + 1;
-      return fileAndTimeChanged;
-    },
-    {}
-  );
+  return changedFiles.reduce((map: Map<Path, number>, path) => {
+    applyFiltersAndExcludeObsoletePath(path, map);
+    return map;
+  }, new Map());
 
-  return Object.keys(changedFilesCount)
-    .map(
-      (changedFileName) =>
-        ({
-          relativePath: changedFileName,
-          commitCount: changedFilesCount[changedFileName].toString(),
-        } as ParsedLine)
-    )
-    .filter((parsedLine: ParsedLine) => {
-      return existsSync(resolve(directory, parsedLine.relativePath));
-    });
+  function applyFiltersAndExcludeObsoletePath(
+    path: string,
+    map: Map<Path, number>
+  ) {
+    if (!filters || !filters.length) {
+      if (pathStillExists(path)) {
+        addOrIncrement(map, path);
+      }
+    } else {
+      const pathHasAMatch = filters.every((f) => micromatch.isMatch(path, f));
+      if (pathHasAMatch) {
+        if (pathStillExists(path)) {
+          addOrIncrement(map, path);
+        }
+      }
+    }
+  }
+
+  function addOrIncrement(map: Map<Path, number>, path: string) {
+    map.set(path, (map.get(path) ?? 0) + 1);
+  }
+
+  function pathStillExists(fileName: string) {
+    return existsSync(resolve(directory, fileName));
+  }
 }
