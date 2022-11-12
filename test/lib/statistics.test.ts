@@ -104,6 +104,32 @@ describe("Statistics", () => {
     });
   });
 
+  context("options.until", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, until: "2010-01-01" };
+      await new TestRepositoryFixture()
+        .addFile({ name: "a.js", date: "2000-01-01T00:00:00" })
+        .addFile({ name: "b.js", date: "2020-01-01T00:00:00" })
+        .addFile({ name: "c.js", date: "2020-01-01T00:00:00" })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = Array.from(result.values());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          churn: 1,
+          complexity: 1,
+          path: "a.js",
+          score: 1,
+        },
+      ]);
+    });
+  });
+
   context("options.sort=score", () => {
     it("returns the appropriate elements", async () => {
       // Given
