@@ -21,7 +21,7 @@ async function compute(options: Options): Promise<Map<Path, number>> {
 
   const gitLogCommand = buildGitLogCommand(options);
   const rawStringOfAllChurns = executeGitLogCommand(gitLogCommand);
-  const arrayOfAllChurns = computeNumberOfTimesFilesChanged(
+  const arrayOfAllChurns = computeChurnsPerFiles(
     rawStringOfAllChurns,
     options.directory
   );
@@ -100,7 +100,7 @@ function buildGitLogCommand(options: Options): string {
     .join(" ");
 }
 
-function computeNumberOfTimesFilesChanged(
+function computeChurnsPerFiles(
   gitLogOutput: string,
   directory: string
 ): ParsedLine[] {
