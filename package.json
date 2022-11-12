@@ -25,7 +25,7 @@
     "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
     "pretest": "npm run lint",
-    "test": "mocha --require ts-node/register test/**/*.ts",
+    "test": "mocha --timeout=5000 --require=ts-node/register test/**/*.ts",
     "test:ci": "nyc --reporter=lcov npm test"
   },
   "keywords": [
