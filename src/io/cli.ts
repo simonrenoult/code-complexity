@@ -77,7 +77,7 @@ function getRawCli(
     )
     .option(
       "-d, --directories",
-      "Display values for directories instead of files"
+      "display values for directories instead of files"
     )
     .on("--help", () => {
       console.log();

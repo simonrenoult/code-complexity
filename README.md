@@ -40,6 +40,7 @@ $ npx code-complexity <path-to-git-directory or URL> [options]
       -i, --since [since]                   limit analysis to commits more recent in age than date
       -u, --until [until]                   limit analysis to commits older in age than date
       -s, --sort [sort]                     sort results (allowed valued: score, churn, complexity or file)
+      -d, --directories                     display values for directories instead of files
       -h, --help                            display help for command
 
     Examples:
