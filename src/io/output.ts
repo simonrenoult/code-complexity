@@ -35,7 +35,7 @@ function render(
 }
 
 function toJson(statistics: Statistics[]): string {
-  return JSON.stringify(statistics);
+  return JSON.stringify(statistics.map((s) => s.toState()));
 }
 
 function toTable(statistics: Statistics[]): string {

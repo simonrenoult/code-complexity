@@ -2,11 +2,19 @@ import Churn from "./churn/churn";
 import Complexity from "./complexity";
 import { Options, Path, Sort } from "./types";
 import { buildDebugger } from "../utils";
+import * as NodePath from "path";
 
 const DEFAULT_CHURN = 1;
 const DEFAULT_COMPLEXITY = 1;
 
 const internal = { debug: buildDebugger("statistics") };
+
+export interface IStatistics {
+  path: Path;
+  churn: number;
+  complexity: number;
+  score: number;
+}
 
 export default class Statistics {
   public readonly path: Path;
@@ -14,12 +22,7 @@ export default class Statistics {
   public readonly complexity: number;
   public readonly score: number;
 
-  constructor(path: Path, churn: number, complexity: number) {
-    this.path = path;
-    this.churn = churn;
-    this.complexity = complexity;
-    this.score = this.churn * this.complexity;
-  }
+  private readonly directories: string[];
 
   public static async compute(
     options: Options
@@ -31,24 +34,92 @@ export default class Statistics {
     const paths = Array.from(churns.keys());
     const complexities = await Complexity.compute(paths, options);
 
-    const statistics = paths
-      .map(toStatistics(churns, complexities))
-      .sort(sort(options.sort))
-      .filter(limit(options.limit));
+    const statistics = paths.map(Statistics.toStatistics(churns, complexities));
 
-    return toMap(statistics);
+    const mapOfStatistics = options.directories
+      ? Statistics.toDirectoryMap(statistics)
+      : Statistics.toFileMap(statistics);
+
+    return new Map(
+      [...mapOfStatistics.entries()]
+        .sort(([, v1], [, v2]) => sort(options.sort)(v1, v2))
+        .filter(([, v], index) => limit(options.limit)(v, index))
+    );
   }
-}
 
-function toStatistics(
-  churns: Map<Path, number>,
-  complexities: Map<Path, number>
-): (path: Path) => Statistics {
-  return (path): Statistics => {
-    const churn = churns.get(path) || DEFAULT_CHURN;
-    const complexity = complexities.get(path) || DEFAULT_COMPLEXITY;
-    return new Statistics(path, churn, complexity);
-  };
+  public static toStatistics(
+    churns: Map<Path, number>,
+    complexities: Map<Path, number>
+  ): (path: Path) => Statistics {
+    return (path): Statistics => {
+      const churn = churns.get(path) || DEFAULT_CHURN;
+      const complexity = complexities.get(path) || DEFAULT_COMPLEXITY;
+      return new Statistics(path, churn, complexity);
+    };
+  }
+
+  private constructor(path: Path, churn: number, complexity: number) {
+    this.path = path;
+    this.churn = churn;
+    this.complexity = complexity;
+    this.directories = this.findDirectoriesForFile(path);
+    this.score = this.churn * this.complexity;
+  }
+
+  private findDirectoriesForFile(path: string): string[] {
+    const directories: string[] = [];
+    const pathChunks = NodePath.parse(path).dir.split(NodePath.sep);
+    pathChunks.forEach((chunk) => {
+      const parentDir = directories.slice(-1);
+      const directory = parentDir.length
+        ? parentDir + NodePath.sep + chunk
+        : chunk;
+      directories.push(directory);
+    });
+    return directories.filter((d) => d.length > 0);
+  }
+
+  private static toFileMap(statistics: Statistics[]): Map<Path, Statistics> {
+    return statistics.reduce((map: Map<Path, Statistics>, statistics) => {
+      map.set(statistics.path, statistics);
+      return map;
+    }, new Map());
+  }
+
+  private static toDirectoryMap(
+    allStatistics: Statistics[]
+  ): Map<string, Statistics> {
+    return allStatistics.reduce((map, statisticsForFile) => {
+      statisticsForFile.directories.forEach((directoryForFile) => {
+        computeStatisticsForDirectory(map, directoryForFile, statisticsForFile);
+      });
+      return map;
+    }, new Map<string, Statistics>());
+
+    function computeStatisticsForDirectory(
+      map: Map<string, Statistics>,
+      dir: string,
+      statisticsForFile: Statistics
+    ) {
+      const statisticsForDir = map.get(dir);
+      const churn =
+        statisticsForFile.churn +
+        (statisticsForDir ? statisticsForDir.churn : 0);
+      const complexity =
+        statisticsForFile.complexity +
+        (statisticsForDir ? statisticsForDir.complexity : 0);
+      map.set(dir, new Statistics(dir, churn, complexity));
+    }
+  }
+
+  public toState(): IStatistics {
+    return {
+      path: this.path,
+      churn: this.churn,
+      complexity: this.complexity,
+      score: this.score,
+    };
+  }
 }
 
 function limit(
@@ -79,11 +150,4 @@ function sort(sort: Sort | undefined) {
 
     return 0;
   };
-}
-
-function toMap(statistics: Statistics[]): Map<Path, Statistics> {
-  return statistics.reduce((map: Map<Path, Statistics>, statistics) => {
-    map.set(statistics.path, statistics);
-    return map;
-  }, new Map());
 }

@@ -10,7 +10,7 @@ describe("Statistics", () => {
   const defaultOptions: Options = {
     directory: tmpdir() + sep + TestRepositoryFixture.testRepositoryName,
     target: tmpdir() + sep + TestRepositoryFixture.testRepositoryName,
-    format: "table",
+    format: "json",
     filter: [],
     limit: 3,
     since: undefined,
@@ -32,7 +32,8 @@ describe("Statistics", () => {
       const result = await Statistics.compute(options);
 
       // Then
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
+
       expect(statistics).to.have.length(3);
     });
   });
@@ -52,7 +53,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -84,7 +85,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -116,7 +117,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -143,7 +144,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -191,7 +192,7 @@ describe("Statistics", () => {
 
         // When
         const result = await Statistics.compute(options);
-        const statistics = Array.from(result.values());
+        const statistics = [...result.values()].map((s) => s.toState());
 
         // Then
         expect(statistics).to.deep.equal([
@@ -232,7 +233,7 @@ describe("Statistics", () => {
 
         // When
         const result = await Statistics.compute(options);
-        const statistics = Array.from(result.values());
+        const statistics = [...result.values()].map((s) => s.toState());
 
         // Then
         expect(statistics).to.deep.equal([
@@ -270,7 +271,7 @@ describe("Statistics", () => {
 
           // When
           const result = await Statistics.compute(options);
-          const statistics = Array.from(result.values());
+          const statistics = [...result.values()].map((s) => s.toState());
 
           // Then
           expect(statistics).to.deep.equal([
@@ -310,7 +311,7 @@ describe("Statistics", () => {
 
           // When
           const result = await Statistics.compute(options);
-          const statistics = Array.from(result.values());
+          const statistics = [...result.values()].map((s) => s.toState());
 
           // Then
           expect(statistics).to.deep.equal([
@@ -339,7 +340,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -378,7 +379,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -404,6 +405,55 @@ describe("Statistics", () => {
     });
   });
 
+  context("options.directories=true", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = {
+        ...defaultOptions,
+        limit: 4,
+        directories: true,
+      };
+      new TestRepositoryFixture()
+        .addFile({ name: "test/a.js" })
+        .addFile({ name: "test/foo/b.js" })
+        .addFile({ name: "test/foo/c.js" })
+        .addFile({ name: "test/bar/qux/d.js" })
+        .writeOnDisk();
+
+      // When
+      const result = await Statistics.compute(options);
+      const statistics = [...result.values()].map((s) => s.toState());
+
+      // Then
+      expect(statistics).to.deep.equal([
+        {
+          path: "test",
+          churn: 4,
+          complexity: 4,
+          score: 16,
+        },
+        {
+          path: "test/foo",
+          churn: 2,
+          complexity: 2,
+          score: 4,
+        },
+        {
+          path: "test/bar",
+          churn: 1,
+          complexity: 1,
+          score: 1,
+        },
+        {
+          path: "test/bar/qux",
+          churn: 1,
+          complexity: 1,
+          score: 1,
+        },
+      ]);
+    });
+  });
+
   context("when file no longer exists", () => {
     it("it is ignored", async () => {
       // Given
@@ -415,7 +465,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = Array.from(result.values());
+      const statistics = [...result.values()].map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([

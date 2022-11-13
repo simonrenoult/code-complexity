@@ -7,6 +7,7 @@ export type ComplexityStrategy = "sloc" | "halstead" | "cyclomatic";
 export type Options = {
   target: string | URL;
   directory: string;
+  directories?: boolean;
   limit?: number;
   since?: string;
   until?: string;

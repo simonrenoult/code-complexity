@@ -21,7 +21,7 @@ While imperfect, this measure gives a good enough idea of what's going on.
 ## Usage
 
 ```sh
-$ npx code-complexity <path-to-git-directory or URL>
+$ npx code-complexity <path-to-git-directory or URL> [options]
 ```
 
 ## Help
@@ -50,6 +50,7 @@ $ npx code-complexity <path-to-git-directory or URL>
     $ code-complexity ../foo --sort score
     $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
     $ code-complexity . --limit 10 --sort score
+    $ code-complexity . --limit 10 --modules 
     $ code-complexity . --limit 10 --sort score -cs halstead
     $ code-complexity . --since=2021-06-01 --limit 100
     $ code-complexity . --since=2021-04-01 --until=2021-07-01

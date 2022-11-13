@@ -74,6 +74,10 @@ function getRawCli(
       "sort results (allowed valued: score, churn, complexity or file)",
       /^(score|churn|complexity|file)$/i
     )
+    .option(
+      "-d, --directories",
+      "Display values for directories instead of files"
+    )
     .on("--help", () => {
       console.log();
       console.log("Examples:");
@@ -83,9 +87,12 @@ function getRawCli(
         "$ code-complexity https://github.com/simonrenoult/code-complexity",
         "$ code-complexity foo --limit 3",
         "$ code-complexity ../foo --sort score",
-        "$ code-complexity . -cs halstead",
         "$ code-complexity /foo/bar --filter 'src/**,!src/front/**'",
         "$ code-complexity . --limit 10 --sort score",
+        "$ code-complexity . --limit 10 --modules",
+        "$ code-complexity . --limit 10 --sort score -cs halstead",
+        "$ code-complexity . --since=2021-06-01 --limit 100",
+        "$ code-complexity . --since=2021-04-01 --until=2021-07-01",
       ].forEach((example) => console.log(example.padStart(2)));
     });
 }
@@ -95,6 +102,7 @@ function buildOptions(args: string[], options: any): Options {
   return {
     target,
     directory: parseDirectory(target),
+    directories: options.directories,
     format: options.format ? (String(options.format) as Format) : "table",
     filter: options.filter || [],
     limit: options.limit ? Number(options.limit) : undefined,

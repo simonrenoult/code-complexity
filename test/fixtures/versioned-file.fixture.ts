@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
-import { appendFileSync, writeFileSync } from "fs";
-import { sep } from "path";
+import { appendFileSync, mkdirSync, writeFileSync } from "fs";
+import * as NodePath from "path";
 
 export default class VersionedFileFixture {
   constructor(private readonly repositoryLocation: string) {}
@@ -81,7 +81,8 @@ export default class VersionedFileFixture {
         .map((value, index) => `console.log(${index});`)
         .join("\n");
 
-    writeFileSync(`${this.getFileLocation()}`, fileContent);
+    mkdirSync(NodePath.parse(this.getFileLocation()).dir, { recursive: true });
+    writeFileSync(this.getFileLocation(), fileContent);
   }
 
   private addFileToRepository(): void {
@@ -103,6 +104,6 @@ export default class VersionedFileFixture {
   }
 
   private getFileLocation(): string {
-    return `${this.repositoryLocation}${sep}${this.name}`;
+    return `${this.repositoryLocation}${NodePath.sep}${this.name}`;
   }
 }
