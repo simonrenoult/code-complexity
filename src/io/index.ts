@@ -1,6 +1,6 @@
 import Cli from "./cli";
 import Output from "./output";
-import { Options, Path } from "../lib/types";
+import { Options } from "../lib/types";
 import Statistics from "../lib";
 import { execSync } from "child_process";
 import { existsSync } from "fs";
@@ -12,7 +12,7 @@ export default async function main(): Promise<void> {
   assertGitIsInstalled();
   assertIsGitRootDirectory(options.directory);
 
-  const statistics: Map<Path, Statistics> = await Statistics.compute(options);
+  const statistics = await Statistics.compute(options);
   Cli.cleanup(options);
   Output.render(statistics, options);
 }

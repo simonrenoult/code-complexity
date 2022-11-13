@@ -32,8 +32,7 @@ describe("Statistics", () => {
       const result = await Statistics.compute(options);
 
       // Then
-      const statistics = [...result.values()].map((s) => s.toState());
-
+      const statistics = result.map((s) => s.toState());
       expect(statistics).to.have.length(3);
     });
   });
@@ -53,7 +52,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -85,7 +84,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -117,7 +116,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -144,7 +143,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -192,7 +191,7 @@ describe("Statistics", () => {
 
         // When
         const result = await Statistics.compute(options);
-        const statistics = [...result.values()].map((s) => s.toState());
+        const statistics = result.map((s) => s.toState());
 
         // Then
         expect(statistics).to.deep.equal([
@@ -233,7 +232,7 @@ describe("Statistics", () => {
 
         // When
         const result = await Statistics.compute(options);
-        const statistics = [...result.values()].map((s) => s.toState());
+        const statistics = result.map((s) => s.toState());
 
         // Then
         expect(statistics).to.deep.equal([
@@ -271,7 +270,7 @@ describe("Statistics", () => {
 
           // When
           const result = await Statistics.compute(options);
-          const statistics = [...result.values()].map((s) => s.toState());
+          const statistics = result.map((s) => s.toState());
 
           // Then
           expect(statistics).to.deep.equal([
@@ -311,7 +310,7 @@ describe("Statistics", () => {
 
           // When
           const result = await Statistics.compute(options);
-          const statistics = [...result.values()].map((s) => s.toState());
+          const statistics = result.map((s) => s.toState());
 
           // Then
           expect(statistics).to.deep.equal([
@@ -340,7 +339,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -379,7 +378,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -422,7 +421,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([
@@ -465,7 +464,7 @@ describe("Statistics", () => {
 
       // When
       const result = await Statistics.compute(options);
-      const statistics = [...result.values()].map((s) => s.toState());
+      const statistics = result.map((s) => s.toState());
 
       // Then
       expect(statistics).to.deep.equal([

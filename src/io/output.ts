@@ -1,7 +1,7 @@
 import * as Table from "cli-table3";
 
 import Statistics from "../lib/statistics";
-import { Options, Path } from "../lib/types";
+import { Options } from "../lib/types";
 import { buildDebugger, withDuration } from "../utils";
 
 const internal = { debug: buildDebugger("output") };
@@ -10,25 +10,20 @@ export default {
   render: (...args: any[]): void => withDuration(render, args, internal.debug),
 };
 
-function render(
-  statisticsPerPath: Map<Path, Statistics>,
-  options: Options
-): void {
-  const values = Array.from(statisticsPerPath.values());
-
+function render(statistics: Statistics[], options: Options): void {
   let stdout;
   switch (options.format) {
     case "table":
-      stdout = toTable(values);
+      stdout = toTable(statistics);
       break;
     case "json":
-      stdout = toJson(values);
+      stdout = toJson(statistics);
       break;
     case "csv":
-      stdout = toCSV(values);
+      stdout = toCSV(statistics);
       break;
     default:
-      stdout = toTable(values);
+      stdout = toTable(statistics);
   }
 
   console.log(stdout);
