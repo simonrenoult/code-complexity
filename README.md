@@ -1,6 +1,6 @@
 # code-complexity
 
-> Measure the churn/complexity score. Higher values mean hotspots where
+> Measure the churn/complexity score. Higher scores reveal hotspots where
 > refactorings should happen.
 
 [![Build Status][travis-image]][travis-url]
