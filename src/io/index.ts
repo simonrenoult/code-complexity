@@ -1,9 +1,10 @@
+import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
+
 import Cli from "./cli";
-import Output from "./output";
 import { Options } from "../lib/types";
+import Output from "./output";
 import Statistics from "../lib";
-import { execSync } from "child_process";
-import { existsSync } from "fs";
 
 export default async function main(): Promise<void> {
   const options = await Cli.parse();

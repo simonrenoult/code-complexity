@@ -1,7 +1,8 @@
-import { tmpdir } from "os";
-import { sep } from "path";
-import { existsSync, mkdirSync, rmdirSync } from "fs";
-import { execSync } from "child_process";
+import { existsSync, mkdirSync, rmdirSync } from "node:fs";
+import { execSync } from "node:child_process";
+import { sep } from "node:path";
+import { tmpdir } from "node:os";
+
 import VersionedFileFixture from "./versioned-file.fixture";
 
 export default class TestRepositoryFixture {

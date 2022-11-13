@@ -1,9 +1,10 @@
-import { expect } from "chai";
-import { sep } from "path";
+import { sep } from "node:path";
+import { tmpdir } from "node:os";
 
-import Statistics from "../../src/lib";
+import { expect } from "chai";
+
 import { Options } from "../../src/lib/types";
-import { tmpdir } from "os";
+import Statistics from "../../src/lib";
 import TestRepositoryFixture from "../fixtures/test-repository.fixture";
 
 describe("Statistics", () => {

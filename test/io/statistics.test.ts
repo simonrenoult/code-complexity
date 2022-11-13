@@ -1,6 +1,8 @@
-import { execSync } from "child_process";
-import TestRepositoryFixture from "../fixtures/test-repository.fixture";
+import { execSync } from "node:child_process";
+
 import { expect } from "chai";
+
+import TestRepositoryFixture from "../fixtures/test-repository.fixture";
 
 describe("CLI", () => {
   context("when format is json", () => {

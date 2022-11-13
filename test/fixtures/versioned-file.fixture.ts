@@ -1,6 +1,6 @@
-import { execSync } from "child_process";
-import { appendFileSync, mkdirSync, writeFileSync } from "fs";
-import * as NodePath from "path";
+import * as NodePath from "node:path";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 
 export default class VersionedFileFixture {
   constructor(private readonly repositoryLocation: string) {}

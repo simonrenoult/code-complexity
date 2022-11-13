@@ -1,7 +1,8 @@
-import { readFileSync } from "fs";
-import { transformSync } from "@babel/core";
-import { extname } from "path";
+import { extname } from "node:path";
+import { readFileSync } from "node:fs";
+
 import { buildDebugger, UnsupportedExtension } from "../../utils";
+import { transformSync } from "@babel/core";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const escomplex = require("escomplex");

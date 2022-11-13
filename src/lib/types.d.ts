@@ -1,4 +1,4 @@
-import { URL } from "url";
+import { URL } from "node:url";
 
 export type Path = string;
 export type Sort = "score" | "churn" | "complexity" | "file" | "ratio";

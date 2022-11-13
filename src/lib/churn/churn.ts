@@ -1,10 +1,11 @@
-import { execSync } from "child_process";
+import { execSync } from "node:child_process";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
 import * as micromatch from "micromatch";
 
-import { Options, Path } from "../types";
 import { buildDebugger, withDuration } from "../../utils";
-import { resolve } from "path";
-import { existsSync } from "fs";
+import { Options, Path } from "../types";
 
 const internal = { debug: buildDebugger("churn") };
 const PER_LINE = "\n";

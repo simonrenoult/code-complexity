@@ -1,8 +1,9 @@
-import Churn from "./churn/churn";
-import Complexity from "./complexity";
+import * as NodePath from "node:path";
+
 import { Options, Path, Sort } from "./types";
 import { buildDebugger } from "../utils";
-import * as NodePath from "path";
+import Churn from "./churn/churn";
+import Complexity from "./complexity";
 
 const DEFAULT_CHURN = 1;
 const DEFAULT_COMPLEXITY = 1;

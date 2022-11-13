@@ -1,5 +1,5 @@
 import * as sloc from "node-sloc";
-import { createReadStream } from "fs";
+import { createReadStream } from "node:fs";
 
 export default async function compute(absolutePath: string): Promise<number> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -1,8 +1,8 @@
 import * as Table from "cli-table3";
 
-import Statistics from "../lib/statistics";
-import { Options } from "../lib/types";
 import { buildDebugger, withDuration } from "../utils";
+import { Options } from "../lib/types";
+import Statistics from "../lib/statistics";
 
 const internal = { debug: buildDebugger("output") };
 
