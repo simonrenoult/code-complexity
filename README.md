@@ -15,8 +15,10 @@ view, using information from our version control systems, we can get a better
 sense of the effects of our refactoring efforts.*
 
 
-Note: `code-complexity` currently measures complexity using lines of code count.
-While imperfect, this measure gives a good enough idea of what's going on.
+Note: `code-complexity` currently measures complexity using either:
+- lines of code count (all languages)
+- cyclomatic complexity (JavaScript/TypeScript)
+- halstead complexity (JavaScript/TypeScript)
 
 ## Usage
 
@@ -72,11 +74,6 @@ $ npx code-complexity https://github.com/simonrenoult/code-complexity --sort=sco
 │ .idea/workspace.xml          │ 123        │ 6     │ 738   │
 └──────────────────────────────┴────────────┴───────┴───────┘
 ```
-
-## Notes
-
-- The Halstead metrics are a [collection of several metrics](https://en.wikipedia.org/wiki/Halstead_complexity_measures), we use the "volume" metric.
-- We only currently support Halstead and Cyclomatic for JavaScript and TypeScript
 
 ## Special thanks
 
