@@ -1,8 +1,8 @@
 import * as Table from "cli-table3";
+import { IStatistic } from "../../dist/src/lib/statistics";
+import { Options } from "../lib/types";
 
 import { buildDebugger, withDuration } from "../utils";
-import { Options } from "../lib/types";
-import Statistics from "../lib/statistics";
 
 const internal = { debug: buildDebugger("output") };
 
@@ -10,7 +10,7 @@ export default {
   render: (...args: any[]): void => withDuration(render, args, internal.debug),
 };
 
-function render(statistics: Statistics[], options: Options): void {
+function render(statistics: IStatistic[], options: Options): void {
   let stdout;
   switch (options.format) {
     case "table":
@@ -29,11 +29,11 @@ function render(statistics: Statistics[], options: Options): void {
   console.log(stdout);
 }
 
-function toJson(statistics: Statistics[]): string {
-  return JSON.stringify(statistics.map((s) => s.toState()));
+function toJson(statistics: IStatistic[]): string {
+  return JSON.stringify(statistics);
 }
 
-function toTable(statistics: Statistics[]): string {
+function toTable(statistics: IStatistic[]): string {
   const table = new Table({
     head: ["file", "complexity", "churn", "score"],
   });
@@ -49,7 +49,7 @@ function toTable(statistics: Statistics[]): string {
   return table.toString();
 }
 
-function toCSV(statistics: Statistics[]): string {
+function toCSV(statistics: IStatistic[]): string {
   let csv = "file,complexity,churn,score\n";
   statistics.forEach((stat) => {
     csv +=

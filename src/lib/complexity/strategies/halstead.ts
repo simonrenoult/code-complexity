@@ -1,4 +1,4 @@
-import { buildDebugger, UnsupportedExtension } from "../../utils";
+import { buildDebugger, UnsupportedExtension } from "../../../utils";
 import { extname } from "node:path";
 import { readFileSync } from "node:fs";
 import { transformSync } from "@babel/core";

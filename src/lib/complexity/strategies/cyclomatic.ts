@@ -1,7 +1,7 @@
 import { extname } from "node:path";
 import { readFileSync } from "node:fs";
 
-import { buildDebugger, UnsupportedExtension } from "../../utils";
+import { buildDebugger, UnsupportedExtension } from "../../../utils";
 import { transformSync } from "@babel/core";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

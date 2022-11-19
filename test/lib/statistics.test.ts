@@ -30,11 +30,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      const statistics = result.map((s) => s.toState());
-      expect(statistics).to.have.length(3);
+      expect(result).to.have.length(3);
     });
   });
 
@@ -52,11 +51,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 1,
           complexity: 1,
@@ -84,11 +82,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 1,
           complexity: 1,
@@ -116,11 +113,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 1,
           complexity: 1,
@@ -143,11 +139,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 3,
           complexity: 3,
@@ -191,11 +186,10 @@ describe("Statistics", () => {
           .writeOnDisk();
 
         // When
-        const result = await Statistics.compute(options);
-        const statistics = result.map((s) => s.toState());
+        const result = (await Statistics.compute(options)).list();
 
         // Then
-        expect(statistics).to.deep.equal([
+        expect(result).to.deep.equal([
           {
             churn: 1,
             complexity: 3,
@@ -232,11 +226,10 @@ describe("Statistics", () => {
           .writeOnDisk();
 
         // When
-        const result = await Statistics.compute(options);
-        const statistics = result.map((s) => s.toState());
+        const result = (await Statistics.compute(options)).list();
 
         // Then
-        expect(statistics).to.deep.equal([
+        expect(result).to.deep.equal([
           {
             churn: 1,
             complexity: 25.26619429851844,
@@ -270,11 +263,10 @@ describe("Statistics", () => {
             .writeOnDisk();
 
           // When
-          const result = await Statistics.compute(options);
-          const statistics = result.map((s) => s.toState());
+          const result = (await Statistics.compute(options)).list();
 
           // Then
-          expect(statistics).to.deep.equal([
+          expect(result).to.deep.equal([
             {
               churn: 1,
               complexity: 8,
@@ -310,11 +302,10 @@ describe("Statistics", () => {
             .writeOnDisk();
 
           // When
-          const result = await Statistics.compute(options);
-          const statistics = result.map((s) => s.toState());
+          const result = (await Statistics.compute(options)).list();
 
           // Then
-          expect(statistics).to.deep.equal([
+          expect(result).to.deep.equal([
             {
               churn: 1,
               complexity: 7,
@@ -339,11 +330,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 7,
           complexity: 1,
@@ -378,11 +368,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 3,
           complexity: 2,
@@ -421,11 +410,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           path: "test",
           churn: 4,
@@ -464,11 +452,10 @@ describe("Statistics", () => {
         .writeOnDisk();
 
       // When
-      const result = await Statistics.compute(options);
-      const statistics = result.map((s) => s.toState());
+      const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(statistics).to.deep.equal([
+      expect(result).to.deep.equal([
         {
           churn: 1,
           complexity: 1,

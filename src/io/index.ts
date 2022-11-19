@@ -15,7 +15,7 @@ export default async function main(): Promise<void> {
 
   const statistics = await Statistics.compute(options);
   Cli.cleanup(options);
-  Output.render(statistics, options);
+  Output.render(statistics.list(), options);
 }
 
 function warnIfUsingComplexityWithIncompatibleFileTypes(options: Options) {
