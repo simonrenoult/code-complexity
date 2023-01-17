@@ -1,5 +1,5 @@
 import * as Table from "cli-table3";
-import { IStatistic } from "../../dist/src/lib/statistics";
+import { IStatistic } from "../lib/statistics/statistic";
 import { Options } from "../lib/types";
 
 import { buildDebugger, withDuration } from "../utils";
