@@ -2,7 +2,7 @@ import * as NodePath from "node:path";
 
 import { Path } from "../types";
 
-interface IStatistic {
+export interface IStatistic {
   path: string;
   churn: number;
   complexity: number;

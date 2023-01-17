@@ -1,4 +1,4 @@
-import { IStatistic } from "../../../dist/src/lib/statistics";
+import { IStatistic } from "./statistic";
 import { buildDebugger } from "../../utils";
 import Churns from "../churn/churns";
 import Complexities from "../complexity/complexities";
