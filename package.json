@@ -1,6 +1,6 @@
 {
   "name": "code-complexity",
-  "version": "4.4.2",
+  "version": "4.4.3",
   "description": "Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.",
   "author": {
     "name": "Simon Renoult",
