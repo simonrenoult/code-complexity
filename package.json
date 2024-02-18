@@ -7,7 +7,7 @@
     "email": "contact@simonrenoult.me"
   },
   "main": "dist/src/lib",
-  "types": "dist/src/lib/types.d.ts",
+  "types": "dist/src/lib/index.d.ts",
   "bin": {
     "code-complexity": "dist/bin/code-complexity.js"
   },
