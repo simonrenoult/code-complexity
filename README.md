@@ -26,6 +26,25 @@ Note: `code-complexity` currently measures complexity using either:
 $ npx code-complexity <path-to-git-directory or URL> [options]
 ```
 
+or
+
+```javascript
+// CommonJS
+const complexity = require("code-complexity")
+const results = await complexity.compute({
+  target: "some/file/path"
+})
+```
+
+```typescript
+// ES Modules
+import { analyze } from "code-complexity";
+
+const results = await analyze({
+  target: "some/file/path"
+})
+```
+
 ## Help
 
 ```text
