@@ -26,6 +26,7 @@ export function calculate(path: string): number | UnsupportedExtension {
 function fromJavaScript(path: string): number {
   const content = readFileSync(path, { encoding: "utf8" });
   const babelResult = transformSync(content, {
+    filename: path,
     presets: ["@babel/preset-env"],
   });
   if (!babelResult) throw new Error(`Error while parsing file ${path}`);
@@ -36,6 +37,7 @@ function fromJavaScript(path: string): number {
 function fromTypeScript(path: string): number {
   const content = readFileSync(path, { encoding: "utf8" });
   const babelResult = transformSync(content, {
+    filename: path,
     plugins: ["@babel/plugin-transform-typescript"],
     presets: ["@babel/preset-env"],
   });
