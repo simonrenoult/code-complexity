@@ -37,7 +37,10 @@ function fromJavaScript(path: string): number {
 function fromTypeScript(path: string): number {
   const content = readFileSync(path, { encoding: "utf8" });
   const babelResult = transformSync(content, {
-    plugins: ["@babel/plugin-transform-typescript"],
+    plugins: [
+      "@babel/plugin-transform-typescript",
+      ["@babel/plugin-proposal-decorators", { legacy: true }],
+    ],
     presets: ["@babel/preset-env"],
   });
   if (!babelResult) throw new Error(`Error while parsing file ${path}`);
