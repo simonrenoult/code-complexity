@@ -10,12 +10,11 @@
 
 Quoting Michael Feathers (source [here][michael-feathers-source]):
 
-_Often when we refactor, we look at local areas of code. If we take a wider
+*Often when we refactor, we look at local areas of code. If we take a wider
 view, using information from our version control systems, we can get a better
-sense of the effects of our refactoring efforts._
+sense of the effects of our refactoring efforts.*
 
 Note: `code-complexity` currently measures complexity using either:
-
 - lines of code count (all languages)
 - cyclomatic complexity (JavaScript/TypeScript)
 - halstead complexity (JavaScript/TypeScript)
@@ -84,8 +83,8 @@ A special thanks to a few contributors that helped me make `code-complexity` bet
 - Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
 - Scott Brooks (scottamplitude) for initiating the work on complexity strategies
 
-[michael-feathers-source]: https://www.stickyminds.com/article/getting-empirical-about-refactoring
-[travis-image]: https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
+[michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
+[travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
 [style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [style-url]: https://prettier.io/
