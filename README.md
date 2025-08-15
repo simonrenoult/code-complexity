@@ -10,12 +10,12 @@
 
 Quoting Michael Feathers (source [here][michael-feathers-source]):
 
-*Often when we refactor, we look at local areas of code. If we take a wider
+_Often when we refactor, we look at local areas of code. If we take a wider
 view, using information from our version control systems, we can get a better
-sense of the effects of our refactoring efforts.*
-
+sense of the effects of our refactoring efforts._
 
 Note: `code-complexity` currently measures complexity using either:
+
 - lines of code count (all languages)
 - cyclomatic complexity (JavaScript/TypeScript)
 - halstead complexity (JavaScript/TypeScript)
@@ -43,6 +43,7 @@ $ npx code-complexity <path-to-git-directory or URL> [options]
       -u, --until [until]                   limit analysis to commits older in age than date
       -s, --sort [sort]                     sort results (allowed valued: score, churn, complexity or file)
       -d, --directories                     display values for directories instead of files
+      -mb, --max-buffer [maxBuffer]         set the max buffer size for git log (in bytes)
       -h, --help                            display help for command
 
     Examples:
@@ -53,10 +54,11 @@ $ npx code-complexity <path-to-git-directory or URL> [options]
     $ code-complexity ../foo --sort score
     $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
     $ code-complexity . --limit 10 --sort score
-    $ code-complexity . --limit 10 --directories 
+    $ code-complexity . --limit 10 --directories
     $ code-complexity . --limit 10 --sort score -cs halstead
     $ code-complexity . --since=2021-06-01 --limit 100
     $ code-complexity . --since=2021-04-01 --until=2021-07-01
+    $ code-complexity . --max-buffer 64000000
 ```
 
 ## Output
@@ -82,8 +84,8 @@ A special thanks to a few contributors that helped me make `code-complexity` bet
 - Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
 - Scott Brooks (scottamplitude) for initiating the work on complexity strategies
 
-[michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
-[travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
+[michael-feathers-source]: https://www.stickyminds.com/article/getting-empirical-about-refactoring
+[travis-image]: https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
 [style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [style-url]: https://prettier.io/

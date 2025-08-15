@@ -68,7 +68,8 @@ export default class GitHistory {
   }
 
   private executeGitLogCommand(gitLogCommand: string): string {
-    return execSync(gitLogCommand, { encoding: "utf8", maxBuffer: 32_000_000 });
+    const maxBuffer = this.options.maxBuffer ?? 32_000_000;
+    return execSync(gitLogCommand, { encoding: "utf8", maxBuffer });
   }
 
   private listFiles(): string[] {

@@ -79,6 +79,11 @@ function getRawCli(
       "-d, --directories",
       "display values for directories instead of files"
     )
+    .option(
+      "-mb, --max-buffer [maxBuffer]",
+      "set the max buffer size for git log (in bytes)",
+      parseInt
+    )
     .on("--help", () => {
       console.log();
       console.log("Examples:");
@@ -94,6 +99,7 @@ function getRawCli(
         "$ code-complexity . --limit 10 --sort score -cs halstead",
         "$ code-complexity . --since=2021-06-01 --limit 100",
         "$ code-complexity . --since=2021-04-01 --until=2021-07-01",
+        "$ code-complexity . --max-buffer 64000000",
       ].forEach((example) => console.log(example.padStart(2)));
     });
 }
@@ -113,6 +119,7 @@ function buildOptions(args: string[], options: any): Options {
     complexityStrategy: options.complexityStrategy
       ? (String(options.complexityStrategy) as ComplexityStrategy)
       : "sloc",
+    maxBuffer: options.maxBuffer ? Number(options.maxBuffer) : undefined,
   };
 
   // FIXME: I'm not a fan of pulling the code here but it's good enough.
