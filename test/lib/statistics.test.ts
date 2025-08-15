@@ -442,6 +442,27 @@ describe("Statistics", () => {
     });
   });
 
+  context("options.maxBuffer", () => {
+    it("returns the appropriate elements", async () => {
+      // Given
+      const options: Options = { ...defaultOptions, maxBuffer: 64_000_000 };
+      new TestRepositoryFixture().addFile({ name: "a.js" }).writeOnDisk();
+
+      // When
+      const result = (await Statistics.compute(options)).list();
+
+      // Then
+      expect(result).to.deep.equal([
+        {
+          churn: 1,
+          complexity: 1,
+          path: "a.js",
+          score: 1,
+        },
+      ]);
+    });
+  });
+
   context("when file no longer exists", () => {
     it("it is ignored", async () => {
       // Given

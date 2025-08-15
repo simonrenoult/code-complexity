@@ -15,4 +15,5 @@ export type Options = {
   complexityStrategy?: ComplexityStrategy;
   filter?: string[];
   format?: Format;
+  maxBuffer?: number;
 };
