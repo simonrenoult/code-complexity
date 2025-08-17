@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, rmdirSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { sep } from "node:path";
 import { tmpdir } from "node:os";
@@ -37,7 +37,7 @@ export default class TestRepositoryFixture {
 
   public writeOnDisk(): this {
     if (existsSync(this.location)) {
-      rmdirSync(this.location, { recursive: true });
+      rmSync(this.location, { recursive: true });
     }
     mkdirSync(this.location);
     execSync(`git -C ${this.location} init`);
