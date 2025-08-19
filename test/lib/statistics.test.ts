@@ -1,7 +1,6 @@
-import { sep } from "node:path";
+import * as assert from "node:assert";
 import { tmpdir } from "node:os";
-
-import { expect } from "chai";
+import { sep } from "node:path";
 
 import { Options } from "../../src/lib/types";
 import Statistics from "../../src/lib";
@@ -33,7 +32,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.have.length(3);
+      assert.equal(result.length, 3);
     });
   });
 
@@ -54,7 +53,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 1,
           complexity: 1,
@@ -85,7 +84,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 1,
           complexity: 1,
@@ -116,7 +115,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 1,
           complexity: 1,
@@ -142,7 +141,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 3,
           complexity: 3,
@@ -189,7 +188,7 @@ describe("Statistics", () => {
         const result = (await Statistics.compute(options)).list();
 
         // Then
-        expect(result).to.deep.equal([
+        assert.deepStrictEqual(result, [
           {
             churn: 1,
             complexity: 3,
@@ -229,7 +228,7 @@ describe("Statistics", () => {
         const result = (await Statistics.compute(options)).list();
 
         // Then
-        expect(result).to.deep.equal([
+        assert.deepStrictEqual(result, [
           {
             churn: 1,
             complexity: 25.26619429851844,
@@ -266,7 +265,7 @@ describe("Statistics", () => {
           const result = (await Statistics.compute(options)).list();
 
           // Then
-          expect(result).to.deep.equal([
+          assert.deepStrictEqual(result, [
             {
               churn: 1,
               complexity: 8,
@@ -305,7 +304,7 @@ describe("Statistics", () => {
           const result = (await Statistics.compute(options)).list();
 
           // Then
-          expect(result).to.deep.equal([
+          assert.deepStrictEqual(result, [
             {
               churn: 1,
               complexity: 7,
@@ -333,7 +332,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 7,
           complexity: 1,
@@ -371,7 +370,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 3,
           complexity: 2,
@@ -413,7 +412,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           path: "test",
           churn: 4,
@@ -452,7 +451,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 1,
           complexity: 1,
@@ -476,7 +475,7 @@ describe("Statistics", () => {
       const result = (await Statistics.compute(options)).list();
 
       // Then
-      expect(result).to.deep.equal([
+      assert.deepStrictEqual(result, [
         {
           churn: 1,
           complexity: 1,
