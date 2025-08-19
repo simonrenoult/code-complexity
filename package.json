@@ -54,13 +54,11 @@
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@types/babel__core": "^7.1.20",
-    "@types/chai": "^4.3.4",
     "@types/debug": "^4.1.7",
     "@types/micromatch": "^4.0.2",
     "@types/mocha": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
-    "chai": "^4.3.7",
     "codecov": "^3.8.2",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",

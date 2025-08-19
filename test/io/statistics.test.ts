@@ -1,6 +1,5 @@
+import * as assert from "node:assert";
 import { execSync } from "node:child_process";
-
-import { expect } from "chai";
 
 import TestRepositoryFixture from "../fixtures/test-repository.fixture";
 
@@ -21,7 +20,8 @@ describe("CLI", () => {
       ).trim();
 
       // Then
-      expect(result).to.deep.equal(
+      assert.deepStrictEqual(
+        result,
         JSON.stringify([
           { path: "a.js", churn: 2, complexity: 2, score: 4 },
           { path: "b.ts", churn: 1, complexity: 1, score: 1 },
@@ -46,7 +46,8 @@ describe("CLI", () => {
       ).trim();
 
       // Then
-      expect(result).to.deep.equal(
+      assert.deepStrictEqual(
+        result,
         ["file,complexity,churn,score", "a.js,2,2,4", "b.ts,1,1,1"].join("\n")
       );
     });
