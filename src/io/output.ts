@@ -2,15 +2,7 @@ import * as Table from "cli-table3";
 import { IStatistic } from "../lib/statistics/statistic";
 import { Options } from "../lib/types";
 
-import { buildDebugger, withDuration } from "../utils";
-
-const internal = { debug: buildDebugger("output") };
-
-export default {
-  render: (...args: any[]): void => withDuration(render, args, internal.debug),
-};
-
-function render(statistics: IStatistic[], options: Options): void {
+export function render(statistics: IStatistic[], options: Options): void {
   let stdout;
   switch (options.format) {
     case "table":

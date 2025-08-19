@@ -3,61 +3,69 @@ import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 
 export default class VersionedFileFixture {
-  constructor(private readonly repositoryLocation: string) {}
+  #repositoryLocation: string;
 
-  private name = "example.js";
-  private numberOfLinesInFile = 10;
-  private numberOfCommitsForFile = 10;
-  private content?: string;
-  private commitDate?: string;
-  private removed = false;
+  constructor(repositoryLocation: string) {
+    this.#repositoryLocation = repositoryLocation;
+  }
+
+  #name = "example.js";
+  #numberOfLinesInFile = 10;
+  #numberOfCommitsForFile = 10;
+  #content?: string;
+  #commitDate?: string;
+  #removed = false;
 
   withName(name: string): VersionedFileFixture {
-    this.name = name;
+    this.#name = name;
     return this;
   }
 
   containing(args: { lines: number } | string): VersionedFileFixture {
     if (typeof args === "string") {
-      this.content = args;
+      this.#content = args;
     } else {
-      this.numberOfLinesInFile = args.lines;
+      this.#numberOfLinesInFile = args.lines;
     }
     return this;
   }
 
   committed(args: { times: number; date?: string }): VersionedFileFixture {
-    this.numberOfCommitsForFile = args.times;
-    this.commitDate = args.date;
+    this.#numberOfCommitsForFile = args.times;
+    this.#commitDate = args.date;
     return this;
   }
 
   isRemoved(value: boolean): VersionedFileFixture {
-    this.removed = value;
+    this.#removed = value;
     return this;
   }
 
   writeOnDisk(): void {
-    for (let i = 0; i < this.numberOfCommitsForFile; i++) {
+    for (let i = 0; i < this.#numberOfCommitsForFile; i++) {
       if (i === 0) {
-        this.createFileWithContentInRepository();
-        this.addFileToRepository();
+        this.#createFileWithContentInRepository();
+        this.#addFileToRepository();
       } else {
-        this.modifyFileWithoutChangingItsLength(i);
+        this.#modifyFileWithoutChangingItsLength(i);
       }
-      this.commitFile(i);
+      this.#commitFile(i);
     }
 
-    if (this.removed) {
-      this.removeAndCommit();
+    if (this.#removed) {
+      this.#removeAndCommit();
     }
   }
 
-  private commitFile(commitNumber: number): void {
-    const commitMessage = `"${this.name}: commit #${commitNumber + 1}"`;
-    const command = this.commitDate
-      ? `GIT_COMMITTER_DATE="${this.commitDate}" git -C ${this.repositoryLocation} commit --all --message=${commitMessage} --date=${this.commitDate}`
-      : `git -C ${this.repositoryLocation} commit --all --message=${commitMessage}`;
+  #commitFile(commitNumber: number): void {
+    const commitMessage = `"${this.#name}: commit #${commitNumber + 1}"`;
+    const command = this.#commitDate
+      ? `GIT_COMMITTER_DATE="${this.#commitDate}" git -C ${
+          this.#repositoryLocation
+        } commit --all --message=${commitMessage} --date=${this.#commitDate}`
+      : `git -C ${
+          this.#repositoryLocation
+        } commit --all --message=${commitMessage}`;
     try {
       execSync(command);
     } catch (e: any) {
@@ -66,34 +74,34 @@ export default class VersionedFileFixture {
     }
   }
 
-  private modifyFileWithoutChangingItsLength(commitNumber: number): void {
+  #modifyFileWithoutChangingItsLength(commitNumber: number): void {
     appendFileSync(
-      `${this.getFileLocation()}`,
+      `${this.#getFileLocation()}`,
       `// change for commit #${commitNumber + 1} `
     );
   }
 
-  private createFileWithContentInRepository(): void {
+  #createFileWithContentInRepository(): void {
     const fileContent =
-      this.content ||
-      new Array(this.numberOfLinesInFile)
+      this.#content ||
+      new Array(this.#numberOfLinesInFile)
         .fill(null)
         .map((value, index) => `console.log(${index});`)
         .join("\n");
 
-    mkdirSync(NodePath.parse(this.getFileLocation()).dir, { recursive: true });
-    writeFileSync(this.getFileLocation(), fileContent);
+    mkdirSync(NodePath.parse(this.#getFileLocation()).dir, { recursive: true });
+    writeFileSync(this.#getFileLocation(), fileContent);
   }
 
-  private addFileToRepository(): void {
-    execSync(`git -C ${this.repositoryLocation} add --all`);
+  #addFileToRepository(): void {
+    execSync(`git -C ${this.#repositoryLocation} add --all`);
   }
 
-  private removeAndCommit() {
-    const message = `"${this.name}: removed"`;
+  #removeAndCommit() {
+    const message = `"${this.#name}: removed"`;
     const commands = [
-      `git -C ${this.repositoryLocation} rm ${this.getFileLocation()}`,
-      `git -C ${this.repositoryLocation} commit --message=${message}`,
+      `git -C ${this.#repositoryLocation} rm ${this.#getFileLocation()}`,
+      `git -C ${this.#repositoryLocation} commit --message=${message}`,
     ].join("&&");
     try {
       execSync(commands);
@@ -103,7 +111,7 @@ export default class VersionedFileFixture {
     }
   }
 
-  private getFileLocation(): string {
-    return `${this.repositoryLocation}${NodePath.sep}${this.name}`;
+  #getFileLocation(): string {
+    return `${this.#repositoryLocation}${NodePath.sep}${this.#name}`;
   }
 }

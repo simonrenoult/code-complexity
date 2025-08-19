@@ -1,24 +1,25 @@
+import { resolve } from "node:path";
 import { Options, Path } from "../types";
 import computeSloc from "./strategies/sloc";
 import { calculate as calculateCyclomatic } from "./strategies/cyclomatic";
 import { calculate as calculateHalstead } from "./strategies/halstead";
-import { resolve } from "node:path";
 import { UnsupportedExtension } from "../../utils";
 
-// FIXME: add modules
-
 export default class Complexity {
-  public static async compute(path: Path, options: Options) {
-    const complexity = await Complexity.computeComplexity(path, options);
+  path: Path;
+  complexity: number;
+
+  static async compute(path: Path, options: Options) {
+    const complexity = await Complexity.#computeComplexity(path, options);
     return new Complexity(path, complexity);
   }
 
-  private constructor(
-    public readonly path: Path,
-    public readonly complexity: number
-  ) {}
+  constructor(path: Path, complexity: number) {
+    this.complexity = complexity;
+    this.path = path;
+  }
 
-  private static async computeComplexity(
+  static async #computeComplexity(
     path: Path,
     options: Options
   ): Promise<number> {

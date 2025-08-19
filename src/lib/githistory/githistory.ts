@@ -1,35 +1,30 @@
-import * as micromatch from "micromatch";
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import * as micromatch from "micromatch";
 
 import { Options, Path } from "../types";
 
 export type History = Path[];
 
 export default class GitHistory {
-  private options: Options;
+  #options: Options;
+  history: History;
+  files: Path[];
 
-  public readonly history: History;
-  public readonly files: Path[];
+  constructor(options: Options) {
+    this.#options = options;
 
-  public static build(options: Options) {
-    return new GitHistory(options);
+    this.history = this.#buildHistory();
+    this.files = this.#listFiles();
   }
 
-  private constructor(options: Options) {
-    this.options = options;
-
-    this.history = this.buildHistory();
-    this.files = this.listFiles();
-  }
-
-  private buildGitLogCommand(): string {
+  #buildGitLogCommand(): string {
     const isWindows = process.platform === "win32";
 
     return [
       "git",
-      `-C ${this.options.directory}`,
+      `-C ${this.#options.directory}`,
       `log`,
       `--follow`,
 
@@ -37,8 +32,8 @@ export default class GitHistory {
       // https://github.com/git-for-windows/git/issues/3131
       `--format=${isWindows ? "" : "''"}`,
       `--name-only`,
-      this.options.since ? `--since="${this.options.since}"` : "",
-      this.options.until ? `--until="${this.options.until}"` : "",
+      this.#options.since ? `--since="${this.#options.since}"` : "",
+      this.#options.until ? `--until="${this.#options.until}"` : "",
 
       // Windows CMD handle quotes differently
       isWindows ? "*" : "'*'",
@@ -47,19 +42,19 @@ export default class GitHistory {
       .join(" ");
   }
 
-  private buildHistory(): Path[] {
-    const gitLogCommand = this.buildGitLogCommand();
-    const stdout = this.executeGitLogCommand(gitLogCommand);
+  #buildHistory(): Path[] {
+    const gitLogCommand = this.#buildGitLogCommand();
+    const stdout = this.#executeGitLogCommand(gitLogCommand);
     return stdout
       .split("\n")
       .filter((line) => {
         if (line.trim().length === 0) {
           return false;
         }
-        if (!this.pathStillExists(line)) {
+        if (!this.#pathStillExists(line)) {
           return false;
         }
-        if (!this.filterMatches(line)) {
+        if (!this.#filterMatches(line)) {
           return false;
         }
         return true;
@@ -67,22 +62,22 @@ export default class GitHistory {
       .sort();
   }
 
-  private executeGitLogCommand(gitLogCommand: string): string {
-    const maxBuffer = this.options.maxBuffer ?? 32_000_000;
+  #executeGitLogCommand(gitLogCommand: string): string {
+    const maxBuffer = this.#options.maxBuffer ?? 32_000_000;
     return execSync(gitLogCommand, { encoding: "utf8", maxBuffer });
   }
 
-  private listFiles(): string[] {
+  #listFiles(): string[] {
     return [...new Set(this.history)];
   }
 
-  private pathStillExists(fileName: string) {
-    return existsSync(resolve(this.options.directory, fileName));
+  #pathStillExists(fileName: string) {
+    return existsSync(resolve(this.#options.directory, fileName));
   }
 
-  private filterMatches(file: string) {
-    if (this.options.filter && this.options.filter.length) {
-      return this.options.filter.every((f) => micromatch.isMatch(file, f));
+  #filterMatches(file: string) {
+    if (this.#options.filter && this.#options.filter.length) {
+      return this.#options.filter.every((f) => micromatch.isMatch(file, f));
     }
     return true;
   }
