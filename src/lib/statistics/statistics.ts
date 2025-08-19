@@ -10,24 +10,24 @@ import Statistic from "./statistic";
 const internal = { debug: buildDebugger("statistics") };
 
 export default class Statistics {
-  private statistics: Statistic[] = [];
+  #statistics: Statistic[] = [];
 
-  public static async compute(options: Options): Promise<Statistics> {
+  static async compute(options: Options): Promise<Statistics> {
     internal.debug(`invoked with options: ${JSON.stringify(options)}`);
     internal.debug(`using cwd: ${process.cwd()}`);
 
-    const gitHistory = GitHistory.build(options);
-    const churns = Churns.from(gitHistory.history, options);
+    const gitHistory = new GitHistory(options);
+    const churns = Churns.from(gitHistory.history);
     const complexities = await Complexity.computeFor(gitHistory.files, options);
 
     return new Statistics(gitHistory.files, churns, complexities, options);
   }
 
-  public list(): IStatistic[] {
-    return this.statistics.map((s) => s.toState());
+  list(): IStatistic[] {
+    return this.#statistics.map((s) => s.toState());
   }
 
-  private constructor(
+  constructor(
     files: Path[],
     churns: Churns,
     complexities: Complexities,
@@ -36,19 +36,19 @@ export default class Statistics {
     const statisticsForFiles: Statistic[] = files.map((path): Statistic => {
       const churn = churns.getByPath(path);
       const complexity = complexities.getByPath(path);
-      return Statistic.build(path, churn.getValue(), complexity.getValue());
+      return new Statistic(path, churn.getValue(), complexity.getValue());
     });
 
     const result = options.directories
-      ? Statistics.buildDirectoriesStatistics(statisticsForFiles)
+      ? Statistics.#buildDirectoriesStatistics(statisticsForFiles)
       : statisticsForFiles;
 
-    this.statistics = result
+    this.#statistics = result
       .sort(sort(options.sort))
       .filter(limit(options.limit));
   }
 
-  private static buildDirectoriesStatistics(
+  static #buildDirectoriesStatistics(
     statisticsForFiles: Statistic[]
   ): Statistic[] {
     const map = statisticsForFiles.reduce((map, statisticsForFile) => {
@@ -72,7 +72,7 @@ export default class Statistics {
       const complexity =
         statisticsForFile.complexity +
         (statisticsForDir ? statisticsForDir.complexity : 0);
-      map.set(dir, Statistic.build(dir, churn, complexity));
+      map.set(dir, new Statistic(dir, churn, complexity));
     }
   }
 }

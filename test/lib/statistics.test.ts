@@ -318,7 +318,7 @@ describe("Statistics", () => {
     });
   });
 
-  context("options.sort=churn", () => {
+  context("options.sort=#churn", () => {
     it("returns the appropriate elements", async () => {
       // Given
       const options: Options = { ...defaultOptions, sort: "churn" };

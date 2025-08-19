@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 
 import Cli from "./cli";
 import { Options } from "../lib/types";
-import Output from "./output";
+import * as Output from "./output";
 import Statistics from "../lib";
 
 export default async function main(): Promise<void> {

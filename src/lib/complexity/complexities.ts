@@ -5,9 +5,9 @@ import Complexity from "./complexity";
 const internal = { debug: buildDebugger("complexity") };
 
 export default class Complexities {
-  private readonly complexityByPath: Map<Path, Complexity>;
+  #complexityByPath: Map<Path, Complexity>;
 
-  public static async computeFor(
+  static async computeFor(
     paths: Path[],
     options: Options
   ): Promise<Complexities> {
@@ -19,17 +19,17 @@ export default class Complexities {
     return new Complexities(complexities);
   }
 
-  public getByPath(path: Path): Complexity {
-    const complexity = this.complexityByPath.get(path);
-    if (!complexity) throw new Error("Complexity not found for path: " + path);
+  constructor(complexities: Complexity[]) {
+    this.#complexityByPath = this.#computeComplexitiesPerPath(complexities);
+  }
+
+  getByPath(path: Path): Complexity {
+    const complexity = this.#complexityByPath.get(path);
+    if (!complexity) throw new Error("Complexity not found for #path: " + path);
     return complexity;
   }
 
-  private constructor(complexities: Complexity[]) {
-    this.complexityByPath = this.computeComplexitiesPerPath(complexities);
-  }
-
-  private computeComplexitiesPerPath(complexities: Complexity[]) {
+  #computeComplexitiesPerPath(complexities: Complexity[]) {
     return complexities.reduce((map, complexity) => {
       map.set(complexity.path, complexity);
       return map;

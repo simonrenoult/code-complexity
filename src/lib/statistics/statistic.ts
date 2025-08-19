@@ -10,26 +10,21 @@ export interface IStatistic {
 }
 
 export default class Statistic {
-  public readonly path: Path;
-  public readonly churn: number;
-  public readonly complexity: number;
-  public readonly score: number;
+  path: Path;
+  churn: number;
+  complexity: number;
+  score: number;
+  directories: string[];
 
-  readonly directories: string[];
-
-  static build(path: Path, churn: number, complexity: number): Statistic {
-    return new Statistic(path, churn, complexity);
-  }
-
-  private constructor(path: Path, churn: number, complexity: number) {
+  constructor(path: Path, churn: number, complexity: number) {
     this.path = path;
     this.churn = churn;
     this.complexity = complexity;
-    this.directories = this.findDirectoriesForFile(path);
+    this.directories = this.#findDirectoriesForFile(path);
     this.score = this.churn * this.complexity;
   }
 
-  private findDirectoriesForFile(path: string): string[] {
+  #findDirectoriesForFile(path: string): string[] {
     const directories: string[] = [];
     const pathChunks = NodePath.parse(path).dir.split(NodePath.sep);
     pathChunks.forEach((chunk) => {
@@ -42,7 +37,7 @@ export default class Statistic {
     return directories.filter((d) => d.length > 0);
   }
 
-  public toState(): IStatistic {
+  toState(): IStatistic {
     return {
       path: this.path,
       churn: this.churn,
