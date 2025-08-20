@@ -36,7 +36,7 @@ Options:
   -l, --limit [limit]                                    limit the number of files to output
   -i, --since [since]                                    limit analysis to commits more recent in age than date
   -u, --until [until]                                    limit analysis to commits older in age than date
-  -s, --sort [score|churn|complexity|file]               sort results (allowed valued: score, churn, complexity or file)
+  -s, --sort [score|churn|complexity|file]               sort result
   -d, --directories                                      display values for directories instead of files
   -mb, --max-buffer [maxBuffer]                          set the max buffer size for git log (in bytes)
   -h, --help                                             display help for command
