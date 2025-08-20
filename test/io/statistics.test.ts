@@ -1,10 +1,11 @@
 import * as assert from "node:assert";
+import { describe, it } from "node:test";
 import { execSync } from "node:child_process";
 
 import TestRepositoryFixture from "../fixtures/test-repository.fixture";
 
 describe("CLI", () => {
-  context("when format is json", () => {
+  describe("when format is json", () => {
     it("generates the appropriate output", () => {
       // Given
       const repo = new TestRepositoryFixture();
@@ -30,7 +31,7 @@ describe("CLI", () => {
     });
   });
 
-  context("when format is csv", () => {
+  describe("when format is csv", () => {
     it("generates the appropriate output", () => {
       // Given
       const repo = new TestRepositoryFixture();

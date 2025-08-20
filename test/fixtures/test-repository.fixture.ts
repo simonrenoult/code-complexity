@@ -19,9 +19,9 @@ export default class TestRepositoryFixture {
   }[] = [];
 
   constructor() {
-    this.location = `${this.#systemTemporaryDirectory}${sep}${
-      TestRepositoryFixture.testRepositoryName
-    }`;
+    const now = Date.now();
+    const dirName = `${now}-${TestRepositoryFixture.testRepositoryName}`;
+    this.location = `${this.#systemTemporaryDirectory}${sep}${dirName}`;
   }
 
   addFile(args: {
