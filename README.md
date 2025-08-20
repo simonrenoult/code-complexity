@@ -3,8 +3,6 @@
 > Measure the churn/complexity score. Higher scores reveal hotspots where
 > refactorings should happen.
 
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coverage-image]][coverage-url]
 [![Style Status][style-image]][style-url]
 [![NPM Version][npm-image]][npm-url]
 
@@ -15,7 +13,7 @@ view, using information from our version control systems, we can get a better
 sense of the effects of our refactoring efforts.*
 
 Note: `code-complexity` currently measures complexity using either:
-- lines of code count (all languages)
+- lines of code count (for most languages)
 - cyclomatic complexity (JavaScript/TypeScript)
 - halstead complexity (JavaScript/TypeScript)
 
@@ -57,6 +55,32 @@ $ code-complexity . --since=2021-06-01 --limit 100
 $ code-complexity . --since=2021-04-01 --until=2021-07-01
 $ code-complexity . --max-buffer 64000000
 ```
+
+## Which strategy should you choose?
+
+Currently, `code-complexity` supports three strategies:
+- `sloc`
+- `cyclomatic` (JavaScript/TypeScript only)
+- `halstead` (JavaScript/TypeScript only)
+
+`sloc` is the default strategy since it works on pretty much any language.
+It's a basic source code line count. One could think that it's not super helpful, but I have found that length is a 
+decent starting point.
+
+`cyclomatic` is a more advanced strategy that uses the [cyclomatic complexity][cyclomatic]
+of functions. Basically, the more nesting you have, the more complex your function is.
+
+`halstead` is a more advanced strategy that uses the [halstead complexity][halstead]`.
+It will evaluate complexity based on the number of operands, operators and operands per operator.
+Basically, the more diverse operators you have, the more complex your function is.
+
+None is better than the other ;)
+
+My own workflow is usually to poke around with one of them, look at the underlying
+code and then decide if the complexity is worth refactoring.
+
+[cyclomatic]: https://en.wikipedia.org/wiki/Cyclomatic_complexity
+[halstead]: https://en.wikipedia.org/wiki/Halstead_complexity_measures
 
 ## Output
 
