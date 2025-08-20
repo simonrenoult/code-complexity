@@ -70,7 +70,7 @@ decent starting point.
 `cyclomatic` is a more advanced strategy that uses the [cyclomatic complexity][cyclomatic]
 of functions. Basically, the more nesting you have, the more complex your function is.
 
-`halstead` is a more advanced strategy that uses the [halstead complexity][halstead]`.
+`halstead` is a more advanced strategy that uses the [halstead complexity][halstead].
 It will evaluate complexity based on the number of operands, operators and operands per operator.
 Basically, the more diverse operators you have, the more complex your function is.
 
