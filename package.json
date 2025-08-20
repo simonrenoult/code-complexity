@@ -23,6 +23,8 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
+    "prestart": "npm run build",
+    "start": "node dist/bin/code-complexity.js",
     "lint": "eslint --ext .ts .",
     "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
