@@ -23,13 +23,11 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "coverage": "nyc npm test",
     "lint": "eslint --ext .ts .",
     "prepare": "npm run lint && npm run build",
     "postversion": "git push --tags",
     "pretest": "npm run lint",
-    "test": "node --test --require=ts-node/register test/**/*.ts",
-    "test:ci": "nyc --reporter=lcov npm test"
+    "test": "node --test --require=ts-node/register test/**/*.ts"
   },
   "keywords": [
     "quality",
@@ -58,14 +56,12 @@
     "@types/micromatch": "4.0.9",
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@typescript-eslint/parser": "5.42.1",
-    "codecov": "3.8.3",
     "eslint": "8.27.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-promise": "6.1.1",
-    "nyc": "15.1.0",
     "prettier": "2.8.8",
     "ts-node": "10.9.2",
     "typescript": "4.9.5"
