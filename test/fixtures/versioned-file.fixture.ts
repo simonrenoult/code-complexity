@@ -3,18 +3,17 @@ import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
 
 export default class VersionedFileFixture {
+  #name = "example.js";
+  #numberOfLinesInFile = 10;
+  #numberOfCommitsForFile = 10;
+  #removed = false;
   #repositoryLocation: string;
+  #content?: string;
+  #commitDate?: string;
 
   constructor(repositoryLocation: string) {
     this.#repositoryLocation = repositoryLocation;
   }
-
-  #name = "example.js";
-  #numberOfLinesInFile = 10;
-  #numberOfCommitsForFile = 10;
-  #content?: string;
-  #commitDate?: string;
-  #removed = false;
 
   withName(name: string): VersionedFileFixture {
     this.#name = name;
@@ -66,12 +65,8 @@ export default class VersionedFileFixture {
       : `git -C ${
           this.#repositoryLocation
         } commit --all --message=${commitMessage}`;
-    try {
-      execSync(command);
-    } catch (e: any) {
-      console.log(e.stdout.toString());
-      throw e;
-    }
+
+    execSync(command);
   }
 
   #modifyFileWithoutChangingItsLength(commitNumber: number): void {
@@ -103,12 +98,8 @@ export default class VersionedFileFixture {
       `git -C ${this.#repositoryLocation} rm ${this.#getFileLocation()}`,
       `git -C ${this.#repositoryLocation} commit --message=${message}`,
     ].join("&&");
-    try {
-      execSync(commands);
-    } catch (e: any) {
-      console.log(e.stdout.toString());
-      throw e;
-    }
+
+    execSync(commands);
   }
 
   #getFileLocation(): string {
