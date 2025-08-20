@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 12
+  - 23
 
 git:
   submodules: false
@@ -12,7 +12,6 @@ before_install:
 
 script:
   - npm ci
-  - npm run test:ci
-
-after_success:
-  - npm run coverage
+  - npm run lint
+  - npm run build
+  - npm test
