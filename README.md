@@ -28,36 +28,34 @@ $ npx code-complexity <path-to-git-directory or URL> [options]
 ## Help
 
 ```text
-    Usage: code-complexity <target> [options]
+Usage: code-complexity <target> [options]
 
-    Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.
+Options:
+  -V, --version                                          output the version number
+  --filter <strings>                                     list of globs (comma separated) to filter
+  -cs, --complexity-strategy [sloc|cyclomatic|halstead]  choose the complexity strategy to analyze your codebase with (default: "sloc")
+  -f, --format [table|json|csv]                          format results
+  -l, --limit [limit]                                    limit the number of files to output
+  -i, --since [since]                                    limit analysis to commits more recent in age than date
+  -u, --until [until]                                    limit analysis to commits older in age than date
+  -s, --sort [score|churn|complexity|file]               sort results (allowed valued: score, churn, complexity or file)
+  -d, --directories                                      display values for directories instead of files
+  -mb, --max-buffer [maxBuffer]                          set the max buffer size for git log (in bytes)
+  -h, --help                                             display help for command
 
-    Options:
-      -V, --version                         output the version number
-      --filter <strings>                    list of globs (comma separated) to filter
-      -cs, --complexity-strategy [strategy] choose the complexity strategy to analyze your codebase with (allowed values: sloc, cyclomatic, halstead).
-      -f, --format [format]                 format results using table, json or csv
-      -l, --limit [limit]                   limit the number of files to output
-      -i, --since [since]                   limit analysis to commits more recent in age than date
-      -u, --until [until]                   limit analysis to commits older in age than date
-      -s, --sort [sort]                     sort results (allowed valued: score, churn, complexity or file)
-      -d, --directories                     display values for directories instead of files
-      -mb, --max-buffer [maxBuffer]         set the max buffer size for git log (in bytes)
-      -h, --help                            display help for command
+Examples:
 
-    Examples:
-
-    $ code-complexity .
-    $ code-complexity https://github.com/simonrenoult/code-complexity
-    $ code-complexity foo --limit 3
-    $ code-complexity ../foo --sort score
-    $ code-complexity /foo/bar --filter 'src/**,!src/front/**'
-    $ code-complexity . --limit 10 --sort score
-    $ code-complexity . --limit 10 --directories
-    $ code-complexity . --limit 10 --sort score -cs halstead
-    $ code-complexity . --since=2021-06-01 --limit 100
-    $ code-complexity . --since=2021-04-01 --until=2021-07-01
-    $ code-complexity . --max-buffer 64000000
+$ code-complexity .
+$ code-complexity https://github.com/simonrenoult/code-complexity
+$ code-complexity foo --limit 3
+$ code-complexity ../foo --sort score
+$ code-complexity /foo/bar --filter 'src/**,!src/front/**'
+$ code-complexity . --limit 10 --sort score
+$ code-complexity . --limit 10 --directories
+$ code-complexity . --limit 10 --sort score -cs halstead
+$ code-complexity . --since=2021-06-01 --limit 100
+$ code-complexity . --since=2021-04-01 --until=2021-07-01
+$ code-complexity . --max-buffer 64000000
 ```
 
 ## Output

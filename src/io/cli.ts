@@ -50,11 +50,12 @@ function getRawCli(
     .option(
       "-cs, --complexity-strategy [sloc|cyclomatic|halstead]",
       "choose the complexity strategy to analyze your codebase with",
-      /^(sloc|cyclomatic|halstead)$/i
+      /^(sloc|cyclomatic|halstead)$/i,
+      "sloc"
     )
     .option(
-      "-f, --format [format]",
-      "format results using table or json",
+      "-f, --format [table|json|csv]",
+      "format results",
       /^(table|json|csv)$/i
     )
     .option(
@@ -71,7 +72,7 @@ function getRawCli(
       "limit analysis to commits older in age than date"
     )
     .option(
-      "-s, --sort [sort]",
+      "-s, --sort [score|churn|complexity|file]",
       "sort results (allowed valued: score, churn, complexity or file)",
       /^(score|churn|complexity|file)$/i
     )
@@ -95,7 +96,7 @@ function getRawCli(
         "$ code-complexity ../foo --sort score",
         "$ code-complexity /foo/bar --filter 'src/**,!src/front/**'",
         "$ code-complexity . --limit 10 --sort score",
-        "$ code-complexity . --limit 10 --modules",
+        "$ code-complexity . --limit 10 --directories",
         "$ code-complexity . --limit 10 --sort score -cs halstead",
         "$ code-complexity . --since=2021-06-01 --limit 100",
         "$ code-complexity . --since=2021-04-01 --until=2021-07-01",
