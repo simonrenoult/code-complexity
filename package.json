@@ -4,7 +4,7 @@
   "description": "Measure the churn/complexity score. Higher values mean hotspots where refactorings should happen.",
   "author": {
     "name": "Simon Renoult",
-    "email": "contact@simonrenoult.me"
+    "email": "contact@simonrenoult.fr"
   },
   "engines": {
     "node": "23"
