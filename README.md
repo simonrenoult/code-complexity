@@ -8,11 +8,12 @@
 
 Quoting Michael Feathers (source [here][michael-feathers-source]):
 
-*Often when we refactor, we look at local areas of code. If we take a wider
+_Often when we refactor, we look at local areas of code. If we take a wider
 view, using information from our version control systems, we can get a better
-sense of the effects of our refactoring efforts.*
+sense of the effects of our refactoring efforts._
 
 Note: `code-complexity` currently measures complexity using either:
+
 - lines of code count (for most languages)
 - cyclomatic complexity (JavaScript/TypeScript)
 - halstead complexity (JavaScript/TypeScript)
@@ -59,12 +60,13 @@ $ code-complexity . --max-buffer 64000000
 ## Which strategy should you choose?
 
 Currently, `code-complexity` supports three strategies:
+
 - `sloc`
 - `cyclomatic` (JavaScript/TypeScript only)
 - `halstead` (JavaScript/TypeScript only)
 
 `sloc` is the default strategy since it works on pretty much any language.
-It's a basic source code line count. One could think that it's not super helpful, but I have found that length is a 
+It's a basic source code line count. One could think that it's not super helpful, but I have found that length is a
 decent starting point.
 
 `cyclomatic` is a more advanced strategy that uses the [cyclomatic complexity][cyclomatic]
@@ -105,8 +107,8 @@ A special thanks to a few contributors that helped me make `code-complexity` bet
 - Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
 - Scott Brooks (scottamplitude) for initiating the work on complexity strategies
 
-[michael-feathers-source]:https://www.stickyminds.com/article/getting-empirical-about-refactoring
-[travis-image]:https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
+[michael-feathers-source]: https://www.stickyminds.com/article/getting-empirical-about-refactoring
+[travis-image]: https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/simonrenoult/code-complexity
 [style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [style-url]: https://prettier.io/

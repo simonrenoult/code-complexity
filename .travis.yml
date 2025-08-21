@@ -12,6 +12,4 @@ before_install:
 
 script:
   - npm ci
-  - npm run lint
-  - npm run build
-  - npm test
+  - npm run verify

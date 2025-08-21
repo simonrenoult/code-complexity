@@ -30,7 +30,7 @@ export default class Statistics {
     files: Path[],
     churns: Churns,
     complexities: Complexities,
-    options: Options
+    options: Options,
   ) {
     const statisticsForFiles: Statistic[] = files.map((path): Statistic => {
       const churn = churns.getByPath(path);
@@ -48,7 +48,7 @@ export default class Statistics {
   }
 
   static #buildDirectoriesStatistics(
-    statisticsForFiles: Statistic[]
+    statisticsForFiles: Statistic[],
   ): Statistic[] {
     const map = statisticsForFiles.reduce((map, statisticsForFile) => {
       statisticsForFile.directories.forEach((directoryForFile) => {
@@ -62,7 +62,7 @@ export default class Statistics {
     function computeStatisticsForDirectory(
       map: Map<string, Statistic>,
       dir: string,
-      statisticsForFile: Statistic
+      statisticsForFile: Statistic,
     ) {
       const statisticsForDir = map.get(dir);
       const churn =
@@ -77,7 +77,7 @@ export default class Statistics {
 }
 
 function limit(
-  limit: number | undefined
+  limit: number | undefined,
 ): (s: Statistic, n: number) => boolean {
   return (statistics: Statistic, i: number): boolean => !limit || i < limit;
 }

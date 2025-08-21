@@ -212,7 +212,7 @@ describe("Statistics", () => {
             complexity: 3,
             path: "a.js",
             score: 3,
-          }
+          },
         );
       });
       it("on a js file with a function", async () => {
@@ -243,7 +243,7 @@ describe("Statistics", () => {
             complexity: 5,
             path: "b.js",
             score: 5,
-          }
+          },
         );
       });
       it("on a js file with a mix of instructions+function", async () => {
@@ -274,7 +274,7 @@ describe("Statistics", () => {
             complexity: 9,
             path: "b.js",
             score: 9,
-          }
+          },
         );
       });
       it("on a simple ts file", async () => {

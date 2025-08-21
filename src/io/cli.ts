@@ -4,17 +4,18 @@ import { sep } from "node:path";
 import { tmpdir } from "node:os";
 import { URL } from "node:url";
 
-import { Command, program } from "commander";
+import { Command, OptionValues, program } from "commander";
 
-import { buildDebugger, getPackageJson } from "../utils";
+import { buildDebugger } from "../utils";
 import { ComplexityStrategy, Format, Options, Sort } from "../lib/types";
+const pkg = import("../../package.json");
 
 const internal = { debug: buildDebugger("cli") };
 
 export default { parse, cleanup };
 
 async function parse(): Promise<Options> {
-  const { description, version } = await getPackageJson();
+  const { description, version } = await pkg;
   const cli = getRawCli(description, version).parse();
 
   assertArgsAreProvided(cli);
@@ -34,7 +35,7 @@ function cleanup(options: Options): void {
 
 function getRawCli(
   description: string | undefined,
-  version: string | undefined
+  version: string | undefined,
 ): Command {
   return program
     .name("code-complexity")
@@ -45,45 +46,45 @@ function getRawCli(
     .option(
       "--filter <strings>",
       "list of globs (comma separated) to filter",
-      commaSeparatedList
+      commaSeparatedList,
     )
     .option(
       "-cs, --complexity-strategy [sloc|cyclomatic|halstead]",
       "choose the complexity strategy to analyze your codebase with",
       /^(sloc|cyclomatic|halstead)$/i,
-      "sloc"
+      "sloc",
     )
     .option(
       "-f, --format [table|json|csv]",
       "format results",
-      /^(table|json|csv)$/i
+      /^(table|json|csv)$/i,
     )
     .option(
       "-l, --limit [limit]",
       "limit the number of files to output",
-      parseInt
+      parseInt,
     )
     .option(
       "-i, --since [since]",
-      "limit analysis to commits more recent in age than date"
+      "limit analysis to commits more recent in age than date",
     )
     .option(
       "-u, --until [until]",
-      "limit analysis to commits older in age than date"
+      "limit analysis to commits older in age than date",
     )
     .option(
       "-s, --sort [score|churn|complexity|file]",
       "sort results (allowed valued: score, churn, complexity or file)",
-      /^(score|churn|complexity|file)$/i
+      /^(score|churn|complexity|file)$/i,
     )
     .option(
       "-d, --directories",
-      "display values for directories instead of files"
+      "display values for directories instead of files",
     )
     .option(
       "-mb, --max-buffer [maxBuffer]",
       "set the max buffer size for git log (in bytes)",
-      parseInt
+      parseInt,
     )
     .on("--help", () => {
       console.log();
@@ -105,7 +106,7 @@ function getRawCli(
     });
 }
 
-function buildOptions(args: string[], options: any): Options {
+function buildOptions(args: string[], options: OptionValues): Options {
   const target = parseTarget(args[0]);
   return {
     target,
@@ -140,13 +141,13 @@ function buildOptions(args: string[], options: any): Options {
   function parseTarget(target: string): string | URL {
     try {
       return new URL(target);
-    } catch (e) {
+    } catch {
       try {
         lstatSync(target);
         return target;
-      } catch (e) {
+      } catch {
         throw new Error(
-          "Argument 'target' is neither a directory nor a valid URL."
+          "Argument 'target' is neither a directory nor a valid URL.",
         );
       }
     }

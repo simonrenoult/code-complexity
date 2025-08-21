@@ -9,11 +9,11 @@ export default class Complexities {
 
   static async computeFor(
     paths: Path[],
-    options: Options
+    options: Options,
   ): Promise<Complexities> {
     internal.debug(`${paths.length} files to compute complexity on`);
     const complexities = await Promise.all(
-      paths.map(async (p) => await Complexity.compute(p, options))
+      paths.map(async (p) => await Complexity.compute(p, options)),
     );
 
     return new Complexities(complexities);

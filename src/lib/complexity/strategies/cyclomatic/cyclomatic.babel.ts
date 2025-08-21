@@ -15,7 +15,7 @@ export function compute(path: string, options: ParserOptions) {
 export function cyclomaticForAst(
   ast: ParseResult,
   code: string,
-  options: ParserOptions
+  options: ParserOptions,
 ): number {
   const results: FunctionComplexity[] = [];
   let hasTopLevelStatements = false;
@@ -24,7 +24,7 @@ export function cyclomaticForAst(
     FunctionDeclaration(path) {
       const fnCode = code.slice(
         path.node.start ?? undefined,
-        path.node.end ?? undefined
+        path.node.end ?? undefined,
       );
       results.push({
         name: path.node.id?.name || "<anonymous>",
@@ -34,7 +34,7 @@ export function cyclomaticForAst(
     FunctionExpression(path) {
       const fnCode = code.slice(
         path.node.start ?? undefined,
-        path.node.end ?? undefined
+        path.node.end ?? undefined,
       );
       results.push({
         name: path.node.id?.name || "<anonymous>",
@@ -44,7 +44,7 @@ export function cyclomaticForAst(
     ArrowFunctionExpression(path) {
       const fnCode = code.slice(
         path.node.start ?? undefined,
-        path.node.end ?? undefined
+        path.node.end ?? undefined,
       );
       let name = "<arrow>";
       if (path.parent.type === "VariableDeclarator" && path.parent.id) {

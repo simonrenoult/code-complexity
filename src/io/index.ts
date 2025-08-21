@@ -19,7 +19,7 @@ export default async function main(): Promise<void> {
 function warnIfUsingComplexityWithIncompatibleFileTypes(options: Options) {
   if (options.complexityStrategy !== "sloc") {
     console.warn(
-      "Beware, the 'halstead' and 'cyclomatic' strategies are only available for JavaScript/TypeScript."
+      "Beware, the 'halstead' and 'cyclomatic' strategies are only available for JavaScript/TypeScript.",
     );
   }
 }

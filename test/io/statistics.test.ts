@@ -17,7 +17,7 @@ describe("CLI", () => {
       // When
       const result = execSync(
         `npx ts-node bin/code-complexity.ts ${repo.location} --format=json`,
-        { encoding: "utf8" }
+        { encoding: "utf8" },
       ).trim();
 
       // Then
@@ -26,7 +26,7 @@ describe("CLI", () => {
         JSON.stringify([
           { path: "a.js", churn: 2, complexity: 2, score: 4 },
           { path: "b.ts", churn: 1, complexity: 1, score: 1 },
-        ])
+        ]),
       );
     });
   });
@@ -43,13 +43,13 @@ describe("CLI", () => {
       // When
       const result = execSync(
         `npx ts-node bin/code-complexity.ts ${repo.location} --format=csv`,
-        { encoding: "utf8" }
+        { encoding: "utf8" },
       ).trim();
 
       // Then
       assert.deepStrictEqual(
         result,
-        ["file,complexity,churn,score", "a.js,2,2,4", "b.ts,1,1,1"].join("\n")
+        ["file,complexity,churn,score", "a.js,2,2,4", "b.ts,1,1,1"].join("\n"),
       );
     });
   });

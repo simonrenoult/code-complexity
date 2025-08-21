@@ -18,7 +18,7 @@ export function calculate(path: string): number | UnsupportedExtension {
       return computeFromBabel(path, { sourceType: "unambiguous" });
     default:
       internal.debug(
-        "Unsupported file extension. Falling back on default complexity (1)"
+        "Unsupported file extension. Falling back on default complexity (1)",
       );
       return new UnsupportedExtension();
   }

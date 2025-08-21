@@ -72,7 +72,7 @@ export default class VersionedFileFixture {
   #modifyFileWithoutChangingItsLength(commitNumber: number): void {
     appendFileSync(
       `${this.#getFileLocation()}`,
-      `// change for commit #${commitNumber + 1} `
+      `// change for commit #${commitNumber + 1} `,
     );
   }
 

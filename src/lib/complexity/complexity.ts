@@ -21,7 +21,7 @@ export default class Complexity {
 
   static async #computeComplexity(
     path: Path,
-    options: Options
+    options: Options,
   ): Promise<number> {
     const absolutePath = resolve(options.directory, path);
 

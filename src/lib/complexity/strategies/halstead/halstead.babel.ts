@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import { parse, ParserOptions } from "@babel/parser";
 import traverse from "@babel/traverse";
 import { buildDebugger } from "../../../../utils";
+import { Node } from "@babel/core";
 
 export const internal = { debug: buildDebugger("statistics:halstead") };
 
@@ -62,7 +63,7 @@ export function compute(path: string, options: ParserOptions) {
   return Math.round(volume);
 }
 
-function isOperand(node: any): string | null {
+function isOperand(node: Node): string | null {
   switch (node.type) {
     case "Identifier":
       return node.name;
@@ -81,7 +82,7 @@ function isOperand(node: any): string | null {
   }
 }
 
-function isOperator(node: any): string | null {
+function isOperator(node: Node): string | null {
   switch (node.type) {
     // Expressions binaires / logiques / assignations
     case "BinaryExpression":

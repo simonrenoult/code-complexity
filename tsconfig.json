@@ -10,8 +10,5 @@
     "resolveJsonModule": true,
     "target": "ES2022"
   },
-  "include": [
-    "./src/**/*",
-    "./bin/**/*"
-  ]
+  "include": ["./src/**/*", "./bin/**/*"]
 }
