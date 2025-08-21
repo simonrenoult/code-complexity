@@ -42,18 +42,17 @@
   "license": "MIT",
   "dependencies": {
     "@babel/core": "7.28.3",
+    "@babel/parser": "7.28.3",
     "@babel/plugin-transform-typescript": "7.28.0",
+    "@babel/preset-env": "7.28.3",
     "cli-table3": "0.6.5",
     "commander": "10.0.1",
     "debug": "4.4.1",
-    "escomplex": "2.0.0-alpha",
-    "esprima": "4.0.1",
     "micromatch": "4.0.8",
     "node-sloc": "0.2.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "7.28.3",
-    "@types/babel__core": "^7.20.5",
+    "@types/babel__core": "7.20.5",
     "@types/debug": "4.1.12",
     "@types/micromatch": "4.0.9",
     "@typescript-eslint/eslint-plugin": "5.42.1",
@@ -67,8 +66,5 @@
     "prettier": "2.8.8",
     "ts-node": "10.9.2",
     "typescript": "4.9.5"
-  },
-  "bundleDependencies": [
-    "esprima"
-  ]
+  }
 }

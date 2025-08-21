@@ -185,7 +185,129 @@ describe("Statistics", () => {
 
   describe("options.sort=complexity", () => {
     describe("when using cyclomatic strategy", () => {
-      it("returns the appropriate elements", async () => {
+      it("on a js file without function", async () => {
+        // Given
+        const trf = new TestRepositoryFixture()
+          .addFile({
+            name: "a.js",
+            content: "if (true) if (true) console.log();",
+          })
+          .writeOnDisk();
+        const options: Options = {
+          ...defaultOptions,
+          target: trf.location,
+          directory: trf.location,
+          sort: "complexity",
+          complexityStrategy: "cyclomatic",
+        };
+
+        // When
+        const result = (await Statistics.compute(options)).list();
+
+        // Then
+        assert.deepEqual(
+          result.find((e) => e.path === "a.js"),
+          {
+            churn: 1,
+            complexity: 3,
+            path: "a.js",
+            score: 3,
+          }
+        );
+      });
+      it("on a js file with a function", async () => {
+        // Given
+        const trf = new TestRepositoryFixture()
+          .addFile({
+            name: "b.js",
+            content:
+              "function sayHi(truc) { if(truc) if(truc) if(truc) if(truc) console.log('truc') }",
+          })
+          .writeOnDisk();
+        const options: Options = {
+          ...defaultOptions,
+          target: trf.location,
+          directory: trf.location,
+          sort: "complexity",
+          complexityStrategy: "cyclomatic",
+        };
+
+        // When
+        const result = (await Statistics.compute(options)).list();
+
+        // Then
+        assert.deepEqual(
+          result.find((e) => e.path === "b.js"),
+          {
+            churn: 1,
+            complexity: 5,
+            path: "b.js",
+            score: 5,
+          }
+        );
+      });
+      it("on a js file with a mix of instructions+function", async () => {
+        // Given
+        const trf = new TestRepositoryFixture()
+          .addFile({
+            name: "b.js",
+            content:
+              "if(truc) if(truc) if(truc) if(truc) console.log('truc'); function sayHi(truc) { if(truc) if(truc) if(truc) if(truc) console.log('truc') }",
+          })
+          .writeOnDisk();
+        const options: Options = {
+          ...defaultOptions,
+          target: trf.location,
+          directory: trf.location,
+          sort: "complexity",
+          complexityStrategy: "cyclomatic",
+        };
+
+        // When
+        const result = (await Statistics.compute(options)).list();
+
+        // Then
+        assert.deepEqual(
+          result.find((e) => e.path === "b.js"),
+          {
+            churn: 1,
+            complexity: 9,
+            path: "b.js",
+            score: 9,
+          }
+        );
+      });
+      it("on a simple ts file", async () => {
+        // Given
+        const trf = new TestRepositoryFixture()
+          .addFile({
+            name: "a.ts",
+            content: "if (true) if (true) console.log();",
+          })
+          .writeOnDisk();
+
+        const options: Options = {
+          ...defaultOptions,
+          target: trf.location,
+          directory: trf.location,
+          sort: "complexity",
+          complexityStrategy: "cyclomatic",
+        };
+
+        // When
+        const result = (await Statistics.compute(options)).list();
+
+        // Then
+        assert.deepStrictEqual(result, [
+          {
+            churn: 1,
+            complexity: 3,
+            path: "a.ts",
+            score: 3,
+          },
+        ]);
+      });
+      it("on js+ts files", async () => {
         // Given
         const trf = new TestRepositoryFixture()
           .addFile({
@@ -254,15 +376,15 @@ describe("Statistics", () => {
         assert.deepStrictEqual(result, [
           {
             churn: 1,
-            complexity: 25.26619429851844,
+            complexity: 21,
             path: "a.ts",
-            score: 25.26619429851844,
+            score: 21,
           },
           {
             churn: 1,
-            complexity: 25.26619429851844,
+            complexity: 21,
             path: "b.js",
-            score: 25.26619429851844,
+            score: 21,
           },
         ]);
       });

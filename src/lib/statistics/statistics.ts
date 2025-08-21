@@ -1,11 +1,10 @@
-import { IStatistic } from "./statistic";
+import Statistic, { IStatistic } from "./statistic";
 import { buildDebugger } from "../../utils";
 import Churns from "../churn/churns";
 import Complexities from "../complexity/complexities";
 import Complexity from "../complexity/complexities";
 import GitHistory from "../githistory/githistory";
 import { Options, Path, Sort } from "../types";
-import Statistic from "./statistic";
 
 const internal = { debug: buildDebugger("statistics") };
 
