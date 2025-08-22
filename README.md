@@ -3,8 +3,9 @@
 > Measure the churn/complexity score. Higher scores reveal hotspots where
 > refactorings should happen.
 
-[![Style Status][style-image]][style-url]
+[![CI][gh-actions-image]][gh-ci-url]
 [![NPM Version][npm-image]][npm-url]
+[![Style Status][style-image]][style-url]
 
 Quoting Michael Feathers (source [here][michael-feathers-source]):
 
@@ -107,12 +108,10 @@ A special thanks to a few contributors that helped me make `code-complexity` bet
 - Alexander Dormann (alexdo) for fixing the `ENOBUFS` (and apologies for stealing your code).
 - Scott Brooks (scottamplitude) for initiating the work on complexity strategies
 
-[michael-feathers-source]: https://www.stickyminds.com/article/getting-empirical-about-refactoring
-[travis-image]: https://img.shields.io/travis/simonrenoult/code-complexity/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/simonrenoult/code-complexity
-[style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
+[gh-actions-image]: https://github.com/simonrenoult/code-complexity/actions/workflows/ci.yml/badge.svg
+[gh-ci-url]: https://github.com/simonrenoult/code-complexity/actions/workflows/ci.yml
 [style-url]: https://prettier.io/
-[coverage-image]: https://img.shields.io/codecov/c/github/simonrenoult/code-complexity.svg?style=flat-square
-[coverage-url]: https://codecov.io/gh/simonrenoult/code-complexity/branch/master
+[style-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square
 [npm-image]: https://img.shields.io/npm/v/code-complexity.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/code-complexity
+[michael-feathers-source]: https://www.stickyminds.com/article/getting-empirical-about-refactoring

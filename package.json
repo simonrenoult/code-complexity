@@ -23,7 +23,6 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "prepublish": "npm run verify",
     "start": "node dist/bin/code-complexity.js",
     "test": "node --test --require=ts-node/register test/**/*.ts",
     "verify": "prettier --check . && eslint . && npm run test && npm run build"

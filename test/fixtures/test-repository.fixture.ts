@@ -41,6 +41,9 @@ export default class TestRepositoryFixture {
       rmSync(this.location, { recursive: true });
     }
     mkdirSync(this.location);
+    execSync(`git config --global user.email "contact@example.com"`);
+    execSync(`git config --global user.name "John Doe"`);
+    execSync(`git config --global init.defaultBranch main`);
     execSync(`git -C ${this.location} init`);
 
     this.#files.forEach((file) => {
