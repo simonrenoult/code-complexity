@@ -7,7 +7,7 @@
     "email": "contact@simonrenoult.fr"
   },
   "engines": {
-    "node": "23"
+    "node": ">= 18"
   },
   "main": "dist/src/lib",
   "types": "dist/src/lib/index.d.ts",
