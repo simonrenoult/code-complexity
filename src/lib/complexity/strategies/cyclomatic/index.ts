@@ -12,7 +12,7 @@ export function calculate(path: string): number | UnsupportedExtension {
     case ".ts":
       return computeFromBabel(path, {
         sourceType: "unambiguous",
-        plugins: ["typescript"],
+        plugins: ["typescript", "decorators"],
       });
     case ".mjs":
     case ".cjs":
